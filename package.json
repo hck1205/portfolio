@@ -4,11 +4,10 @@
   "packageManager": "pnpm@10.9.0",
   "scripts": {
     "setup": "corepack pnpm install",
-    "dev": "powershell -NoProfile -Command \"Start-Process 'http://localhost:3000'; corepack pnpm --filter @portfolio/shell dev\"",
-    "dev:all": "corepack pnpm --parallel --filter @portfolio/shell --filter @portfolio/remote-chart --filter @portfolio/remote-ai dev",
+    "dev": "powershell -NoProfile -Command \"Start-Process 'http://localhost:3000'; corepack pnpm --parallel --filter @portfolio/shell --filter @portfolio/design-system dev\"",
+    "dev:all": "corepack pnpm --parallel --filter @portfolio/shell --filter @portfolio/design-system dev",
     "dev:shell": "corepack pnpm --filter @portfolio/shell dev",
-    "dev:chart": "corepack pnpm --filter @portfolio/remote-chart dev",
-    "dev:ai": "corepack pnpm --filter @portfolio/remote-ai dev",
+    "dev:storybook": "corepack pnpm --filter @portfolio/design-system dev",
     "build": "corepack pnpm -r --if-present build",
     "typecheck": "corepack pnpm -r --if-present typecheck"
   },
