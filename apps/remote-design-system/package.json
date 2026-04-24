@@ -1,10 +1,10 @@
 {
-  "name": "@portfolio/shell",
+  "name": "@portfolio/remote-design-system",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 3000",
+    "dev": "next dev --port 3003",
     "build": "next build",
-    "start": "next start --port 3000",
+    "start": "next start --port 3003",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

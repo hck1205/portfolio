@@ -1,4 +1,10 @@
-const designSystemUrl = process.env.NEXT_PUBLIC_DESIGN_SYSTEM_URL ?? "http://localhost:6006";
+import dynamic from "next/dynamic";
+
+const storybookUrl = process.env.NEXT_PUBLIC_DESIGN_SYSTEM_URL ?? "http://localhost:6006";
+const RemoteDesignSystemShowcase = dynamic(() => import("designSystem/DesignSystemShowcase"), {
+  ssr: false,
+  loading: () => <div className="remote-fallback">Loading design system remote...</div>
+});
 
 export default function Page() {
   const navigationItems = [
@@ -37,19 +43,17 @@ export default function Page() {
       <section className="workspace" id="design-system">
         <header className="workspace-header">
           <div>
-            <p className="eyebrow">Micro Frontend Remote</p>
-            <h2>Design System Storybook</h2>
+            <p className="eyebrow">Module Federation Remote</p>
+            <h2>Design System Remote</h2>
           </div>
-          <a className="open-link" href={designSystemUrl} rel="noreferrer" target="_blank">
-            Open
+          <a className="open-link" href={storybookUrl} rel="noreferrer" target="_blank">
+            Open Storybook
           </a>
         </header>
 
-        <iframe
-          className="storybook-frame"
-          src={designSystemUrl}
-          title="Portfolio design system Storybook"
-        />
+        <section className="remote-stage" aria-label="Federated design system remote">
+          <RemoteDesignSystemShowcase />
+        </section>
       </section>
     </main>
   );

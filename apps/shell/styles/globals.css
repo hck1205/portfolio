@@ -140,7 +140,7 @@ h2 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 72px;
+  min-width: 126px;
   height: 36px;
   border: 1px solid #c7c7bf;
   border-radius: 8px;
@@ -154,14 +154,22 @@ h2 {
   background: #f7f7f4;
 }
 
-.storybook-frame {
+.remote-stage {
   width: 100%;
   min-width: 0;
-  height: 100%;
   min-height: 680px;
   border: 1px solid #d7d7d0;
   border-radius: 0 0 8px 8px;
   background: #ffffff;
+  padding: 24px;
+}
+
+.remote-fallback {
+  display: grid;
+  min-height: 320px;
+  place-items: center;
+  color: #6b6258;
+  font-weight: 800;
 }
 
 @media (max-width: 760px) {
@@ -189,7 +197,8 @@ h2 {
     align-items: flex-start;
   }
 
-  .storybook-frame {
+  .remote-stage {
     min-height: 600px;
+    padding: 16px;
   }
 }

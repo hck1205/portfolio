@@ -129,3 +129,24 @@ body {
 .ds-stack p {
   margin: 0;
 }
+
+.remote-design-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: var(--ds-color-canvas);
+  padding: 32px;
+}
+
+.remote-design-showcase {
+  display: grid;
+  width: min(100%, 720px);
+  min-height: 420px;
+  place-items: center;
+}
+
+.remote-design-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
