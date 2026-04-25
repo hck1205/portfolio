@@ -215,6 +215,47 @@ body {
   font-weight: 800;
 }
 
+.overview {
+  min-height: 100vh;
+  padding: 48px;
+}
+
+.overview-title {
+  margin: 0;
+  color: #171717;
+  font-size: 34px;
+  line-height: 1.1;
+}
+
+.overview-list {
+  display: grid;
+  gap: 12px;
+  max-width: 520px;
+  margin-top: 28px;
+}
+
+.overview-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border: 1px solid #d7d7d0;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 18px;
+}
+
+.overview-item__label {
+  color: #343434;
+  font-weight: 700;
+}
+
+.overview-item__value {
+  color: #123fbb;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
 @media (max-width: 760px) {
   .shell {
     grid-template-columns: 1fr;
@@ -231,6 +272,11 @@ body {
   }
 
   .shell-page {
+    min-height: auto;
+    padding: 28px 20px;
+  }
+
+  .overview {
     min-height: auto;
     padding: 28px 20px;
   }
