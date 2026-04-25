@@ -1,13 +1,12 @@
 node_modules
 .turbo
 .next
+.mf
 out
 dist
 storybook-static
 coverage
 .vercel
-doc/
-docs/
 *.tsbuildinfo
 .env
 .env.*
