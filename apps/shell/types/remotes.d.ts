@@ -1,6 +1,6 @@
-declare module "designSystem/DesignSystemShowcase" {
+declare module "ax/AXApp" {
   import type { ComponentType } from "react";
 
-  const DesignSystemShowcase: ComponentType;
-  export default DesignSystemShowcase;
+  const AXApp: ComponentType;
+  export default AXApp;
 }

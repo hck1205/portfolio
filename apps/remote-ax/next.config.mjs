@@ -11,10 +11,10 @@ const nextConfig = {
   webpack(config) {
     config.plugins.push(
       new NextFederationPlugin({
-        name: "designSystem",
+        name: "ax",
         filename: "static/chunks/remoteEntry.js",
         exposes: {
-          "./DesignSystemShowcase": "./components/DesignSystemShowcase.tsx"
+          "./AXApp": "./components/AXApp.tsx"
         },
         extraOptions: {
           exposePages: false
