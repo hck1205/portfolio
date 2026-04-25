@@ -98,7 +98,7 @@ Get-Content -Raw portfolio.md
 - 앱 구조: Turborepo + Next.js + Module Federation + Vercel
 - 패키지 매니저: pnpm
 - 앱 구조: `apps/shell`, `apps/remote-chart`, `apps/remote-ai`
-- 공유 패키지 구조: `packages/ui`, `packages/config`
+- 공유 패키지 구조: `packages/ui`
 
 ### 3. 로컬 개발 도구 확인
 
@@ -144,7 +144,6 @@ apps/remote-ai/
 
 ```txt
 packages/ui/
-packages/config/
 ```
 
 각 앱에는 최소 Next.js App Router 구조만 추가했다.

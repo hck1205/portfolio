@@ -4,10 +4,11 @@
   "packageManager": "pnpm@10.9.0",
   "scripts": {
     "setup": "corepack pnpm install",
-    "dev": "powershell -NoProfile -Command \"Start-Process 'chrome.exe' 'http://localhost:3000'; corepack pnpm --parallel --filter @portfolio/shell --filter @portfolio/storybook --filter @portfolio/remote-ax dev\"",
-    "dev:all": "corepack pnpm --parallel --filter @portfolio/shell --filter @portfolio/storybook --filter @portfolio/remote-ax dev",
+    "dev": "powershell -NoProfile -Command \"Start-Process 'chrome.exe' 'http://localhost:3000'; corepack pnpm --parallel --filter @portfolio/ui --filter @portfolio/shell --filter @portfolio/remote-design-system --filter @portfolio/remote-ax dev\"",
+    "dev:all": "corepack pnpm --parallel --filter @portfolio/ui --filter @portfolio/shell --filter @portfolio/remote-design-system --filter @portfolio/remote-ax dev",
     "dev:shell": "corepack pnpm --filter @portfolio/shell dev",
-    "dev:storybook": "corepack pnpm --filter @portfolio/storybook dev",
+    "dev:storybook": "corepack pnpm --filter @portfolio/remote-design-system dev",
+    "dev:remote-design-system": "corepack pnpm --filter @portfolio/remote-design-system dev",
     "dev:ax": "corepack pnpm --filter @portfolio/remote-ax dev",
     "build": "corepack pnpm -r --if-present build",
     "typecheck": "corepack pnpm -r --if-present typecheck"

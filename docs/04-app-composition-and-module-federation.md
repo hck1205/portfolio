@@ -10,7 +10,7 @@
 portfolio
 ├─ apps
 │  ├─ shell                # localhost:3000, 전체 화면과 좌측 nav를 가진 host 앱
-│  ├─ design-system        # localhost:6006, @portfolio/storybook 패키지
+│  ├─ remote-design-system # localhost:6006, @portfolio/remote-design-system 패키지
 │  └─ remote-ax            # localhost:3004, AX Module Federation remote
 ├─ packages
 │  ├─ ui                   # 여러 앱이 공유하는 UI 패키지
@@ -143,7 +143,7 @@ npm run dev
 | 앱 | 명령 | 포트 |
 | --- | --- | --- |
 | Shell | `corepack pnpm --filter @portfolio/shell dev` | `3000` |
-| Storybook | `corepack pnpm --filter @portfolio/storybook dev` | `6006` |
+| Storybook | `corepack pnpm --filter @portfolio/remote-design-system dev` | `6006` |
 | AX remote | `corepack pnpm --filter @portfolio/remote-ax dev` | `3004` |
 
 환경 변수 기본값은 `.env.example`에 있다.

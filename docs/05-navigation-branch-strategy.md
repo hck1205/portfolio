@@ -12,7 +12,7 @@ Shell의 좌측 navigation은 다음 순서를 기준으로 한다.
 | Micro Frontend | `app/micro-frontend` | `apps/shell` | Shell inline content |
 | AX (AI Transformation) | `app/ax-transformation` | `apps/remote-ax` | Module Federation |
 | Performance Optimization | `app/performance-optimization` | 추후 결정 | Shell inline content 또는 remote app |
-| Design System | `app/design-system` | `apps/design-system` | iframe inject |
+| Design System | `app/remote-design-system` | `apps/remote-design-system` | iframe inject |
 | Graphics Integration | `app/graphics-integration` | 추후 결정 | Shell inline content 또는 remote app |
 | APP | `app/app` | `apps/shell` | Shell inline content |
 
@@ -27,7 +27,7 @@ app/overview
 app/micro-frontend
 app/ax-transformation
 app/performance-optimization
-app/design-system
+app/remote-design-system
 app/graphics-integration
 app/app
 ```
@@ -97,4 +97,3 @@ NEXT_PUBLIC_DESIGN_SYSTEM_URL=http://localhost:6006
 | ownership이 분리된다 | 해당 앱만 담당하는 작업 흐름이 생긴다. |
 
 이 기준을 넘기 전에는 Shell 안에서 작게 시작하고, 기준을 넘긴 뒤 remote app으로 추출한다.
-
