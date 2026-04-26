@@ -142,7 +142,7 @@ importers:
         specifier: ^5.8.0
         version: 5.9.3
 
-  apps/shell:
+  apps/host:
     dependencies:
       '@portfolio/ui':
         specifier: workspace:*

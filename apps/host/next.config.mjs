@@ -22,7 +22,7 @@ const nextConfig = {
     } else {
       config.plugins.push(
         new NextFederationPlugin({
-          name: "shell",
+          name: "host",
           filename: "static/chunks/remoteEntry.js",
           remotes: {
             ax: `ax@${axRemoteUrl}/_next/static/chunks/remoteEntry.js`

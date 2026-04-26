@@ -1,5 +1,5 @@
 {
-  "name": "@portfolio/shell",
+  "name": "@portfolio/host",
   "private": true,
   "scripts": {
     "dev": "next dev --port 3000",
