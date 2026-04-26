@@ -1,13 +1,22 @@
+import { createElement } from "react";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { Button } from "./Button";
+
+import { defineDsButton, type ButtonSize, type ButtonTone } from "./Button";
+
+defineDsButton();
+
+type ButtonStoryArgs = {
+  disabled: boolean;
+  label: string;
+  size: ButtonSize;
+  tone: ButtonTone;
+};
 
 const meta = {
-  title: "Design System/Button",
-  component: Button,
+  title: "Components/Button",
   parameters: {
     layout: "centered"
   },
-  tags: ["autodocs"],
   argTypes: {
     tone: {
       control: "select",
@@ -19,11 +28,14 @@ const meta = {
     }
   },
   args: {
-    children: "Button",
+    disabled: false,
+    label: "Button",
     tone: "primary",
     size: "md"
-  }
-} satisfies Meta<typeof Button>;
+  },
+  render: ({ disabled, label, size, tone }) =>
+    createElement("ds-button", { disabled, size, tone }, label)
+} satisfies Meta<ButtonStoryArgs>;
 
 export default meta;
 
@@ -33,14 +45,14 @@ export const Primary: Story = {};
 
 export const Neutral: Story = {
   args: {
-    children: "Neutral",
+    label: "Neutral",
     tone: "neutral"
   }
 };
 
 export const Danger: Story = {
   args: {
-    children: "Delete",
+    label: "Delete",
     tone: "danger"
   }
 };
