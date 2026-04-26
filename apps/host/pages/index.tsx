@@ -31,23 +31,23 @@ export default function Page() {
   };
 
   return (
-    <main className="shell">
-      <aside className="shell-sidebar" aria-label="Portfolio navigation">
-        <div className="shell-brand">
-          <span className="shell-brand-mark" aria-hidden="true">
+    <main className="host">
+      <aside className="host-sidebar" aria-label="Portfolio navigation">
+        <div className="host-brand">
+          <span className="host-brand-mark" aria-hidden="true">
             P
           </span>
           <div>
-            <p className="shell-brand-kicker">Portfolio</p>
-            <h1>Shell</h1>
+            <p className="host-brand-kicker">Portfolio</p>
+            <h1>Host</h1>
           </div>
         </div>
 
-        <nav className="shell-nav">
+        <nav className="host-nav">
           {navigationItems.map((item) => (
             <button
               aria-current={activeNav === item.id ? 'page' : undefined}
-              className="shell-nav-item"
+              className="host-nav-item"
               key={item.id}
               onClick={() => setActiveNav(item.id)}
               type="button"
@@ -61,7 +61,7 @@ export default function Page() {
         </nav>
       </aside>
 
-      <section className="shell-workspace">{renderApp(activeItem)}</section>
+      <section className="host-workspace">{renderApp(activeItem)}</section>
     </main>
   );
 }
