@@ -1,5 +1,5 @@
 import type { Preview } from "@storybook/nextjs-vite";
-import "@portfolio/ui/styles.css";
+import "../src/styles.css";
 
 const preview: Preview = {
   parameters: {
@@ -12,6 +12,11 @@ const preview: Preview = {
     layout: "centered",
     nextjs: {
       appDirectory: true
+    },
+    options: {
+      storySort: {
+        order: ["Foundation", ["Tokens"], "Components"]
+      }
     }
   }
 };

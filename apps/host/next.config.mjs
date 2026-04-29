@@ -12,7 +12,7 @@ const axRemoteUrl = process.env.NEXT_PUBLIC_AX_REMOTE_URL ?? "http://localhost:3
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  transpilePackages: ["@portfolio/ui"],
+  transpilePackages: ["@portfolio/remote-design-system"],
   webpack(config, options) {
     if (options.isServer) {
       config.resolve.alias = {

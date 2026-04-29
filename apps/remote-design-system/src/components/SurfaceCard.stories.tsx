@@ -22,7 +22,7 @@ const meta = {
     eyebrow: "Portfolio",
     heading: "Runtime composition",
     body:
-      "Shared UI components live in packages/ui and can be rendered inside each micro frontend app."
+      "Design system components live in remote-design-system and can be installed by each micro frontend app."
   },
   render: ({ body, eyebrow, heading }) =>
     createElement("ds-surface-card", { eyebrow, heading }, body)

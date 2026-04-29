@@ -7,7 +7,7 @@ process.env.NEXT_PRIVATE_LOCAL_WEBPACK = "true";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  transpilePackages: ["@portfolio/ui"],
+  transpilePackages: ["@portfolio/remote-design-system"],
   webpack(config) {
     config.plugins.push(
       new NextFederationPlugin({
