@@ -1,13 +1,40 @@
 {
   "name": "@portfolio/remote-design-system",
-  "private": true,
+  "version": "0.0.0",
+  "private": false,
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
+    "clean": "shx rm -rf dist",
     "dev": "storybook dev -p 6006",
-    "build": "storybook build -o storybook-static",
+    "dev:lib": "vite build --watch",
+    "dev:storybook": "storybook dev -p 6006",
+    "build": "npm run build:lib && npm run build:storybook",
+    "build:lib": "vite build",
+    "build:storybook": "storybook build -o storybook-static",
+    "prepack": "npm run clean && npm run build:lib",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@portfolio/ui": "workspace:*",
     "next": "^15.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
@@ -16,10 +43,16 @@
     "@storybook/addon-a11y": "^10.3.5",
     "@storybook/addon-docs": "^10.3.5",
     "@storybook/nextjs-vite": "^10.3.5",
+    "@tailwindcss/vite": "^4.2.4",
     "@types/node": "^22.15.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^6.0.1",
+    "shx": "^0.4.0",
     "storybook": "^10.3.5",
-    "typescript": "^5.8.0"
+    "tailwindcss": "^4.2.4",
+    "typescript": "^5.8.0",
+    "vite": "^8.0.10",
+    "vite-plugin-dts": "^4.5.4"
   }
 }

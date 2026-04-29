@@ -13,6 +13,7 @@ export default defineConfig({
     react(),
     dts({
       entryRoot: "src",
+      include: ["src/**/*.ts", "src/**/*.tsx"],
       exclude: ["src/**/*.stories.tsx"],
       insertTypesEntry: true
     })

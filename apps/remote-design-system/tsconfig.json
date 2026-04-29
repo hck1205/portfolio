@@ -4,10 +4,10 @@
     "plugins": [{ "name": "next" }]
   },
   "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
     ".storybook/**/*.ts",
-    ".storybook/**/*.tsx",
-    "../../packages/ui/src/**/*.ts",
-    "../../packages/ui/src/**/*.tsx"
+    ".storybook/**/*.tsx"
   ],
   "exclude": ["node_modules"]
 }
