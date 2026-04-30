@@ -1,4 +1,4 @@
-import type { Preview } from "@storybook/nextjs-vite";
+import type { Preview } from "@storybook/web-components-vite";
 import "../src/styles.css";
 
 const preview: Preview = {
@@ -10,12 +10,9 @@ const preview: Preview = {
       }
     },
     layout: "centered",
-    nextjs: {
-      appDirectory: true
-    },
     options: {
       storySort: {
-        order: ["Foundation", ["Tokens"], "Components"]
+        order: ["Components", "Icons", ["Lucide"], "Foundation", ["Tokens"]]
       }
     }
   }
