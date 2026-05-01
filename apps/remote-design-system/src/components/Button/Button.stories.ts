@@ -205,7 +205,7 @@ function renderLinkStory() {
 }
 
 const meta: Meta<ButtonStoryArgs> = {
-  title: "General/Button",
+  title: "Components/General/Button",
   tags: ["autodocs"],
   parameters: {
     layout: "centered",
