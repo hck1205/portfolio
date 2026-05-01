@@ -1,6 +1,6 @@
 import "./styles.css";
 
-import { defineDsButton, defineDsCollapse } from "./components";
+import { defineDsButton, defineDsCollapse, defineDsDivider } from "./components";
 
 export {
   breakPoints,
@@ -32,6 +32,8 @@ export type {
 export {
   defineDsButton,
   DsButton,
+  defineDsDivider,
+  DsDivider,
   defineDsCollapse,
   DsCollapse,
   DsCollapseItem
@@ -46,6 +48,11 @@ export type {
   ButtonSize,
   ButtonType,
   ButtonVariant,
+  DividerOrientation,
+  DividerProps,
+  DividerSize,
+  DividerTitlePlacement,
+  DividerVariant,
   CollapseCollapsible,
   CollapseExpandIconPlacement,
   CollapseHeadingLevel,
@@ -56,6 +63,7 @@ export type {
 
 export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsButton(registry);
+  defineDsDivider(registry);
   defineDsCollapse(registry);
 }
 

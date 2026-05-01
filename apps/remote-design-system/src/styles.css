@@ -462,6 +462,18 @@
     @apply text-ds-3 leading-ds-readable text-ds-muted;
   }
 
+  .ds-divider-story-frame {
+    @apply grid w-[520px] max-w-full gap-ds-2 rounded-ds-sm border border-ds-border bg-ds-surface p-ds-6 text-ds-text;
+  }
+
+  .ds-divider-story-frame p {
+    @apply text-ds-3 leading-ds-readable text-ds-muted;
+  }
+
+  .ds-divider-story-inline-row {
+    @apply flex items-center justify-center gap-ds-1 text-ds-3 text-ds-text;
+  }
+
   ds-collapse {
     @apply block w-[var(--ds-component-width-md)] overflow-hidden rounded-ds-sm border border-ds-border bg-ds-surface text-ds-text shadow-none;
   }

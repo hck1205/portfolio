@@ -10,6 +10,14 @@ export type {
   ButtonType,
   ButtonVariant
 } from "./Button";
+export { defineDsDivider, DsDivider } from "./Divider";
+export type {
+  DividerOrientation,
+  DividerProps,
+  DividerSize,
+  DividerTitlePlacement,
+  DividerVariant
+} from "./Divider";
 export { defineDsCollapse, DsCollapse, DsCollapseItem } from "./Collapse";
 export type {
   CollapseCollapsible,
