@@ -1,6 +1,6 @@
 import "./styles.css";
 
-import { defineDsCollapse } from "./components";
+import { defineDsButton, defineDsCollapse } from "./components";
 
 export {
   breakPoints,
@@ -30,11 +30,22 @@ export type {
   TokenCategory
 } from "./foundation";
 export {
+  defineDsButton,
+  DsButton,
   defineDsCollapse,
   DsCollapse,
   DsCollapseItem
 } from "./components";
 export type {
+  ButtonClickDetail,
+  ButtonColor,
+  ButtonHtmlType,
+  ButtonIconPlacement,
+  ButtonProps,
+  ButtonShape,
+  ButtonSize,
+  ButtonType,
+  ButtonVariant,
   CollapseCollapsible,
   CollapseExpandIconPlacement,
   CollapseHeadingLevel,
@@ -44,6 +55,7 @@ export type {
 } from "./components";
 
 export function defineDesignSystemElements(registry?: CustomElementRegistry) {
+  defineDsButton(registry);
   defineDsCollapse(registry);
 }
 

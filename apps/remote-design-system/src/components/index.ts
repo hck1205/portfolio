@@ -1,3 +1,15 @@
+export { defineDsButton, DsButton } from "./Button";
+export type {
+  ButtonClickDetail,
+  ButtonColor,
+  ButtonHtmlType,
+  ButtonIconPlacement,
+  ButtonProps,
+  ButtonShape,
+  ButtonSize,
+  ButtonType,
+  ButtonVariant
+} from "./Button";
 export { defineDsCollapse, DsCollapse, DsCollapseItem } from "./Collapse";
 export type {
   CollapseCollapsible,
