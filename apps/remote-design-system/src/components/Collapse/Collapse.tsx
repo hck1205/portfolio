@@ -192,6 +192,11 @@ export class DsCollapse extends HTMLElement {
    */
   private handleCollapseToggle = (event: Event) => {
     const customEvent = event as CustomEvent<CollapseToggleDetail>;
+    const sourceItem = customEvent.target;
+
+    if (!(sourceItem instanceof DsCollapseItem) || sourceItem.parentElement !== this) {
+      return;
+    }
 
     if (this.accordion && customEvent.detail.open) {
       for (const item of this.items) {
@@ -214,7 +219,9 @@ export class DsCollapse extends HTMLElement {
    * @returns `ds-collapse-item` element 배열입니다.
    */
   private get items() {
-    return Array.from(this.querySelectorAll<DsCollapseItem>("ds-collapse-item"));
+    return Array.from(this.children).filter(
+      (child): child is DsCollapseItem => child.localName === "ds-collapse-item"
+    );
   }
 
   /**
@@ -288,10 +295,16 @@ export class DsCollapse extends HTMLElement {
       }
 
       if (openItemKeys.size > 0) {
-        item.open = openItemKeys.has(item.itemKey);
+        const shouldOpen = openItemKeys.has(item.itemKey);
+
+        if (item.open !== shouldOpen) {
+          item.open = shouldOpen;
+        }
       }
 
-      item.attributeChangedCallback();
+      item.syncFromParent({
+        expandIconPlacement: this.expandIconPlacement
+      });
     }
 
     this.hasAppliedDefaultActiveKey = true;

@@ -17,6 +17,7 @@ export const COLLAPSE_ITEM_OBSERVED_ATTRIBUTES = [
   "collapsible",
   "disabled",
   "extra",
+  "heading-level",
   "item-key",
   "label",
   "open",

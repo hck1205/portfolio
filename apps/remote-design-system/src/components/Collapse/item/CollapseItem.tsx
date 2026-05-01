@@ -1,16 +1,23 @@
 import { COLLAPSE_ITEM_OBSERVED_ATTRIBUTES, COLLAPSE_TOGGLE_EVENT } from "../constants/Collapse.constants";
 import { createCollapseId, normalizeBooleanAttribute } from "../dom/Collapse.dom";
 import {
+  applyCollapseItemStyles,
   createCollapseItemElements,
   syncCollapseItemElements,
   type CollapseItemElements
 } from "./CollapseItem.render";
-import type { CollapseCollapsible, CollapseToggleDetail } from "../types/Collapse.types";
+import type {
+  CollapseCollapsible,
+  CollapseExpandIconPlacement,
+  CollapseHeadingLevel,
+  CollapseToggleDetail
+} from "../types/Collapse.types";
 
 export class DsCollapseItem extends HTMLElement {
   static observedAttributes = COLLAPSE_ITEM_OBSERVED_ATTRIBUTES;
 
   private elements?: CollapseItemElements;
+  private parentExpandIconPlacement: CollapseExpandIconPlacement = "start";
   private readonly panelId = createCollapseId("ds-collapse-panel");
   private readonly triggerId = createCollapseId("ds-collapse-trigger");
 
@@ -100,6 +107,20 @@ export class DsCollapseItem extends HTMLElement {
     this.setAttribute("extra", value);
   }
 
+  get headingLevel(): CollapseHeadingLevel {
+    const value = Number(this.getAttribute("heading-level"));
+
+    if (value === 1 || value === 2 || value === 3 || value === 4 || value === 5 || value === 6) {
+      return value;
+    }
+
+    return 3;
+  }
+
+  set headingLevel(value: CollapseHeadingLevel) {
+    this.setAttribute("heading-level", String(value));
+  }
+
   /**
    * item을 식별하는 key를 반환합니다.
    *
@@ -178,6 +199,15 @@ export class DsCollapseItem extends HTMLElement {
     this.setAttribute("show-arrow", String(value));
   }
 
+  syncFromParent({
+    expandIconPlacement
+  }: {
+    expandIconPlacement: CollapseExpandIconPlacement;
+  }) {
+    this.parentExpandIconPlacement = expandIconPlacement;
+    this.render();
+  }
+
   /**
    * trigger 버튼 클릭을 item toggle 흐름으로 연결합니다.
    *
@@ -245,6 +275,7 @@ export class DsCollapseItem extends HTMLElement {
 
     const shadowRoot = this.shadowRoot ?? this.attachShadow({ mode: "open" });
     shadowRoot.replaceChildren(this.elements.sectionElement);
+    applyCollapseItemStyles(shadowRoot);
   }
 
   /**
@@ -262,9 +293,9 @@ export class DsCollapseItem extends HTMLElement {
       collapsible: this.collapsible,
       disabled: this.disabled,
       elements: this.elements,
-      expandIconPlacement:
-        this.closest("ds-collapse")?.getAttribute("expand-icon-placement") === "end" ? "end" : "start",
+      expandIconPlacement: this.parentExpandIconPlacement,
       extra: this.extra,
+      headingLevel: this.headingLevel,
       label: this.label,
       open: this.open,
       panelId: this.panelId,
