@@ -1,6 +1,6 @@
 import "./styles.css";
 
-import { defineDsButton, defineDsCollapse } from "./components";
+import { defineDsButton, defineDsCollapse, defineDsFloatButton } from "./components";
 
 export {
   breakPoints,
@@ -32,6 +32,9 @@ export type {
 export {
   defineDsButton,
   DsButton,
+  defineDsFloatButton,
+  DsFloatButton,
+  DsFloatButtonGroup,
   defineDsCollapse,
   DsCollapse,
   DsCollapseItem
@@ -46,6 +49,15 @@ export type {
   ButtonSize,
   ButtonType,
   ButtonVariant,
+  FloatButtonClickDetail,
+  FloatButtonGroupOpenChangeDetail,
+  FloatButtonGroupPlacement,
+  FloatButtonGroupProps,
+  FloatButtonGroupTrigger,
+  FloatButtonHtmlType,
+  FloatButtonProps,
+  FloatButtonShape,
+  FloatButtonType,
   CollapseCollapsible,
   CollapseExpandIconPlacement,
   CollapseHeadingLevel,
@@ -56,6 +68,7 @@ export type {
 
 export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsButton(registry);
+  defineDsFloatButton(registry);
   defineDsCollapse(registry);
 }
 

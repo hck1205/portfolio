@@ -10,6 +10,18 @@ export type {
   ButtonType,
   ButtonVariant
 } from "./Button";
+export { defineDsFloatButton, DsFloatButton, DsFloatButtonGroup } from "./FloatButton";
+export type {
+  FloatButtonClickDetail,
+  FloatButtonGroupOpenChangeDetail,
+  FloatButtonGroupPlacement,
+  FloatButtonGroupProps,
+  FloatButtonGroupTrigger,
+  FloatButtonHtmlType,
+  FloatButtonProps,
+  FloatButtonShape,
+  FloatButtonType
+} from "./FloatButton";
 export { defineDsCollapse, DsCollapse, DsCollapseItem } from "./Collapse";
 export type {
   CollapseCollapsible,
