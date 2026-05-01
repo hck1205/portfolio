@@ -442,126 +442,12 @@
     @apply block w-[var(--ds-component-width-md)] overflow-hidden rounded-ds-sm border border-ds-border bg-ds-surface text-ds-text shadow-none;
   }
 
-  .ds-collapse-story {
-    @apply grid w-[var(--ds-component-width-md)] gap-ds-4 text-ds-text;
-  }
-
-  .ds-collapse-story__description {
-    @apply m-0 text-ds-3 leading-ds-readable text-ds-muted;
-  }
-
   ds-collapse[data-borderless] {
     @apply rounded-none border-0;
   }
 
   ds-collapse[data-ghost] {
     @apply rounded-none border-0 bg-transparent;
-  }
-
-  ds-collapse-item {
-    @apply block;
-  }
-
-  .ds-collapse__item {
-    @apply border-b border-ds-border bg-ds-surface;
-  }
-
-  ds-collapse[data-ghost] .ds-collapse__item {
-    @apply border-b-0 bg-transparent;
-  }
-
-  ds-collapse-item:last-child .ds-collapse__item {
-    @apply border-b-0;
-  }
-
-  .ds-collapse__heading {
-    @apply m-0 flex items-stretch bg-ds-subtle-surface text-ds-3 font-ds-strong leading-ds-tight text-ds-text transition-colors duration-150 ease-in-out;
-  }
-
-  ds-collapse[size="small"] .ds-collapse__heading {
-    @apply text-ds-2;
-  }
-
-  ds-collapse[size="large"] .ds-collapse__heading {
-    @apply text-ds-4;
-  }
-
-  ds-collapse[data-ghost] .ds-collapse__heading {
-    @apply bg-transparent;
-  }
-
-  .ds-collapse__trigger {
-    @apply flex min-w-0 flex-1 cursor-pointer items-center gap-ds-4 border-0 bg-transparent px-ds-5 py-ds-4 text-left font-sans text-inherit leading-[inherit];
-  }
-
-  .ds-collapse__trigger[data-icon-only="true"] {
-    @apply flex-none px-ds-5 py-ds-4;
-  }
-
-  .ds-collapse__heading[data-collapsible="icon"] .ds-collapse__label,
-  .ds-collapse__heading[data-collapsible="icon"] .ds-collapse__extra {
-    @apply flex items-center;
-  }
-
-  .ds-collapse__heading[data-collapsible="icon"] .ds-collapse__label,
-  .ds-collapse__heading[data-collapsible="icon"] .ds-collapse__extra {
-    @apply py-ds-4;
-  }
-
-  .ds-collapse__heading[data-collapsible="icon"][data-icon-placement="start"] .ds-collapse__extra {
-    @apply pr-ds-5;
-  }
-
-  .ds-collapse__heading[data-collapsible="icon"][data-icon-placement="end"] .ds-collapse__label {
-    @apply pl-ds-5;
-  }
-
-  ds-collapse[size="small"] .ds-collapse__trigger {
-    @apply px-ds-4 py-ds-3;
-  }
-
-  ds-collapse[size="large"] .ds-collapse__trigger {
-    @apply px-ds-6 py-ds-5;
-  }
-
-  .ds-collapse__trigger:focus-visible {
-    @apply outline outline-[length:var(--ds-focus-ring-width)] outline-offset-[var(--ds-focus-ring-offset)] outline-ds-primary;
-  }
-
-  .ds-collapse__trigger:disabled {
-    @apply cursor-not-allowed opacity-[0.55];
-  }
-
-  .ds-collapse__label {
-    @apply min-w-0 flex-1 text-left;
-  }
-
-  .ds-collapse__extra {
-    @apply flex-none text-ds-2 font-ds-strong text-ds-muted;
-  }
-
-  .ds-collapse__icon {
-    @apply block w-ds-4 flex-none text-center text-ds-2 text-ds-muted transition-transform duration-150 ease-in-out;
-  }
-
-  ds-collapse-item[open] .ds-collapse__icon {
-    @apply rotate-90 text-ds-text;
-  }
-
-  .ds-collapse__body {
-    @apply overflow-y-auto border-t border-ds-border bg-ds-surface px-ds-5 py-ds-4 text-ds-3 leading-ds-readable text-ds-muted transition-all duration-100 ease-in-out;
-  }
-
-  ds-collapse[size="small"] .ds-collapse__body {
-    @apply px-ds-4 py-ds-3 text-ds-2;
-  }
-
-  ds-collapse[size="large"] .ds-collapse__body {
-    @apply px-ds-6 py-ds-5;
-  }
-
-  ds-collapse[data-ghost] .ds-collapse__body {
-    @apply border-t-0 bg-transparent;
   }
 
   .ds-foundation {

@@ -37,6 +37,7 @@ export {
 export type {
   CollapseCollapsible,
   CollapseExpandIconPlacement,
+  CollapseHeadingLevel,
   CollapseItemProps,
   CollapseProps,
   CollapseSize
