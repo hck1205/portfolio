@@ -127,6 +127,15 @@ function createButtonRow(children: HTMLElement[]) {
   return row;
 }
 
+function createGhostPreview() {
+  const preview = document.createElement("div");
+
+  preview.className = "ds-button-story-ghost-preview";
+  preview.append(createButton({ ...defaultButtonArgs, label: "Ghost", ghost: true, type: "primary" }));
+
+  return preview;
+}
+
 function renderDefaultButton(args: ButtonStoryArgs) {
   ensureButtonDefined();
 
@@ -163,7 +172,7 @@ function renderStatesStory() {
     createButton({ ...defaultButtonArgs, label: "Disabled", disabled: true }),
     createButton({ ...defaultButtonArgs, label: "Loading", loading: true }),
     createButton({ ...defaultButtonArgs, label: "Danger", danger: true, type: "primary" }),
-    createButton({ ...defaultButtonArgs, label: "Ghost", ghost: true, type: "primary" }),
+    createGhostPreview(),
     createButton({ ...defaultButtonArgs, block: true, label: "Block" })
   ]);
 }

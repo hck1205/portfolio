@@ -446,6 +446,10 @@
     @apply basis-full;
   }
 
+  .ds-button-story-ghost-preview {
+    @apply rounded-ds-sm bg-ds-primary p-ds-3;
+  }
+
   ds-collapse {
     @apply block w-[var(--ds-component-width-md)] overflow-hidden rounded-ds-sm border border-ds-border bg-ds-surface text-ds-text shadow-none;
   }
