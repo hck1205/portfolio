@@ -195,6 +195,7 @@ export const BUTTON_STYLES = `
   }
 
   :host([ghost][data-color="primary"]) .ds-button {
+    --ds-button-bg: transparent;
     --ds-button-border: var(--color-ds-primary);
     --ds-button-color: var(--color-ds-primary);
     --ds-button-hover-bg: transparent;
@@ -203,6 +204,7 @@ export const BUTTON_STYLES = `
   }
 
   :host([ghost][data-color="danger"]) .ds-button {
+    --ds-button-bg: transparent;
     --ds-button-border: var(--color-ds-danger);
     --ds-button-color: var(--color-ds-danger);
     --ds-button-hover-bg: transparent;
