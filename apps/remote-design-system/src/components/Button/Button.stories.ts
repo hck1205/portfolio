@@ -29,14 +29,12 @@ type ButtonStoryArgs = {
 };
 
 const storyDescriptions = {
-  default:
-    "Ant Design의 Button type sugar를 DS Web Component API로 옮긴 기본 예시입니다.",
-  variants:
-    "color와 variant 조합이 type보다 우선 적용되는 버튼 변형입니다.",
-  sizes: "small, middle, large 세 가지 크기입니다.",
-  states: "disabled, loading, danger, ghost, block 상태를 확인합니다.",
-  icon: "slot=\"icon\"과 icon-placement로 아이콘 위치를 제어합니다.",
-  link: "href가 있으면 semantic anchor로 렌더링합니다."
+  default: "Default Button story using Ant Design type sugar mapped to the DS Web Component API.",
+  variants: "Button variants where color and variant attributes take precedence over type sugar.",
+  sizes: "Small, middle, and large Button sizes.",
+  states: "Disabled, loading, danger, ghost, and block Button states.",
+  icon: "Icon slot usage with configurable icon placement.",
+  link: "Anchor rendering when href is provided."
 };
 
 const defaultButtonArgs = {

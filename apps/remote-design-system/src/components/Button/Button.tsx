@@ -207,13 +207,13 @@ export class DsButton extends HTMLElement {
       variant: this.variant
     });
 
-    this.setAttribute("size", this.size);
-    this.setAttribute("shape", this.shape);
-    this.setAttribute("icon-placement", this.iconPlacement);
-    this.toggleAttribute("block", this.block);
-    this.toggleAttribute("data-loading", this.loading);
-    this.setAttribute("data-color", appearance.color);
-    this.setAttribute("data-variant", appearance.variant);
+    this.setAttributeIfChanged("size", this.size);
+    this.setAttributeIfChanged("shape", this.shape);
+    this.setAttributeIfChanged("icon-placement", this.iconPlacement);
+    this.toggleAttributeIfChanged("block", this.block);
+    this.toggleAttributeIfChanged("data-loading", this.loading);
+    this.setAttributeIfChanged("data-color", appearance.color);
+    this.setAttributeIfChanged("data-variant", appearance.variant);
   }
 
   private syncStructure() {
@@ -237,10 +237,22 @@ export class DsButton extends HTMLElement {
 
   private syncNullableAttribute(name: string, value: string | undefined) {
     if (value) {
-      this.setAttribute(name, value);
+      this.setAttributeIfChanged(name, value);
       return;
     }
 
     this.removeAttribute(name);
+  }
+
+  private setAttributeIfChanged(name: string, value: string) {
+    if (this.getAttribute(name) !== value) {
+      this.setAttribute(name, value);
+    }
+  }
+
+  private toggleAttributeIfChanged(name: string, force: boolean) {
+    if (this.hasAttribute(name) !== force) {
+      this.toggleAttribute(name, force);
+    }
   }
 }
