@@ -29,13 +29,13 @@ type ButtonStoryArgs = {
 };
 
 const storyDescriptions = {
-  default: "Default Button story using Ant Design type sugar mapped to the DS Web Component API.",
-  variants: "Button variants where color and variant attributes take precedence over type sugar.",
-  sizes: "Small, middle, and large Button sizes.",
-  states: "Disabled, loading, danger, ghost, and block Button states.",
-  ghost: "Ghost buttons keep a transparent background and are intended for colored or complex backgrounds.",
-  icon: "Icon slot usage with configurable icon placement.",
-  link: "Anchor rendering when href is provided."
+  default: "Ant Design의 type 축약 값을 DS Web Component API에 매핑한 기본 Button 스토리입니다.",
+  variants: "color와 variant 속성이 type 축약 값보다 우선 적용되는 Button 변형입니다.",
+  sizes: "small, middle, large 크기의 Button을 확인할 수 있습니다.",
+  states: "disabled, loading, danger, ghost, block 상태의 Button입니다.",
+  ghost: "Ghost Button은 투명한 배경을 유지하며 색상이 있거나 복잡한 배경 위에서 사용하기 적합합니다.",
+  icon: "아이콘 위치를 설정할 수 있는 icon 슬롯 사용 예시입니다.",
+  link: "href가 제공될 때 앵커로 렌더링되는 예시입니다."
 };
 
 const defaultButtonArgs = {
@@ -231,7 +231,7 @@ const meta: Meta<ButtonStoryArgs> = {
     docs: {
       description: {
         component:
-          "Button triggers an operation. It follows Ant Design's Button concepts while using DS Web Component semantics and foundation tokens."
+          "Button은 사용자의 동작을 실행하는 컴포넌트입니다. Ant Design의 Button 개념을 따르면서 DS Web Component 시맨틱과 foundation token을 사용합니다."
       }
     }
   },

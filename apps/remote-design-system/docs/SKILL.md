@@ -53,7 +53,7 @@ Build components that are:
 
 5. Add Storybook stories:
    - stories render the actual custom element
-   - docs descriptions explain the variant
+   - docs descriptions explain the variant in Korean
    - canvas should show the component, not duplicate explanatory text
 
 6. Verify:
@@ -256,6 +256,7 @@ Story rules:
 - title format: `Components/{ComponentName}`
 - render actual custom elements, not approximations
 - map controls to public API only
+- write component and story Docs descriptions in Korean
 - keep explanatory text in Docs descriptions, not inside every story canvas
 - keep stories deterministic and small
 - use `.stories.ts` when no JSX is needed
@@ -264,12 +265,12 @@ Story rules:
 
 For component docs:
 
-- explain purpose and when to use
-- document attributes/properties
-- document custom events and `detail`
-- document slots or child elements
-- document accessibility behavior
-- document known constraints
+- explain purpose and when to use in Korean
+- document attributes/properties in Korean
+- document custom events and `detail` in Korean
+- document slots or child elements in Korean
+- document accessibility behavior in Korean
+- document known constraints in Korean
 
 Docs should complement stories. Do not duplicate long descriptions inside the rendered component preview.
 
@@ -307,6 +308,7 @@ Before finishing, verify:
 - disabled state blocks interaction
 - keyboard behavior works
 - Storybook controls reflect public API
+- Storybook Docs descriptions are written in Korean
 - docs descriptions are not duplicated in story canvas
 - typecheck and build pass
 
