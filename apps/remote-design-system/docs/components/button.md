@@ -1,12 +1,12 @@
 # Button
 
-`ds-button` triggers an operation. It follows Ant Design's Button model while staying native to the remote design system: semantic `<button>` by default, semantic `<a>` when `href` is present, foundation-backed tokens, accessible loading and disabled states, and icon support through a named slot.
+`ds-button` triggers an operation while staying native to the remote design system: semantic `<button>` by default, semantic `<a>` when `href` is present, foundation-backed tokens, accessible loading and disabled states, and icon support through a named slot.
 
 ## Attributes
 
 | Attribute | Values | Default | Notes |
 | --- | --- | --- | --- |
-| `type` | `default`, `primary`, `dashed`, `text`, `link` | `default` | Syntactic sugar for common AntD-style appearances. |
+| `type` | `default`, `primary`, `dashed`, `text`, `link` | `default` | Syntactic sugar for common button appearances. |
 | `color` | `default`, `primary`, `danger` | derived | Overrides `type` color when present. |
 | `variant` | `outlined`, `dashed`, `solid`, `filled`, `text`, `link` | derived | Overrides `type` variant when present. |
 | `size` | `small`, `middle`, `large` | `middle` | Controls height, padding, and text size. |

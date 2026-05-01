@@ -10,6 +10,15 @@ export type {
   ButtonType,
   ButtonVariant
 } from "./Button";
+export { defineDsTypography, DsTypography } from "./Typography";
+export type {
+  TypographyCopyDetail,
+  TypographyEditDetail,
+  TypographyProps,
+  TypographyTitleLevel,
+  TypographyType,
+  TypographyVariant
+} from "./Typography";
 export { defineDsCollapse, DsCollapse, DsCollapseItem } from "./Collapse";
 export type {
   CollapseCollapsible,
