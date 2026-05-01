@@ -69,6 +69,10 @@ function createLoadingIcon() {
   });
 }
 
+function syncIconSlotVisibility(iconSlotElement: HTMLSlotElement) {
+  iconSlotElement.hidden = iconSlotElement.assignedNodes({ flatten: true }).length === 0;
+}
+
 function createButtonControl(href: string) {
   const controlElement = href ? document.createElement("a") : document.createElement("button");
 
@@ -96,11 +100,18 @@ export function createButtonElements({
 
   iconSlotElement.className = "ds-button__icon";
   iconSlotElement.name = "icon";
+  iconSlotElement.hidden = true;
+  iconSlotElement.addEventListener("slotchange", () => {
+    syncIconSlotVisibility(iconSlotElement);
+  });
 
   labelSlotElement.className = "ds-button__label";
 
   controlElement.addEventListener("click", onClick);
   controlElement.append(loadingElement, iconSlotElement, labelSlotElement);
+  queueMicrotask(() => {
+    syncIconSlotVisibility(iconSlotElement);
+  });
 
   return {
     controlElement,
@@ -136,6 +147,7 @@ export function syncButtonElements({
 
   const { controlElement, iconSlotElement, labelSlotElement, loadingElement } = nextElements;
 
+  syncIconSlotVisibility(iconSlotElement);
   controlElement.setAttribute("aria-busy", String(loading));
   controlElement.setAttribute("aria-disabled", String(disabled || loading));
   controlElement.toggleAttribute("data-loading", loading);
