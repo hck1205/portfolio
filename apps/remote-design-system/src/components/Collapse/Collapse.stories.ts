@@ -122,7 +122,7 @@ function renderExtraAndCollapsibleStory(args: CollapseStoryArgs) {
 }
 
 const meta: Meta<CollapseStoryArgs> = {
-  title: "Components/Collapse",
+  title: "Components/Data Display/Collapse",
   tags: ["autodocs"],
   parameters: {
     layout: "centered",
