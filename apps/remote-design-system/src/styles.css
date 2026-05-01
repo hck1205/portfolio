@@ -447,7 +447,7 @@
   }
 
   .ds-button-story-ghost-preview {
-    @apply rounded-ds-sm bg-ds-primary p-ds-3;
+    @apply flex flex-wrap items-center gap-ds-3 rounded-ds-sm bg-[var(--color-neutral-solid-n9)] p-ds-4;
   }
 
   ds-collapse {

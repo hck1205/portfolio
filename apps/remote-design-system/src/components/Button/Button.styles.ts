@@ -187,11 +187,32 @@ export const BUTTON_STYLES = `
 
   :host([ghost]) .ds-button {
     --ds-button-bg: transparent;
-    --ds-button-border: currentColor;
+    --ds-button-border: var(--color-neutral-static-light);
     --ds-button-color: var(--color-neutral-static-light);
     --ds-button-hover-bg: rgba(255, 255, 255, 0.12);
-    --ds-button-hover-border: currentColor;
+    --ds-button-hover-border: var(--color-neutral-static-light);
     --ds-button-hover-color: var(--color-neutral-static-light);
+  }
+
+  :host([ghost][data-color="primary"]) .ds-button {
+    --ds-button-border: var(--color-ds-primary);
+    --ds-button-color: var(--color-ds-primary);
+    --ds-button-hover-bg: transparent;
+    --ds-button-hover-border: var(--color-ds-primary-hover);
+    --ds-button-hover-color: var(--color-ds-primary-hover);
+  }
+
+  :host([ghost][data-color="danger"]) .ds-button {
+    --ds-button-border: var(--color-ds-danger);
+    --ds-button-color: var(--color-ds-danger);
+    --ds-button-hover-bg: transparent;
+    --ds-button-hover-border: var(--color-ds-danger-hover);
+    --ds-button-hover-color: var(--color-ds-danger-hover);
+  }
+
+  :host([ghost][data-variant="text"]) .ds-button,
+  :host([ghost][data-variant="link"]) .ds-button {
+    --ds-button-border: transparent;
   }
 
   .ds-button__icon,
@@ -223,4 +244,3 @@ export const BUTTON_STYLES = `
     }
   }
 `;
-

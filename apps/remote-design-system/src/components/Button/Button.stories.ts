@@ -33,6 +33,7 @@ const storyDescriptions = {
   variants: "Button variants where color and variant attributes take precedence over type sugar.",
   sizes: "Small, middle, and large Button sizes.",
   states: "Disabled, loading, danger, ghost, and block Button states.",
+  ghost: "Ghost buttons keep a transparent background and are intended for colored or complex backgrounds.",
   icon: "Icon slot usage with configurable icon placement.",
   link: "Anchor rendering when href is provided."
 };
@@ -131,7 +132,12 @@ function createGhostPreview() {
   const preview = document.createElement("div");
 
   preview.className = "ds-button-story-ghost-preview";
-  preview.append(createButton({ ...defaultButtonArgs, label: "Ghost", ghost: true, type: "primary" }));
+  preview.append(
+    createButton({ ...defaultButtonArgs, label: "Primary", ghost: true, type: "primary" }),
+    createButton({ ...defaultButtonArgs, label: "Default", ghost: true }),
+    createButton({ ...defaultButtonArgs, label: "Dashed", ghost: true, type: "dashed" }),
+    createButton({ ...defaultButtonArgs, danger: true, ghost: true, label: "Danger", type: "primary" })
+  );
 
   return preview;
 }
@@ -172,9 +178,15 @@ function renderStatesStory() {
     createButton({ ...defaultButtonArgs, label: "Disabled", disabled: true }),
     createButton({ ...defaultButtonArgs, label: "Loading", loading: true }),
     createButton({ ...defaultButtonArgs, label: "Danger", danger: true, type: "primary" }),
-    createGhostPreview(),
+    createButton({ ...defaultButtonArgs, label: "Ghost", ghost: true, type: "primary" }),
     createButton({ ...defaultButtonArgs, block: true, label: "Block" })
   ]);
+}
+
+function renderGhostStory() {
+  ensureButtonDefined();
+
+  return createGhostPreview();
 }
 
 function renderIconStory() {
@@ -299,6 +311,17 @@ export const States: Story = {
     docs: {
       description: {
         story: storyDescriptions.states
+      }
+    }
+  }
+};
+
+export const Ghost: Story = {
+  render: renderGhostStory,
+  parameters: {
+    docs: {
+      description: {
+        story: storyDescriptions.ghost
       }
     }
   }
