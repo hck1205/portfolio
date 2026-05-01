@@ -1,7 +1,6 @@
 import "./styles.css";
 
-import { defineDsButton, DsButton } from "./components/Button";
-import { defineDsSurfaceCard, DsSurfaceCard } from "./components/SurfaceCard";
+import { defineDsCollapse } from "./components";
 
 export {
   breakPoints,
@@ -30,14 +29,21 @@ export type {
   Spacing,
   TokenCategory
 } from "./foundation";
-export { defineDsButton, DsButton };
-export type { ButtonProps, ButtonSize, ButtonTone } from "./components/Button";
-export { defineDsSurfaceCard, DsSurfaceCard };
-export type { SurfaceCardProps } from "./components/SurfaceCard";
+export {
+  defineDsCollapse,
+  DsCollapse,
+  DsCollapseItem
+} from "./components";
+export type {
+  CollapseCollapsible,
+  CollapseExpandIconPlacement,
+  CollapseItemProps,
+  CollapseProps,
+  CollapseSize
+} from "./components";
 
 export function defineDesignSystemElements(registry?: CustomElementRegistry) {
-  defineDsButton(registry);
-  defineDsSurfaceCard(registry);
+  defineDsCollapse(registry);
 }
 
 defineDesignSystemElements();

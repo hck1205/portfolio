@@ -1,5 +1,4 @@
-import { createElement, type CSSProperties } from "react";
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
 import { breakpointStory } from "../breakpoint";
 import { colorStory } from "../color";
@@ -14,9 +13,13 @@ import type {
 } from "../types";
 import { foundationTokenGroups } from "./registry";
 
-type TokenPreviewStyle = CSSProperties & {
+type TokenPreviewStyle = {
   "--token-preview-value"?: string;
   "--token-preview-size"?: string;
+  fontFamily?: string;
+  fontSize?: string;
+  fontWeight?: string;
+  lineHeight?: string;
 };
 
 type TokensOverviewProps = {
@@ -41,6 +44,81 @@ const categoryDescriptions = {
   font: fontStory.description
 } satisfies Record<TokenCategory, string>;
 
+/**
+ * DOM element를 생성하고 className/textContent를 한 번에 설정합니다.
+ *
+ * @param tag 생성할 HTML tag 이름입니다.
+ * @param options element에 적용할 className과 textContent입니다.
+ * @returns 생성된 HTML element입니다.
+ */
+function createElement<K extends keyof HTMLElementTagNameMap>(
+  tag: K,
+  options: {
+    className?: string;
+    textContent?: string;
+  } = {}
+) {
+  const element = document.createElement(tag);
+
+  if (options.className) {
+    element.className = options.className;
+  }
+
+  if (options.textContent !== undefined) {
+    element.textContent = options.textContent;
+  }
+
+  return element;
+}
+
+/**
+ * token preview에서 사용하는 inline style 값을 DOM style object에 반영합니다.
+ *
+ * CSS custom property와 일반 style property를 같은 데이터 구조에서 다루기 위한 helper입니다.
+ *
+ * @param element style을 적용할 HTMLElement입니다.
+ * @param style token preview에 필요한 style 값입니다.
+ */
+function applyTokenPreviewStyle(element: HTMLElement, style: TokenPreviewStyle) {
+  Object.entries(style).forEach(([property, value]) => {
+    if (value === undefined) {
+      return;
+    }
+
+    if (property.startsWith("--")) {
+      element.style.setProperty(property, value);
+      return;
+    }
+
+    if (property === "fontFamily") {
+      element.style.fontFamily = value;
+      return;
+    }
+
+    if (property === "fontSize") {
+      element.style.fontSize = value;
+      return;
+    }
+
+    if (property === "fontWeight") {
+      element.style.fontWeight = value;
+      return;
+    }
+
+    if (property === "lineHeight") {
+      element.style.lineHeight = value;
+    }
+  });
+}
+
+/**
+ * spacing token 값을 preview에 적합한 px 크기로 정규화합니다.
+ *
+ * 큰 spacing 값이 preview 영역을 과도하게 차지하지 않도록 square-root scale로 압축합니다.
+ *
+ * @param value spacing token 원본 값입니다.
+ * @returns preview에 사용할 CSS size 값입니다.
+ */
 function getSpacingPreviewSize(value: string) {
   const numericValue = Number.parseFloat(value);
   const pixelValue = value.endsWith("rem") ? numericValue * 16 : numericValue;
@@ -66,13 +144,20 @@ function getSpacingPreviewSize(value: string) {
   return `${Math.round(minPreviewSize + normalized * (maxPreviewSize - minPreviewSize))}px`;
 }
 
+/**
+ * token category별 preview element에 필요한 style 값을 계산합니다.
+ *
+ * @param group token이 속한 foundation group입니다.
+ * @param value token의 CSS value입니다.
+ * @returns preview DOM에 적용할 style 값입니다.
+ */
 function getTokenPreviewStyle(group: FoundationTokenGroup, value: string): TokenPreviewStyle {
   if (group.category === "font") {
     return {
       "--token-preview-value": value,
       fontFamily: value.includes("sans-serif") ? value : undefined,
       fontSize: value.endsWith("px") ? value : undefined,
-      fontWeight: /^\d+$/.test(value) ? Number(value) : undefined,
+      fontWeight: /^\d+$/.test(value) ? value : undefined,
       lineHeight: value.startsWith("1.") ? value : undefined
     };
   }
@@ -89,128 +174,153 @@ function getTokenPreviewStyle(group: FoundationTokenGroup, value: string): Token
   };
 }
 
+/**
+ * color token 이름에서 family 이름을 추출합니다.
+ *
+ * @param tokenName slash로 구분된 token display name입니다.
+ * @returns color family 이름입니다.
+ */
 function getColorFamily(tokenName: string) {
   return tokenName.split("/")[0] ?? "Other";
 }
 
+/**
+ * color token 목록을 family 단위로 그룹핑합니다.
+ *
+ * @param tokens color foundation token 목록입니다.
+ * @returns family 이름과 token 목록을 담은 배열입니다.
+ */
 function getColorTokenFamilies(tokens: readonly FoundationToken[]) {
   const families = new Map<string, FoundationToken[]>();
 
-  tokens.forEach((token) => {
+  for (const token of tokens) {
     const family = getColorFamily(token.name);
     const familyTokens = families.get(family) ?? [];
 
     familyTokens.push(token);
     families.set(family, familyTokens);
-  });
+  }
 
   return Array.from(families.entries()).map(([family, tokens]) => ({ family, tokens }));
 }
 
-function TokenCard({ group, token }: { group: FoundationTokenGroup; token: FoundationToken }) {
-  return createElement(
-    "article",
-    { className: "ds-token-card", key: token.variable },
-    createElement(
-      "div",
-      {
-        className: `ds-token-preview ds-token-preview--${group.category}`,
-        style: getTokenPreviewStyle(group, token.value)
-      },
-      group.category === "font" ? "Aa" : null
-    ),
-    createElement(
-      "div",
-      { className: "ds-token-card__body" },
-      createElement("h3", null, token.name),
-      createElement("p", null, token.description),
-      createElement("code", null, token.variable),
-      createElement("strong", null, token.value)
-    )
+/**
+ * 하나의 foundation token을 카드 UI로 렌더링합니다.
+ *
+ * @param group token이 속한 foundation group입니다.
+ * @param token 렌더링할 token 데이터입니다.
+ * @returns token 정보를 표시하는 article element입니다.
+ */
+function createTokenCard(group: FoundationTokenGroup, token: FoundationToken) {
+  const card = createElement("article", { className: "ds-token-card" });
+  const preview = createElement("div", {
+    className: `ds-token-preview ds-token-preview--${group.category}`,
+    textContent: group.category === "font" ? "Aa" : undefined
+  });
+  const body = createElement("div", { className: "ds-token-card__body" });
+
+  applyTokenPreviewStyle(preview, getTokenPreviewStyle(group, token.value));
+  body.append(
+    createElement("h3", { textContent: token.name }),
+    createElement("p", { textContent: token.description }),
+    createElement("code", { textContent: token.variable }),
+    createElement("strong", { textContent: token.value })
   );
+  card.append(preview, body);
+
+  return card;
 }
 
-function TokenGrid({ group }: { group: FoundationTokenGroup }) {
+/**
+ * foundation group 하나의 token 목록을 grid 또는 family grid로 렌더링합니다.
+ *
+ * @param group 렌더링할 foundation token group입니다.
+ * @returns token grid element입니다.
+ */
+function createTokenGrid(group: FoundationTokenGroup) {
   if (group.category === "color") {
-    return createElement(
-      "div",
-      { className: "ds-color-token-families" },
-      getColorTokenFamilies(group.tokens).map(({ family, tokens }) =>
-        createElement(
-          "div",
-          { className: "ds-color-token-family", key: family },
-          createElement(
-            "div",
-            { className: "ds-color-token-family__header" },
-            createElement("h3", null, family),
-            createElement("span", null, `${tokens.length} properties`)
-          ),
-          createElement(
-            "div",
-            { className: "ds-token-grid" },
-            tokens.map((token) => TokenCard({ group, token }))
-          )
-        )
-      )
-    );
+    const familiesElement = createElement("div", { className: "ds-color-token-families" });
+
+    for (const { family, tokens } of getColorTokenFamilies(group.tokens)) {
+      const familyElement = createElement("div", { className: "ds-color-token-family" });
+      const familyHeader = createElement("div", { className: "ds-color-token-family__header" });
+      const tokenGrid = createElement("div", { className: "ds-token-grid" });
+
+      familyHeader.append(
+        createElement("h3", { textContent: family }),
+        createElement("span", { textContent: `${tokens.length} properties` })
+      );
+
+      for (const token of tokens) {
+        tokenGrid.append(createTokenCard(group, token));
+      }
+
+      familyElement.append(familyHeader, tokenGrid);
+      familiesElement.append(familyElement);
+    }
+
+    return familiesElement;
   }
 
-  return createElement(
-    "div",
-    { className: "ds-token-grid" },
-    group.tokens.map((token) => TokenCard({ group, token }))
-  );
+  const tokenGrid = createElement("div", { className: "ds-token-grid" });
+
+  for (const token of group.tokens) {
+    tokenGrid.append(createTokenCard(group, token));
+  }
+
+  return tokenGrid;
 }
 
-function TokensOverview({ category }: TokensOverviewProps) {
+/**
+ * Foundation token catalog 전체 또는 특정 category 화면을 렌더링합니다.
+ *
+ * @param args Storybook controls에서 전달되는 token category 설정입니다.
+ * @returns Storybook canvas에 표시할 foundation catalog element입니다.
+ */
+function renderTokensOverview({ category }: TokensOverviewProps = {}) {
   const tokenGroups = category
     ? foundationTokenGroups.filter((group) => group.category === category)
     : foundationTokenGroups;
   let tokenCount = 0;
+  const container = createElement("div", { className: "ds-foundation" });
+  const header = createElement("header", { className: "ds-foundation__header" });
+  const tokenSections = createElement("div", { className: "ds-token-sections" });
 
-  tokenGroups.forEach((group) => {
+  for (const group of tokenGroups) {
     tokenCount += group.tokens.length;
-  });
+  }
 
-  return createElement(
-    "div",
-    { className: "ds-foundation" },
-    createElement(
-      "header",
-      { className: "ds-foundation__header" },
-      createElement("p", null, "Foundation"),
-      createElement("h1", null, category ? `${tokenGroups[0]?.label} tokens` : "Design tokens"),
-      createElement(
-        "span",
-        null,
-        category
-          ? categoryDescriptions[category]
-          : `${tokenCount} CSS custom properties from the remote-design-system source`
-      )
-    ),
-    createElement(
-      "div",
-      { className: "ds-token-sections" },
-      tokenGroups.map((group) =>
-        createElement(
-          "section",
-          { className: "ds-token-section", key: group.category },
-          createElement(
-            "div",
-            { className: "ds-token-section__header" },
-            createElement("h2", null, group.label),
-            createElement("span", null, `${group.tokens.length} properties`)
-          ),
-          TokenGrid({ group })
-        )
-      )
-    )
+  header.append(
+    createElement("p", { textContent: "Foundation" }),
+    createElement("h1", {
+      textContent: category ? `${tokenGroups[0]?.label} tokens` : "Design tokens"
+    }),
+    createElement("span", {
+      textContent: category
+        ? categoryDescriptions[category]
+        : `${tokenCount} CSS custom properties from the remote-design-system source`
+    })
   );
+
+  for (const group of tokenGroups) {
+    const section = createElement("section", { className: "ds-token-section" });
+    const sectionHeader = createElement("div", { className: "ds-token-section__header" });
+
+    sectionHeader.append(
+      createElement("h2", { textContent: group.label }),
+      createElement("span", { textContent: `${group.tokens.length} properties` })
+    );
+    section.append(sectionHeader, createTokenGrid(group));
+    tokenSections.append(section);
+  }
+
+  container.append(header, tokenSections);
+
+  return container;
 }
 
-const meta = {
+const meta: Meta<TokensOverviewProps> = {
   title: "Foundation/Tokens",
-  component: TokensOverview,
   parameters: {
     layout: "fullscreen",
     docs: {
@@ -228,12 +338,13 @@ const meta = {
       control: "select",
       options: [undefined, ...tokenStoryOrder]
     }
-  }
-} satisfies Meta<typeof TokensOverview>;
+  },
+  render: renderTokensOverview
+};
 
 export default meta;
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<TokensOverviewProps>;
 
 export const All: Story = {};
 

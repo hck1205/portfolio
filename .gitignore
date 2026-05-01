@@ -20,3 +20,5 @@ yarn-error.log*
 docs/
 apps/*/docs/
 *.md
+!apps/remote-design-system/docs/
+!apps/remote-design-system/docs/SKILL.md
