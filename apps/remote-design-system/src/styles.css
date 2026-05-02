@@ -804,6 +804,10 @@
     position: static;
   }
 
+  .ds-steps-story-frame {
+    @apply grid w-[760px] max-w-full gap-ds-6 rounded-ds-sm border border-ds-border bg-ds-surface p-ds-6 text-ds-text;
+  }
+
   ds-collapse {
     @apply block w-[var(--ds-component-width-md)] overflow-hidden rounded-ds-sm border border-ds-border bg-ds-surface text-ds-text shadow-none;
   }
