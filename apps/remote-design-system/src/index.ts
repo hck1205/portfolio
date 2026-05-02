@@ -1,7 +1,10 @@
-import "./styles.css";
-
-import { defineDsButton, defineDsCollapse, defineDsLayout } from "./components";
-
+import './styles.css';
+import {
+  defineDsButton,
+  defineDsCollapse,
+  defineDsLayout,
+  defineDsSplitter,
+} from './components';
 export {
   breakPoints,
   breakpointTokens,
@@ -15,8 +18,8 @@ export {
   shadowTokens,
   spacing,
   spacingTokens,
-  fontTokens
-} from "./foundation";
+  fontTokens,
+} from './foundation';
 export type {
   BreakPoints,
   ColorToken,
@@ -27,8 +30,8 @@ export type {
   Radius,
   Shadow,
   Spacing,
-  TokenCategory
-} from "./foundation";
+  TokenCategory,
+} from './foundation';
 export {
   defineDsButton,
   DsButton,
@@ -40,8 +43,11 @@ export {
   DsLayoutContent,
   DsLayoutFooter,
   DsLayoutHeader,
-  DsLayoutSider
-} from "./components";
+  DsLayoutSider,
+  defineDsSplitter,
+  DsSplitter,
+  DsSplitterPanel,
+} from './components';
 export type {
   ButtonClickDetail,
   ButtonColor,
@@ -63,13 +69,21 @@ export type {
   LayoutSiderCollapseDetail,
   LayoutSiderCollapseType,
   LayoutSiderProps,
-  LayoutSiderTheme
-} from "./components";
+  LayoutSiderTheme,
+  SplitterDraggerDoubleClickDetail,
+  SplitterOrientation,
+  SplitterPanelProps,
+  SplitterProps,
+  SplitterResizeDetail,
+  SplitterResizeEndDetail,
+  SplitterResizeStartDetail,
+} from './components';
 
 export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsButton(registry);
   defineDsCollapse(registry);
   defineDsLayout(registry);
+  defineDsSplitter(registry);
 }
 
 defineDesignSystemElements();

@@ -1,4 +1,4 @@
-export { defineDsButton, DsButton } from "./Button";
+export { defineDsButton, DsButton } from './Button';
 export type {
   ButtonClickDetail,
   ButtonColor,
@@ -8,30 +8,40 @@ export type {
   ButtonShape,
   ButtonSize,
   ButtonType,
-  ButtonVariant
-} from "./Button";
-export { defineDsCollapse, DsCollapse, DsCollapseItem } from "./Collapse";
+  ButtonVariant,
+} from './Button';
+export { defineDsCollapse, DsCollapse, DsCollapseItem } from './Collapse';
 export type {
   CollapseCollapsible,
   CollapseExpandIconPlacement,
   CollapseHeadingLevel,
   CollapseItemProps,
   CollapseProps,
-  CollapseSize
-} from "./Collapse";
+  CollapseSize,
+} from './Collapse';
 export {
   defineDsLayout,
   DsLayout,
   DsLayoutContent,
   DsLayoutFooter,
   DsLayoutHeader,
-  DsLayoutSider
-} from "./Layout";
+  DsLayoutSider,
+} from './Layout';
 export type {
   LayoutBreakpoint,
   LayoutProps,
   LayoutSiderCollapseDetail,
   LayoutSiderCollapseType,
   LayoutSiderProps,
-  LayoutSiderTheme
-} from "./Layout";
+  LayoutSiderTheme,
+} from './Layout';
+export { defineDsSplitter, DsSplitter, DsSplitterPanel } from './Splitter';
+export type {
+  SplitterDraggerDoubleClickDetail,
+  SplitterOrientation,
+  SplitterPanelProps,
+  SplitterProps,
+  SplitterResizeDetail,
+  SplitterResizeEndDetail,
+  SplitterResizeStartDetail,
+} from './Splitter';
