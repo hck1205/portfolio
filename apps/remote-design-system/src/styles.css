@@ -887,6 +887,36 @@
     @apply grid w-[760px] max-w-full gap-ds-6 rounded-ds-sm border border-ds-border bg-ds-surface p-ds-6 text-ds-text;
   }
 
+  .ds-tabs-story-frame {
+    @apply grid w-[720px] max-w-full gap-ds-6 rounded-ds-sm border border-ds-border bg-ds-surface p-ds-6 text-ds-text;
+  }
+
+  .ds-tabs-placement-section {
+    @apply grid gap-ds-3 rounded-ds-sm border border-ds-border bg-ds-canvas p-ds-4;
+  }
+
+  .ds-tabs-placement-section__title {
+    @apply m-0 text-ds-1 font-ds-strong uppercase text-ds-muted;
+  }
+
+  .ds-tabs-story-toolbar {
+    @apply flex justify-end;
+  }
+
+  .ds-tabs-story-add-button {
+    @apply inline-flex h-[32px] items-center justify-center rounded-ds-sm border border-ds-primary bg-ds-primary px-ds-4 text-ds-2 font-ds-strong text-[var(--color-neutral-static-light)];
+    cursor: pointer;
+  }
+
+  .ds-tabs-story-add-button:hover {
+    @apply border-ds-primary-hover bg-ds-primary-hover;
+  }
+
+  .ds-tabs-story-add-button:focus-visible {
+    outline: var(--ds-focus-ring-width) solid var(--color-ds-primary);
+    outline-offset: var(--ds-focus-ring-offset);
+  }
+
   ds-collapse {
     @apply block w-[var(--ds-component-width-md)] overflow-hidden rounded-ds-sm border border-ds-border bg-ds-surface text-ds-text shadow-none;
   }

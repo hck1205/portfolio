@@ -12,6 +12,7 @@ import {
   defineDsPagination,
   defineDsSteps,
   defineDsSplitter,
+  defineDsTabs,
   defineDsTypography,
 } from './components';
 
@@ -31,6 +32,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsPagination(registry);
   defineDsSteps(registry);
   defineDsSplitter(registry);
+  defineDsTabs(registry);
 }
 
 defineDesignSystemElements();

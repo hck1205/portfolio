@@ -9,4 +9,5 @@ export * from './Menu';
 export * from './Pagination';
 export * from './Steps';
 export * from './Splitter';
+export * from './Tabs';
 export * from './Typography';
