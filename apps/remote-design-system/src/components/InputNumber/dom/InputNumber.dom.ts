@@ -45,14 +45,25 @@ export function getInputNumberVariant(element: HTMLElement): InputNumberVariant 
 }
 
 export function getNumberAttribute(element: HTMLElement, name: string): number | undefined {
-  const value = Number(element.getAttribute(name));
-
-  return Number.isFinite(value) ? value : undefined;
+  return getFiniteNumberFromAttribute(element, name);
 }
 
 export function parseInputNumber(displayValue: string, decimalSeparator = ".") {
   const normalized = decimalSeparator === "." ? displayValue : displayValue.replace(decimalSeparator, ".");
-  const parsed = Number(normalized.replace(/[^\d.+-]/g, ""));
+  const numericValue = normalized.replace(/[^\d.+-]/g, "").trim();
+
+  if (
+    !numericValue ||
+    numericValue === "-" ||
+    numericValue === "+" ||
+    numericValue === "." ||
+    numericValue === "-." ||
+    numericValue === "+."
+  ) {
+    return null;
+  }
+
+  const parsed = Number(numericValue);
 
   return Number.isFinite(parsed) ? parsed : null;
 }
@@ -108,9 +119,9 @@ export function clampInputNumber(value: number | null, min?: number, max?: numbe
 }
 
 export function getPrecision(element: HTMLElement) {
-  const value = Number(element.getAttribute("precision"));
+  const value = getFiniteNumberFromAttribute(element, "precision");
 
-  return Number.isInteger(value) && value >= 0 ? value : undefined;
+  return value !== undefined && Number.isInteger(value) && value >= 0 ? value : undefined;
 }
 
 export function getStep(element: HTMLElement) {
@@ -131,6 +142,22 @@ function getDecimalLength(value: number) {
   const [, decimal = ""] = String(value).split(".");
 
   return Math.min(decimal.length, 8);
+}
+
+function getFiniteNumberFromAttribute(element: HTMLElement, name: string) {
+  if (!element.hasAttribute(name)) {
+    return undefined;
+  }
+
+  const rawValue = element.getAttribute(name);
+
+  if (rawValue === null || rawValue.trim() === "") {
+    return undefined;
+  }
+
+  const value = Number(rawValue);
+
+  return Number.isFinite(value) ? value : undefined;
 }
 
 function isOneOf<T extends readonly string[]>(value: string | null, options: T): value is T[number] {

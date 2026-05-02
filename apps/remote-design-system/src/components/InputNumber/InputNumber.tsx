@@ -205,14 +205,11 @@ export class DsInputNumber extends HTMLElement {
       return;
     }
 
-    if (event.key === "ArrowUp") {
-      event.preventDefault();
-      this.stepBy(1);
-    }
+    const direction = this.getStepDirectionFromKey(event.key);
 
-    if (event.key === "ArrowDown") {
+    if (direction) {
       event.preventDefault();
-      this.stepBy(-1);
+      this.stepBy(direction);
     }
   };
 
@@ -390,6 +387,18 @@ export class DsInputNumber extends HTMLElement {
     const [, decimal = ""] = String(this.step).split(".");
 
     return decimal.length || undefined;
+  }
+
+  private getStepDirectionFromKey(key: string): 1 | -1 | undefined {
+    if (key === "ArrowUp") {
+      return 1;
+    }
+
+    if (key === "ArrowDown") {
+      return -1;
+    }
+
+    return undefined;
   }
 
   private isAtMax() {

@@ -63,7 +63,17 @@ export const INPUT_NUMBER_STYLES = `
     display: inline-flex;
     flex: 0 0 auto;
     line-height: 0;
+    pointer-events: auto;
+    user-select: none;
+  }
+
+  .ds-input-number__affix--prefix {
     padding-inline: var(--spacing-ds-3) 0;
+  }
+
+  .ds-input-number__affix--suffix {
+    cursor: default;
+    padding-inline: 0 var(--spacing-ds-3);
   }
 
   .ds-input-number__body {

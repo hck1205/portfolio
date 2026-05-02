@@ -152,6 +152,28 @@ function createSection(title: string, children: HTMLElement[]) {
   return section;
 }
 
+function createFieldRow(input: HTMLElement, description: string) {
+  const row = document.createElement("div");
+  const desc = document.createElement("span");
+
+  row.className = "ds-input-number-story-field-row";
+  desc.className = "ds-input-number-story-field-desc";
+  desc.textContent = description;
+  row.append(input, desc);
+
+  return row;
+}
+
+function createDocsDescription(story: string) {
+  return {
+    docs: {
+      description: {
+        story
+      }
+    }
+  };
+}
+
 function renderDefault(args: InputNumberStoryArgs) {
   ensureInputNumberDefined();
 
@@ -186,9 +208,18 @@ function renderRangeStory() {
 
   return createFrame([
     createStack([
-      createInputNumber({ ...defaultArgs, max: 10, min: 0, step: 1, value: 3 }),
-      createInputNumber({ ...defaultArgs, max: 2, min: -2, precision: 2, step: 0.25, value: 0.5 }),
-      createInputNumber({ ...defaultArgs, controls: false, max: 100, min: 0, step: 10, value: 20 })
+      createFieldRow(
+        createInputNumber({ ...defaultArgs, max: 10, min: 0, step: 1, value: 3 }),
+        "min 0 / max 10 / step 1"
+      ),
+      createFieldRow(
+        createInputNumber({ ...defaultArgs, max: 2, min: -2, precision: 2, step: 0.25, value: 0.5 }),
+        "min -2 / max 2 / step 0.25 / precision 2"
+      ),
+      createFieldRow(
+        createInputNumber({ ...defaultArgs, controls: false, max: 100, min: 0, step: 10, value: 20 }),
+        "controls false / min 0 / max 100 / step 10"
+      )
     ])
   ]);
 }
@@ -267,7 +298,7 @@ const meta: Meta<InputNumberStoryArgs> = {
     docs: {
       description: {
         component:
-          "InputNumber는 범위, 증가 단위, 표시 형식을 가진 숫자 입력 컴포넌트입니다. Ant Design의 InputNumber 패턴을 Web Component API로 제공합니다."
+          "InputNumber는 범위, 증가 단위, 표시 형식을 가진 숫자 입력 컴포넌트입니다. 숫자 입력에 필요한 상태와 표시 옵션을 Web Component API로 제공합니다."
       }
     }
   },
@@ -331,99 +362,45 @@ export default meta;
 type Story = StoryObj<InputNumberStoryArgs>;
 
 export const Basic: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: storyDescriptions.basic
-      }
-    }
-  }
+  parameters: createDocsDescription(storyDescriptions.basic)
 };
 
 export const Sizes: Story = {
   render: renderSizesStory,
-  parameters: {
-    docs: {
-      description: {
-        story: storyDescriptions.sizes
-      }
-    }
-  }
+  parameters: createDocsDescription(storyDescriptions.sizes)
 };
 
 export const DisabledAndReadOnly: Story = {
   render: renderDisabledStory,
-  parameters: {
-    docs: {
-      description: {
-        story: storyDescriptions.disabled
-      }
-    }
-  }
+  parameters: createDocsDescription(storyDescriptions.disabled)
 };
 
 export const RangeAndStep: Story = {
   render: renderRangeStory,
-  parameters: {
-    docs: {
-      description: {
-        story: storyDescriptions.range
-      }
-    }
-  }
+  parameters: createDocsDescription(storyDescriptions.range)
 };
 
 export const Formatter: Story = {
   render: renderFormatterStory,
-  parameters: {
-    docs: {
-      description: {
-        story: storyDescriptions.formatter
-      }
-    }
-  }
+  parameters: createDocsDescription(storyDescriptions.formatter)
 };
 
 export const Variants: Story = {
   render: renderVariantsStory,
-  parameters: {
-    docs: {
-      description: {
-        story: storyDescriptions.variants
-      }
-    }
-  }
+  parameters: createDocsDescription(storyDescriptions.variants)
 };
 
 export const Status: Story = {
   render: renderStatusStory,
-  parameters: {
-    docs: {
-      description: {
-        story: storyDescriptions.status
-      }
-    }
-  }
+  parameters: createDocsDescription(storyDescriptions.status)
 };
 
 export const PrefixAndSuffix: Story = {
   render: renderPrefixSuffixStory,
-  parameters: {
-    docs: {
-      description: {
-        story: storyDescriptions.prefixSuffix
-      }
-    }
-  }
+  parameters: createDocsDescription(storyDescriptions.prefixSuffix)
 };
 
 export const KeyboardAndWheel: Story = {
   render: renderKeyboardWheelStory,
-  parameters: {
-    docs: {
-      description: {
-        story: storyDescriptions.keyboardWheel
-      }
-    }
-  }
+  parameters: createDocsDescription(storyDescriptions.keyboardWheel)
 };

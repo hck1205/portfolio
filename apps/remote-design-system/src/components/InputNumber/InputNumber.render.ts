@@ -94,9 +94,9 @@ export function createInputNumberElements({
   rootElement.className = "ds-input-number";
   bodyElement.className = "ds-input-number__body";
   actionsElement.className = "ds-input-number__actions";
-  prefixSlotElement.className = "ds-input-number__affix";
+  prefixSlotElement.className = "ds-input-number__affix ds-input-number__affix--prefix";
   prefixSlotElement.name = "prefix";
-  suffixSlotElement.className = "ds-input-number__affix";
+  suffixSlotElement.className = "ds-input-number__affix ds-input-number__affix--suffix";
   suffixSlotElement.name = "suffix";
   controlElement.className = "ds-input-number__control";
   controlElement.type = "text";
