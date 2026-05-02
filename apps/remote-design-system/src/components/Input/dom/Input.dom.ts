@@ -72,7 +72,17 @@ export function getNativeInputType(element: HTMLElement, mode: InputMode) {
 }
 
 export function getPositiveIntegerAttribute(element: HTMLElement, name: string, fallback: number) {
-  const value = Number(element.getAttribute(name));
+  if (!element.hasAttribute(name)) {
+    return fallback;
+  }
+
+  const rawValue = element.getAttribute(name);
+
+  if (rawValue === null || rawValue.trim() === "") {
+    return fallback;
+  }
+
+  const value = Number(rawValue);
 
   return Number.isInteger(value) && value > 0 ? value : fallback;
 }

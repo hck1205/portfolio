@@ -106,9 +106,9 @@ export function createInputElements({
   const rootElement = document.createElement("div");
   const prefixSlotElement = document.createElement("slot");
   const suffixSlotElement = document.createElement("slot");
-  const clearButtonElement = createIconButton("Clear input", X);
-  const passwordButtonElement = createIconButton("Toggle password visibility", Eye);
-  const searchInlineButtonElement = createIconButton("Search", Search);
+  const clearButtonElement = createIconButton("Clear input", X, "clear");
+  const passwordButtonElement = createIconButton("Toggle password visibility", Eye, "password-visible");
+  const searchInlineButtonElement = createIconButton("Search", Search, "search");
   const searchButtonElement = document.createElement("button");
   const countElement = document.createElement("span");
   const controlElement = createControlElement(mode, onInput, onChange, onKeyDown);
@@ -124,7 +124,7 @@ export function createInputElements({
   searchButtonElement.className = "ds-input-search__button";
   searchButtonElement.type = "button";
   searchButtonElement.addEventListener("click", () => onSearch("button"));
-  syncSearchButtonContent(searchButtonElement, Search);
+  syncSearchButtonContent(searchButtonElement, Search, "search");
 
   clearButtonElement.addEventListener("click", onClear);
   passwordButtonElement.addEventListener("click", onPasswordToggle);
@@ -196,7 +196,7 @@ export function syncInputElements(options: SyncInputElementsOptions): InputEleme
   controlElement.toggleAttribute("required", options.required);
   controlElement.toggleAttribute("readonly", options.readonly);
   controlElement.disabled = options.disabled;
-  controlElement.value = options.value;
+  syncControlValue(controlElement, options.value);
   controlElement.setAttribute("aria-invalid", String(options.status === "error"));
 
   if (options.maxLength) {
@@ -222,15 +222,24 @@ export function syncInputElements(options: SyncInputElementsOptions): InputEleme
   passwordButtonElement.hidden = !showPasswordToggle;
   passwordButtonElement.disabled = options.disabled;
   passwordButtonElement.setAttribute("aria-pressed", String(options.passwordVisible));
-  replaceButtonIcon(passwordButtonElement, options.passwordVisible ? EyeOff : Eye);
+  syncIconButtonContent(
+    passwordButtonElement,
+    options.passwordVisible ? EyeOff : Eye,
+    options.passwordVisible ? "password-hidden" : "password-visible"
+  );
   searchInlineButtonElement.hidden = !showInlineSearch;
   searchInlineButtonElement.disabled = options.disabled || options.loading;
   searchButtonElement.hidden = !showSearchButton;
   searchButtonElement.disabled = options.disabled || options.loading;
-  syncSearchButtonContent(searchButtonElement, options.loading ? LoaderCircle : Search, {
-    loading: options.loading,
-    showIcon: options.searchButtonIcon || options.loading
-  });
+  syncSearchButtonContent(
+    searchButtonElement,
+    options.loading ? LoaderCircle : Search,
+    options.loading ? "loading" : "search",
+    {
+      loading: options.loading,
+      showIcon: options.searchButtonIcon || options.loading
+    }
+  );
 
   countElement.hidden = !options.showCount;
   countElement.textContent = countText;
@@ -279,11 +288,18 @@ function createControlElement(
   return controlElement;
 }
 
-function createIconButton(label: string, icon: Parameters<typeof createIcon>[0]) {
+function syncControlValue(controlElement: HTMLInputElement | HTMLTextAreaElement, value: string) {
+  if (controlElement.value !== value) {
+    controlElement.value = value;
+  }
+}
+
+function createIconButton(label: string, icon: Parameters<typeof createIcon>[0], iconName: string) {
   const button = document.createElement("button");
 
   button.className = "ds-input__action";
   button.type = "button";
+  button.dataset.initialIconName = iconName;
   button.setAttribute("aria-label", label);
   button.append(createIcon(icon, 15));
 
@@ -300,21 +316,38 @@ function createIcon(icon: Parameters<typeof createLucideElement>[0], size = 15) 
   });
 }
 
-function replaceButtonIcon(button: HTMLButtonElement, icon: Parameters<typeof createIcon>[0], loading = false) {
-  const label = button.textContent && button.textContent.trim() ? document.createTextNode(button.textContent.trim()) : undefined;
+function syncIconButtonContent(button: HTMLButtonElement, icon: Parameters<typeof createIcon>[0], iconName: string) {
+  if (button.dataset.iconName === iconName) {
+    return;
+  }
 
-  button.replaceChildren(createIcon(icon, 16), ...(label ? [label] : []));
-  button.firstElementChild?.classList.toggle("ds-input__spinner", loading);
+  button.dataset.iconName = iconName;
+  button.replaceChildren(createIcon(icon, 16));
 }
 
 function syncSearchButtonContent(
   button: HTMLButtonElement,
   icon: Parameters<typeof createIcon>[0],
+  iconName: string,
   { loading = false, showIcon = true }: { loading?: boolean; showIcon?: boolean } = {}
 ) {
+  const nextShowIcon = String(showIcon);
+  const nextLoading = String(loading);
+
+  if (
+    button.dataset.iconName === iconName &&
+    button.dataset.showIcon === nextShowIcon &&
+    button.dataset.loading === nextLoading
+  ) {
+    return;
+  }
+
   const textElement = document.createElement("span");
   const iconElement = createIcon(icon, 16);
 
+  button.dataset.iconName = iconName;
+  button.dataset.showIcon = nextShowIcon;
+  button.dataset.loading = nextLoading;
   textElement.textContent = "Search";
   button.replaceChildren(...(showIcon ? [iconElement] : []), textElement);
   button.firstElementChild?.classList.toggle("ds-input__spinner", loading);

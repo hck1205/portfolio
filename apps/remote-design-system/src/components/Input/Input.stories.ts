@@ -148,6 +148,16 @@ function createSection(title: string, children: HTMLElement[]) {
   return section;
 }
 
+function createDocsDescription(story: string) {
+  return {
+    docs: {
+      description: {
+        story
+      }
+    }
+  };
+}
+
 function renderDefault(args: InputStoryArgs) {
   ensureInputDefined();
 
@@ -410,57 +420,27 @@ export default meta;
 type Story = StoryObj<InputStoryArgs>;
 
 export const Basic: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: storyDescriptions.basic
-      }
-    }
-  }
+  parameters: createDocsDescription(storyDescriptions.basic)
 };
 
 export const Sizes: Story = {
   render: renderSizesStory,
-  parameters: {
-    docs: {
-      description: {
-        story: storyDescriptions.sizes
-      }
-    }
-  }
+  parameters: createDocsDescription(storyDescriptions.sizes)
 };
 
 export const Variants: Story = {
   render: renderVariantsStory,
-  parameters: {
-    docs: {
-      description: {
-        story: storyDescriptions.variants
-      }
-    }
-  }
+  parameters: createDocsDescription(storyDescriptions.variants)
 };
 
 export const PrefixAndSuffix: Story = {
   render: renderPrefixSuffixStory,
-  parameters: {
-    docs: {
-      description: {
-        story: storyDescriptions.prefixSuffix
-      }
-    }
-  }
+  parameters: createDocsDescription(storyDescriptions.prefixSuffix)
 };
 
 export const AllowClearAndShowCount: Story = {
   render: renderClearCountStory,
-  parameters: {
-    docs: {
-      description: {
-        story: storyDescriptions.clearCount
-      }
-    }
-  }
+  parameters: createDocsDescription(storyDescriptions.clearCount)
 };
 
 export const Status: Story = {
@@ -473,44 +453,20 @@ export const Status: Story = {
     status: "error",
     value: "필수 값이 비어있음"
   },
-  parameters: {
-    docs: {
-      description: {
-        story: storyDescriptions.status
-      }
-    }
-  }
+  parameters: createDocsDescription(storyDescriptions.status)
 };
 
 export const TextArea: Story = {
   render: renderTextAreaStory,
-  parameters: {
-    docs: {
-      description: {
-        story: storyDescriptions.textarea
-      }
-    }
-  }
+  parameters: createDocsDescription(storyDescriptions.textarea)
 };
 
 export const SearchBox: Story = {
   render: renderSearchStory,
-  parameters: {
-    docs: {
-      description: {
-        story: storyDescriptions.search
-      }
-    }
-  }
+  parameters: createDocsDescription(storyDescriptions.search)
 };
 
 export const Password: Story = {
   render: renderPasswordStory,
-  parameters: {
-    docs: {
-      description: {
-        story: storyDescriptions.password
-      }
-    }
-  }
+  parameters: createDocsDescription(storyDescriptions.password)
 };
