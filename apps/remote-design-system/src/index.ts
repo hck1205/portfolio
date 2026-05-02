@@ -1,10 +1,13 @@
 import './styles.css';
+
 import {
   defineDsButton,
   defineDsCollapse,
+  defineDsDivider,
   defineDsLayout,
   defineDsSplitter,
 } from './components';
+
 export {
   breakPoints,
   breakpointTokens,
@@ -12,13 +15,13 @@ export {
   convertColorKeyToCssVariable,
   foundationTokenGroups,
   foundationTokens,
+  fontTokens,
   radius,
   radiusTokens,
   shadow,
   shadowTokens,
   spacing,
   spacingTokens,
-  fontTokens,
 } from './foundation';
 export type {
   BreakPoints,
@@ -35,6 +38,8 @@ export type {
 export {
   defineDsButton,
   DsButton,
+  defineDsDivider,
+  DsDivider,
   defineDsCollapse,
   DsCollapse,
   DsCollapseItem,
@@ -58,6 +63,11 @@ export type {
   ButtonSize,
   ButtonType,
   ButtonVariant,
+  DividerOrientation,
+  DividerProps,
+  DividerSize,
+  DividerTitlePlacement,
+  DividerVariant,
   CollapseCollapsible,
   CollapseExpandIconPlacement,
   CollapseHeadingLevel,
@@ -81,6 +91,7 @@ export type {
 
 export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsButton(registry);
+  defineDsDivider(registry);
   defineDsCollapse(registry);
   defineDsLayout(registry);
   defineDsSplitter(registry);
