@@ -4,6 +4,7 @@ import {
   defineDsButton,
   defineDsCollapse,
   defineDsDivider,
+  defineDsFloatButton,
   defineDsLayout,
   defineDsSplitter,
   defineDsTypography,
@@ -43,6 +44,9 @@ export {
   DsDivider,
   defineDsTypography,
   DsTypography,
+  defineDsFloatButton,
+  DsFloatButton,
+  DsFloatButtonGroup,
   defineDsCollapse,
   DsCollapse,
   DsCollapseItem,
@@ -77,6 +81,15 @@ export type {
   TypographyTitleLevel,
   TypographyType,
   TypographyVariant,
+  FloatButtonClickDetail,
+  FloatButtonGroupOpenChangeDetail,
+  FloatButtonGroupPlacement,
+  FloatButtonGroupProps,
+  FloatButtonGroupTrigger,
+  FloatButtonHtmlType,
+  FloatButtonProps,
+  FloatButtonShape,
+  FloatButtonType,
   CollapseCollapsible,
   CollapseExpandIconPlacement,
   CollapseHeadingLevel,
@@ -102,6 +115,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsButton(registry);
   defineDsDivider(registry);
   defineDsTypography(registry);
+  defineDsFloatButton(registry);
   defineDsCollapse(registry);
   defineDsLayout(registry);
   defineDsSplitter(registry);

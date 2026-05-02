@@ -795,6 +795,15 @@
     overflow-wrap: anywhere;
   }
 
+  .ds-float-button-story-frame {
+    @apply relative flex min-h-[220px] w-[420px] max-w-full flex-wrap items-end justify-end gap-ds-4 overflow-hidden rounded-ds-sm border border-ds-border bg-ds-canvas p-ds-6;
+  }
+
+  .ds-float-button-story-frame ds-float-button,
+  .ds-float-button-story-frame ds-float-button-group {
+    position: static;
+  }
+
   ds-collapse {
     @apply block w-[var(--ds-component-width-md)] overflow-hidden rounded-ds-sm border border-ds-border bg-ds-surface text-ds-text shadow-none;
   }
