@@ -5,6 +5,7 @@ import {
   defineDsButton,
   defineDsCollapse,
   defineDsDivider,
+  defineDsDropdown,
   defineDsFloatButton,
   defineDsLayout,
   defineDsSplitter,
@@ -18,6 +19,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsAnchor(registry);
   defineDsButton(registry);
   defineDsDivider(registry);
+  defineDsDropdown(registry);
   defineDsTypography(registry);
   defineDsFloatButton(registry);
   defineDsCollapse(registry);
