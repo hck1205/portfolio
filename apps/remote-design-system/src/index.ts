@@ -6,6 +6,7 @@ import {
   defineDsDivider,
   defineDsFloatButton,
   defineDsLayout,
+  defineDsMenu,
   defineDsSplitter,
   defineDsTypography,
 } from './components';
@@ -20,6 +21,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsFloatButton(registry);
   defineDsCollapse(registry);
   defineDsLayout(registry);
+  defineDsMenu(registry);
   defineDsSplitter(registry);
 }
 
