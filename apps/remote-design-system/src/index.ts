@@ -2,6 +2,7 @@ import './styles.css';
 
 import {
   defineDsAnchor,
+  defineDsAutoComplete,
   defineDsButton,
   defineDsCollapse,
   defineDsDivider,
@@ -21,6 +22,7 @@ export * from './foundation';
 
 export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsAnchor(registry);
+  defineDsAutoComplete(registry);
   defineDsButton(registry);
   defineDsDivider(registry);
   defineDsDropdown(registry);
