@@ -19,3 +19,13 @@ export type {
   CollapseProps,
   CollapseSize
 } from "./Collapse";
+export { defineDsSplitter, DsSplitter, DsSplitterPanel } from "./Splitter";
+export type {
+  SplitterDraggerDoubleClickDetail,
+  SplitterOrientation,
+  SplitterPanelProps,
+  SplitterProps,
+  SplitterResizeDetail,
+  SplitterResizeEndDetail,
+  SplitterResizeStartDetail
+} from "./Splitter";

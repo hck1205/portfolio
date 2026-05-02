@@ -1,6 +1,6 @@
 import "./styles.css";
 
-import { defineDsButton, defineDsCollapse } from "./components";
+import { defineDsButton, defineDsCollapse, defineDsSplitter } from "./components";
 
 export {
   breakPoints,
@@ -34,7 +34,10 @@ export {
   DsButton,
   defineDsCollapse,
   DsCollapse,
-  DsCollapseItem
+  DsCollapseItem,
+  defineDsSplitter,
+  DsSplitter,
+  DsSplitterPanel
 } from "./components";
 export type {
   ButtonClickDetail,
@@ -51,12 +54,20 @@ export type {
   CollapseHeadingLevel,
   CollapseItemProps,
   CollapseProps,
-  CollapseSize
+  CollapseSize,
+  SplitterDraggerDoubleClickDetail,
+  SplitterOrientation,
+  SplitterPanelProps,
+  SplitterProps,
+  SplitterResizeDetail,
+  SplitterResizeEndDetail,
+  SplitterResizeStartDetail
 } from "./components";
 
 export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsButton(registry);
   defineDsCollapse(registry);
+  defineDsSplitter(registry);
 }
 
 defineDesignSystemElements();
