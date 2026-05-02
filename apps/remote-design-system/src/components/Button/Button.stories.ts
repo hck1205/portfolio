@@ -29,7 +29,7 @@ type ButtonStoryArgs = {
 };
 
 const storyDescriptions = {
-  default: "Ant Design의 type 축약 값을 DS Web Component API에 매핑한 기본 Button 스토리입니다.",
+  default: "type 축약 값을 DS Web Component API에 매핑한 기본 Button 스토리입니다.",
   variants: "color와 variant 속성이 type 축약 값보다 우선 적용되는 Button 변형입니다.",
   sizes: "small, middle, large 크기의 Button을 확인할 수 있습니다.",
   states: "disabled, loading, danger, ghost, block 상태의 Button입니다.",
@@ -216,7 +216,7 @@ function renderLinkStory() {
   return createButtonRow([
     createButton({
       ...defaultButtonArgs,
-      href: "https://ant.design/components/button/",
+      href: "https://github.com/hck1205/portfolio",
       label: "Anchor"
     }),
     createButton({ ...defaultButtonArgs, label: "Link type", type: "link" })
@@ -231,7 +231,7 @@ const meta: Meta<ButtonStoryArgs> = {
     docs: {
       description: {
         component:
-          "Button은 사용자의 동작을 실행하는 컴포넌트입니다. Ant Design의 Button 개념을 따르면서 DS Web Component 시맨틱과 foundation token을 사용합니다."
+          "Button은 사용자의 동작을 실행하는 컴포넌트입니다. DS Web Component 시맨틱과 foundation token을 사용합니다."
       }
     }
   },

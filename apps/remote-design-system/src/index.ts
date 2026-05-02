@@ -6,6 +6,7 @@ import {
   defineDsDivider,
   defineDsLayout,
   defineDsSplitter,
+  defineDsTypography,
 } from './components';
 
 export {
@@ -40,6 +41,8 @@ export {
   DsButton,
   defineDsDivider,
   DsDivider,
+  defineDsTypography,
+  DsTypography,
   defineDsCollapse,
   DsCollapse,
   DsCollapseItem,
@@ -68,6 +71,12 @@ export type {
   DividerSize,
   DividerTitlePlacement,
   DividerVariant,
+  TypographyCopyDetail,
+  TypographyEditDetail,
+  TypographyProps,
+  TypographyTitleLevel,
+  TypographyType,
+  TypographyVariant,
   CollapseCollapsible,
   CollapseExpandIconPlacement,
   CollapseHeadingLevel,
@@ -92,6 +101,7 @@ export type {
 export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsButton(registry);
   defineDsDivider(registry);
+  defineDsTypography(registry);
   defineDsCollapse(registry);
   defineDsLayout(registry);
   defineDsSplitter(registry);

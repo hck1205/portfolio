@@ -18,6 +18,15 @@ export type {
   DividerTitlePlacement,
   DividerVariant,
 } from './Divider';
+export { defineDsTypography, DsTypography } from './Typography';
+export type {
+  TypographyCopyDetail,
+  TypographyEditDetail,
+  TypographyProps,
+  TypographyTitleLevel,
+  TypographyType,
+  TypographyVariant,
+} from './Typography';
 export { defineDsCollapse, DsCollapse, DsCollapseItem } from './Collapse';
 export type {
   CollapseCollapsible,
