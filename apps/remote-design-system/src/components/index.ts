@@ -1,5 +1,6 @@
 export * from './Anchor';
 export * from './Button';
+export * from './Cascader';
 export * from './Collapse';
 export * from './Divider';
 export * from './Dropdown';
