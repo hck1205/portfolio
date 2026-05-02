@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
+import "./Pagination.stories.css";
 import { defineDsPagination, type PaginationAlign, type PaginationSize } from ".";
 
 type PaginationStoryArgs = {

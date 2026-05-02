@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
+import "./Divider.stories.css";
 import {
   defineDsDivider,
   type DividerOrientation,

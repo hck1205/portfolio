@@ -9,6 +9,7 @@ import {
 } from "lucide";
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
+import "./FloatButton.stories.css";
 import {
   defineDsFloatButton,
   type FloatButtonGroupPlacement,

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
+import "./Dropdown.stories.css";
 import { defineDsDropdown, type DropdownPlacement, type DropdownTrigger } from ".";
 
 type DropdownStoryArgs = {

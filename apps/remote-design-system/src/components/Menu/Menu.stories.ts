@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { BarChart3, FolderKanban, Home, Settings, Users, createElement as createLucideElement } from "lucide";
 
+import "./Menu.stories.css";
 import { defineDsMenu, type MenuMode, type MenuTheme } from ".";
 
 type MenuStoryArgs = {

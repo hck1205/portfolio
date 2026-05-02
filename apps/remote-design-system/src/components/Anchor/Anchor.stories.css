@@ -1,0 +1,41 @@
+@reference "../../styles.css";
+
+@layer components {
+  .ds-anchor-story-frame {
+    @apply grid h-[520px] w-[860px] max-w-full grid-cols-[220px_minmax(0,1fr)] overflow-auto rounded-ds-sm border border-ds-border bg-ds-canvas text-ds-text;
+    box-shadow: var(--shadow-ds-card);
+  }
+
+  .ds-anchor-story-frame--horizontal {
+    @apply grid-cols-1 grid-rows-[auto_minmax(0,1fr)];
+  }
+
+  .ds-anchor-story-nav {
+    @apply sticky top-0 z-[1] self-start border-r border-ds-border bg-ds-surface p-ds-4;
+  }
+
+  .ds-anchor-story-frame--horizontal .ds-anchor-story-nav {
+    @apply border-b border-r-0;
+  }
+
+  .ds-anchor-story-content {
+    @apply grid gap-ds-5 p-ds-6;
+  }
+
+  .ds-anchor-story-content section {
+    @apply grid min-h-[320px] content-start gap-ds-3 rounded-ds-sm border border-ds-border bg-ds-surface p-ds-6;
+  }
+
+  .ds-anchor-story-content h3,
+  .ds-anchor-story-content p {
+    @apply m-0;
+  }
+
+  .ds-anchor-story-content h3 {
+    @apply text-ds-4 font-ds-emphasis leading-ds-tight;
+  }
+
+  .ds-anchor-story-content p {
+    @apply max-w-[560px] text-ds-3 leading-ds-readable text-ds-muted;
+  }
+}

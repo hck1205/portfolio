@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
+import "./Typography.stories.css";
 import {
   defineDsTypography,
   type TypographyTitleLevel,

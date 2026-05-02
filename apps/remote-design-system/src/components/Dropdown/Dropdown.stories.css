@@ -1,0 +1,27 @@
+@reference "../../styles.css";
+
+@layer components {
+  .ds-dropdown-story-frame {
+    @apply flex min-h-[260px] w-[520px] max-w-full flex-wrap items-start justify-center gap-ds-4 rounded-ds-sm border border-ds-border bg-ds-surface p-ds-8 text-ds-text;
+    box-shadow: var(--shadow-ds-card);
+  }
+
+  .ds-dropdown-story-placement-grid {
+    @apply grid min-h-[420px] w-[720px] max-w-full grid-cols-3 items-center justify-items-center gap-ds-8 rounded-ds-sm border border-ds-border bg-ds-surface p-ds-10 text-ds-text;
+    box-shadow: var(--shadow-ds-card);
+  }
+
+  .ds-dropdown-story-trigger {
+    @apply inline-flex min-h-[30px] items-center justify-center rounded-ds-sm border border-ds-border bg-ds-surface px-ds-2 py-ds-1 text-ds-1 font-ds-strong leading-ds-tight text-ds-text;
+    cursor: pointer;
+  }
+
+  .ds-dropdown-story-trigger:hover {
+    @apply border-ds-primary text-ds-primary;
+  }
+
+  .ds-dropdown-story-trigger:focus-visible {
+    outline: var(--ds-focus-ring-width) solid var(--color-ds-primary);
+    outline-offset: var(--ds-focus-ring-offset);
+  }
+}

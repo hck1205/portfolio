@@ -1,6 +1,7 @@
 import { Download, Search, createElement as createLucideElement } from "lucide";
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
+import "./Button.stories.css";
 import {
   defineDsButton,
   type ButtonColor,

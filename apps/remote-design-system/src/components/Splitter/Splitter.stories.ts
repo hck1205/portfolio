@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
+import "./Splitter.stories.css";
 import { defineDsSplitter, type SplitterOrientation } from ".";
 
 type SplitterStoryArgs = {

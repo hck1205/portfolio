@@ -1,0 +1,30 @@
+@reference "../../styles.css";
+
+@layer components {
+  .ds-splitter-story-preview {
+    @apply h-[360px] w-[760px] max-w-full overflow-hidden rounded-ds-sm border border-ds-border bg-ds-canvas text-ds-text;
+    box-shadow: var(--shadow-ds-card);
+  }
+
+  .ds-splitter-story-preview ds-splitter {
+    --ds-splitter-height: 100%;
+    --ds-splitter-width: 100%;
+  }
+
+  .ds-splitter-story-panel {
+    @apply grid h-full content-start gap-ds-2 bg-ds-surface p-ds-5;
+  }
+
+  .ds-splitter-story-panel h3,
+  .ds-splitter-story-panel p {
+    @apply m-0;
+  }
+
+  .ds-splitter-story-panel h3 {
+    @apply text-ds-4 font-ds-emphasis leading-ds-tight;
+  }
+
+  .ds-splitter-story-panel p {
+    @apply text-ds-2 leading-ds-readable text-ds-muted;
+  }
+}

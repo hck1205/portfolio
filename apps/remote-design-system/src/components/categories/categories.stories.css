@@ -1,0 +1,15 @@
+@reference "../../styles.css";
+
+@layer components {
+  .ds-component-category-overview {
+    @apply grid w-[520px] max-w-full gap-ds-3 rounded-ds-sm border border-ds-border bg-ds-surface p-ds-6 text-ds-text;
+  }
+
+  .ds-component-category-overview h2 {
+    @apply text-ds-5 font-ds-emphasis leading-ds-tight;
+  }
+
+  .ds-component-category-overview p {
+    @apply text-ds-3 leading-ds-readable text-ds-muted;
+  }
+}

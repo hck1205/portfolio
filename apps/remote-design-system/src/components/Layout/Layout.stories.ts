@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
+import "./Layout.stories.css";
 import { defineDsButton } from "../Button";
 import { defineDsLayout } from ".";
 import { defaultLayoutArgs, storyDescriptions } from "./stories/Layout.storyData";

@@ -70,7 +70,9 @@ Use this structure for non-trivial components:
 src/components/{ComponentName}/
   index.ts
   {ComponentName}.tsx
+  {ComponentName}.css
   {ComponentName}.stories.ts
+  {ComponentName}.stories.css
   constants/
     {ComponentName}.constants.ts
   dom/
@@ -86,11 +88,16 @@ src/components/{ComponentName}/
 ```
 
 Use fewer files for simple components. Split a file when it mixes multiple responsibilities or becomes hard to scan.
+Only create `{ComponentName}.css` when the component has consumer-facing Light DOM/global runtime
+CSS. Shadow DOM runtime styles may stay in `{ComponentName}.styles.ts`. Storybook-only wrapper,
+layout, and preview styles must live in `{ComponentName}.stories.css`, not in `src/styles.css`.
 
 ### File Responsibilities
 
 - `{ComponentName}.tsx`: root custom element class, lifecycle, parent-level state, public getters/setters.
 - `{ComponentName}Item.tsx`: child item custom element class, item state, item lifecycle.
+- `{ComponentName}.css`: consumer runtime CSS for Light DOM/global selectors that must be bundled through `src/styles.css`.
+- `{ComponentName}.stories.css`: Storybook preview-only CSS such as story frames, demo layout wrappers, and mock controls.
 - `*.render.ts`: DOM creation and DOM sync helpers. No business rules beyond rendering.
 - `*.styles.ts`: component shadow styles or style maps. Prefer shared `CSSStyleSheet` for repeated instances.
 - `*.types.ts`: public props, unions, and custom event detail types.
@@ -196,6 +203,33 @@ Avoid:
 - global CSS that targets Shadow DOM internals
 - component styles that duplicate the same rules in two places
 
+### CSS Ownership
+
+Use this ownership model:
+
+```text
+src/styles.css
+  Consumer entry CSS. Keep Tailwind import, DS tokens, theme aliases, base styles,
+  utilities, and imports for consumer runtime component CSS here.
+
+src/components/{ComponentName}/{ComponentName}.css
+  Consumer runtime CSS only when a component needs Light DOM/global selectors outside
+  Shadow DOM. Import this file from `src/styles.css` so it is included in `dist/styles.css`.
+
+src/components/{ComponentName}/{ComponentName}.styles.ts`
+  Shadow DOM runtime CSS for Web Component internals. This is bundled with the component
+  class and applied through the component's stylesheet helper.
+
+src/components/{ComponentName}/{ComponentName}.stories.css`
+  Storybook preview CSS only. Import it from `{ComponentName}.stories.ts`.
+  Add `@reference "../../styles.css";` (or the correct relative path) when using
+  Tailwind `@apply` with DS theme utilities.
+```
+
+Do not put component story frames, demo wrappers, mock nav, or preview-only controls in
+`src/styles.css`. Do not move consumer runtime CSS into `*.stories.css`, because consumers
+will not import story files.
+
 ## Performance Rules
 
 - Create DOM structure once; update only changed attributes, text, hidden state, and ARIA.
@@ -262,6 +296,7 @@ Story rules:
 - map controls to public API only
 - write component and story Docs descriptions in Korean
 - every story from `Default` through edge-case stories must explain what is different from the other stories
+- keep story-only CSS in `{ComponentName}.stories.css` and import it from the story file
 - keep explanatory text in Docs descriptions, not inside every story canvas
 - keep stories deterministic and small
 - use `.stories.ts` when no JSX is needed
@@ -294,6 +329,7 @@ Update:
 - `src/components/index.ts`
 - root `src/index.ts`
 - `defineDesignSystemElements()`
+- `src/styles.css` only when a new consumer runtime `{ComponentName}.css` must be imported
 
 Barrel export convention:
 

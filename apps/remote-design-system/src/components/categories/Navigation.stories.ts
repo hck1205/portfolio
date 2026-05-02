@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
+import "./categories.stories.css";
 import { createCategoryOverview } from "./categoryOverview";
 
 const meta: Meta = {

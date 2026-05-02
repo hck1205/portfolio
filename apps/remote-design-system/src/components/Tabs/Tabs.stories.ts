@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
+import "./Tabs.stories.css";
 import { defineDsTabs, type TabsPlacement, type TabsSize, type TabsType } from ".";
 
 type TabsStoryArgs = {

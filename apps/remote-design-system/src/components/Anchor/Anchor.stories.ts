@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
+import "./Anchor.stories.css";
 import { defineDsAnchor, type AnchorDirection } from ".";
 
 type AnchorStoryArgs = {

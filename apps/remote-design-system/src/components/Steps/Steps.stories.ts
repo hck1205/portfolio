@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
+import "./Steps.stories.css";
 import { defineDsSteps } from ".";
 import {
   defaultSteps,

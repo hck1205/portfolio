@@ -1,0 +1,23 @@
+@layer components {
+  ds-collapse {
+    background: var(--color-ds-surface);
+    border: var(--ds-border-width-default) solid var(--color-ds-border);
+    border-radius: var(--radius-ds-sm);
+    box-shadow: none;
+    color: var(--color-ds-text);
+    display: block;
+    overflow: hidden;
+    width: var(--ds-component-width-md);
+  }
+
+  ds-collapse[data-borderless] {
+    border: 0;
+    border-radius: 0;
+  }
+
+  ds-collapse[data-ghost] {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+  }
+}
