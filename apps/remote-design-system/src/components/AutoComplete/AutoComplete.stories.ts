@@ -70,7 +70,7 @@ const storyDescriptions = {
   variants: "outlined, filled, borderless, underlined variant별 입력 스타일을 같은 옵션으로 비교합니다.",
   clear: "allow-clear 상태에서 입력값이 있을 때 clear 버튼이 표시되고 clear 이벤트가 발생합니다.",
   sizes: "small, default, large 크기별 높이와 폰트 크기를 비교합니다.",
-  childOptions: "options 속성 대신 ds-auto-complete-option 자식 요소로 옵션을 선언하는 방식을 확인합니다.",
+  childOptions: "추천 옵션을 속성 값이 아니라 자식 요소로 직접 선언하는 사용 방식을 확인합니다.",
   disabled: "disabled 상태에서는 입력, clear, 추천 목록 열림이 비활성화됩니다."
 };
 
@@ -233,7 +233,7 @@ function renderSizeStory(args: AutoCompleteStoryArgs) {
   ensureAutoCompleteDefined();
 
   return createFrame([
-    createRow(
+    createStack(
       (["small", "medium", "large"] as const).map((size) => {
         return createSection(size === "medium" ? "Default" : size, [
           createAutoComplete(
@@ -300,7 +300,8 @@ function createDocsDescription(description: string) {
 }
 
 const meta = {
-  title: "Components/AutoComplete",
+  title: "Components/Data Entry/AutoComplete",
+  tags: ["autodocs"],
   render: renderBasicStory,
   args: defaultArgs,
   argTypes: {

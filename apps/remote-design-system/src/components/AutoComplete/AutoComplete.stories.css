@@ -2,6 +2,7 @@
   display: grid;
   gap: 20px;
   max-width: min(760px, calc(100vw - 48px));
+  min-height: 360px;
   min-width: min(420px, calc(100vw - 48px));
   width: 100%;
 }
