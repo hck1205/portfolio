@@ -4,6 +4,7 @@ export * from './Collapse';
 export * from './Divider';
 export * from './Dropdown';
 export * from './FloatButton';
+export * from './InputNumber';
 export * from './Layout';
 export * from './Menu';
 export * from './Pagination';

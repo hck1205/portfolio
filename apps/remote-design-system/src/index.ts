@@ -7,6 +7,7 @@ import {
   defineDsDivider,
   defineDsDropdown,
   defineDsFloatButton,
+  defineDsInputNumber,
   defineDsLayout,
   defineDsMenu,
   defineDsPagination,
@@ -26,6 +27,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsDropdown(registry);
   defineDsTypography(registry);
   defineDsFloatButton(registry);
+  defineDsInputNumber(registry);
   defineDsCollapse(registry);
   defineDsLayout(registry);
   defineDsMenu(registry);
