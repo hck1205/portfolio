@@ -1,9 +1,3 @@
-export { DsDivider } from "./Divider";
-export { defineDsDivider } from "./registration/defineDsDivider";
-export type {
-  DividerOrientation,
-  DividerProps,
-  DividerSize,
-  DividerTitlePlacement,
-  DividerVariant
-} from "./types/Divider.types";
+export * from "./Divider";
+export * from "./registration/defineDsDivider";
+export * from "./types/Divider.types";

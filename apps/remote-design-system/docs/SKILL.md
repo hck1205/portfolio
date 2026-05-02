@@ -97,6 +97,9 @@ Use fewer files for simple components. Split a file when it mixes multiple respo
 - `*.dom.ts`: reusable DOM helpers such as id generation and boolean attribute normalization.
 - `registration/define*.ts`: custom element registration with SSR-safe `customElements` guards.
 - `index.ts`: public exports only.
+  Prefer `export * from "./PublicModule"` in barrel files when the target module is already a public
+  API boundary. Do not use `export *` for private helpers such as render, styles, DOM helpers,
+  constants, or test/story-only data unless that folder has intentionally made them public.
 
 ## Reference Pattern: Collapse
 
@@ -289,6 +292,17 @@ Update:
 - `src/components/index.ts`
 - root `src/index.ts`
 - `defineDesignSystemElements()`
+
+Barrel export convention:
+
+- Component folder `index.ts` files should use `export *` from public modules only: the root element,
+  public child/subcomponent elements, registration function, and public types.
+- `src/components/index.ts`, `src/foundation/index.ts`, and root `src/index.ts` should prefer
+  `export * from "./..."` instead of manually repeating every exported symbol.
+- Keep `defineDesignSystemElements()` imports explicit because those runtime functions are executed,
+  not only re-exported.
+- Do not export private render helpers, stylesheets, constants, DOM helpers, or test-only data from
+  public barrels.
 
 Do not export private render helpers, internal styles, or test-only data.
 

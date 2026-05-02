@@ -1,2 +1,2 @@
-export { fontTokens } from "./font";
-export { fontStory } from "./story";
+export * from "./font";
+export * from "./story";

@@ -1,13 +1,6 @@
-export { DsLayout } from "./Layout";
-export { DsLayoutContent, DsLayoutFooter, DsLayoutHeader } from "./LayoutRegion";
-export { DsLayoutSider } from "./LayoutSider";
-export { defineDsLayout } from "./registration/defineDsLayout";
-export type {
-  LayoutBreakpoint,
-  LayoutProps,
-  LayoutSiderCollapseDetail,
-  LayoutSiderCollapseType,
-  LayoutSiderProps,
-  LayoutSiderTheme
-} from "./types/Layout.types";
+export * from "./Layout";
+export * from "./LayoutRegion";
+export * from "./LayoutSider";
+export * from "./registration/defineDsLayout";
+export * from "./types/Layout.types";
 

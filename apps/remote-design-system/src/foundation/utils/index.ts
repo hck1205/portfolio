@@ -1,5 +1,2 @@
-export {
-  createToken,
-  tokenNameToCssVariable
-} from "./utils";
-export { utilsStory } from "./story";
+export * from "./utils";
+export * from "./story";

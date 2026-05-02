@@ -1,14 +1,4 @@
-export { DsFloatButton } from "./FloatButton";
-export { DsFloatButtonGroup } from "./FloatButtonGroup";
-export { defineDsFloatButton } from "./registration/defineDsFloatButton";
-export type {
-  FloatButtonClickDetail,
-  FloatButtonGroupOpenChangeDetail,
-  FloatButtonGroupPlacement,
-  FloatButtonGroupProps,
-  FloatButtonGroupTrigger,
-  FloatButtonHtmlType,
-  FloatButtonProps,
-  FloatButtonShape,
-  FloatButtonType
-} from "./types/FloatButton.types";
+export * from "./FloatButton";
+export * from "./FloatButtonGroup";
+export * from "./registration/defineDsFloatButton";
+export * from "./types/FloatButton.types";

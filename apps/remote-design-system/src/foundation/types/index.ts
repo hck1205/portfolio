@@ -1,6 +1,2 @@
-export type {
-  FoundationToken,
-  FoundationTokenGroup,
-  TokenCategory
-} from "./types";
-export { typesStory } from "./story";
+export * from "./types";
+export * from "./story";

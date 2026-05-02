@@ -1,4 +1,1 @@
-export {
-  foundationTokenGroups,
-  foundationTokens
-} from "./registry";
+export * from "./registry";

@@ -1,10 +1,3 @@
-export { DsTypography } from "./Typography";
-export { defineDsTypography } from "./registration/defineDsTypography";
-export type {
-  TypographyCopyDetail,
-  TypographyEditDetail,
-  TypographyProps,
-  TypographyTitleLevel,
-  TypographyType,
-  TypographyVariant
-} from "./types/Typography.types";
+export * from "./Typography";
+export * from "./registration/defineDsTypography";
+export * from "./types/Typography.types";

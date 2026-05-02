@@ -1,3 +1,2 @@
-export { shadow, shadowTokens } from "./shadow";
-export type { Shadow } from "./shadow";
-export { shadowStory } from "./story";
+export * from "./shadow";
+export * from "./story";
