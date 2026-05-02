@@ -1,3 +1,4 @@
+export * from './Anchor';
 export * from './Button';
 export * from './Collapse';
 export * from './Divider';

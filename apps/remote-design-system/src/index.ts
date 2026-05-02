@@ -1,6 +1,7 @@
 import './styles.css';
 
 import {
+  defineDsAnchor,
   defineDsButton,
   defineDsCollapse,
   defineDsDivider,
@@ -14,6 +15,7 @@ export * from './components';
 export * from './foundation';
 
 export function defineDesignSystemElements(registry?: CustomElementRegistry) {
+  defineDsAnchor(registry);
   defineDsButton(registry);
   defineDsDivider(registry);
   defineDsTypography(registry);
