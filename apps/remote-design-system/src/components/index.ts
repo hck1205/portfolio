@@ -5,5 +5,6 @@ export * from './Divider';
 export * from './Dropdown';
 export * from './FloatButton';
 export * from './Layout';
+export * from './Menu';
 export * from './Splitter';
 export * from './Typography';

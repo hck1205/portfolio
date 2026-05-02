@@ -742,6 +742,19 @@
     @apply w-[1040px];
   }
 
+  .ds-menu-story-frame {
+    @apply grid min-h-[360px] w-[320px] max-w-full content-start rounded-ds-sm border border-ds-border bg-ds-surface p-ds-4 text-ds-text;
+    box-shadow: var(--shadow-ds-card);
+  }
+
+  .ds-menu-story-frame--horizontal {
+    @apply w-fit;
+  }
+
+  .ds-menu-story-frame ds-menu[mode="horizontal"] {
+    @apply max-w-full;
+  }
+
   .ds-component-category-overview {
     @apply grid w-[520px] max-w-full gap-ds-3 rounded-ds-sm border border-ds-border bg-ds-surface p-ds-6 text-ds-text;
   }
