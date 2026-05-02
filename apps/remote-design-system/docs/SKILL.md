@@ -54,6 +54,7 @@ Build components that are:
 5. Add Storybook stories:
    - stories render the actual custom element
    - docs descriptions explain the variant in Korean
+   - every exported story has a short docs description that states the behavior or variant it demonstrates
    - canvas should show the component, not duplicate explanatory text
 
 6. Verify:
@@ -260,6 +261,7 @@ Story rules:
 - render actual custom elements, not approximations
 - map controls to public API only
 - write component and story Docs descriptions in Korean
+- every story from `Default` through edge-case stories must explain what is different from the other stories
 - keep explanatory text in Docs descriptions, not inside every story canvas
 - keep stories deterministic and small
 - use `.stories.ts` when no JSX is needed
@@ -325,6 +327,23 @@ Before finishing, verify:
 - Storybook Docs descriptions are written in Korean
 - docs descriptions are not duplicated in story canvas
 - typecheck and build pass
+
+### Anchor and Scroll Navigation Checklist
+
+Use this checklist for Anchor, table-of-contents, scrollspy, or section navigation components:
+
+- The component does not own fixed width or height; the consuming wrapper owns size and scrollable space.
+- Target lookup is scoped to the active scroll container before using document-level lookup.
+- Click navigation and scrollspy state use the same target resolution path.
+- Active state is based on visible target area first, not only whether a section top crossed a line.
+- The bottom-of-scroll case explicitly activates the last valid target.
+- Smooth click scrolling holds the clicked target active so intermediate sections do not flash active.
+- Scroll handling is throttled with `requestAnimationFrame` and finalized with a short debounce.
+- Layout reads are grouped: read the container viewport metrics once, then read each target once.
+- Global listeners, animation frames, timers, and pending scroll state are cleaned up in `disconnectedCallback`.
+- Nested links do not create invalid interactive nesting such as `<a>` inside `<a>`.
+- Storybook stories cover vertical, horizontal, nested, history replacement, and scroll-container sizing.
+- Every story has a Korean docs description explaining the behavior or variant it demonstrates.
 
 ## Completion Criteria
 
