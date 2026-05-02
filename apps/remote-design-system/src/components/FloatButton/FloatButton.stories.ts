@@ -247,7 +247,7 @@ const meta: Meta<FloatButtonStoryArgs> = {
     docs: {
       description: {
         component:
-          "FloatButton은 전역 액션을 페이지 위에 고정해 보여주는 컴포넌트입니다. Ant Design의 FloatButton 개념을 따르면서 DS Web Component 시맨틱과 foundation token을 사용합니다."
+          "FloatButton은 전역 액션을 페이지 위에 고정해 보여주는 컴포넌트입니다. 빠르게 접근해야 하는 보조 액션을 DS Web Component 시맨틱과 foundation token으로 표현합니다."
       }
     }
   },
