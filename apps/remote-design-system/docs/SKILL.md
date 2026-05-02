@@ -216,11 +216,11 @@ src/components/{ComponentName}/{ComponentName}.css
   Consumer runtime CSS only when a component needs Light DOM/global selectors outside
   Shadow DOM. Import this file from `src/styles.css` so it is included in `dist/styles.css`.
 
-src/components/{ComponentName}/{ComponentName}.styles.ts`
+src/components/{ComponentName}/{ComponentName}.styles.ts
   Shadow DOM runtime CSS for Web Component internals. This is bundled with the component
   class and applied through the component's stylesheet helper.
 
-src/components/{ComponentName}/{ComponentName}.stories.css`
+src/components/{ComponentName}/{ComponentName}.stories.css
   Storybook preview CSS only. Import it from `{ComponentName}.stories.ts`.
   Add `@reference "../../styles.css";` (or the correct relative path) when using
   Tailwind `@apply` with DS theme utilities.
@@ -295,6 +295,8 @@ Story rules:
 - render actual custom elements, not approximations
 - map controls to public API only
 - write component and story Docs descriptions in Korean
+- do not mention upstream reference libraries in Storybook Docs descriptions;
+  describe the DS behavior and variant directly instead
 - every story from `Default` through edge-case stories must explain what is different from the other stories
 - keep story-only CSS in `{ComponentName}.stories.css` and import it from the story file
 - keep explanatory text in Docs descriptions, not inside every story canvas
@@ -306,6 +308,8 @@ Story rules:
 For component docs:
 
 - explain purpose and when to use in Korean
+- describe the design-system component in its own terms and avoid naming upstream reference
+  libraries in public docs descriptions
 - document attributes/properties in Korean
 - document custom events and `detail` in Korean
 - document slots or child elements in Korean
