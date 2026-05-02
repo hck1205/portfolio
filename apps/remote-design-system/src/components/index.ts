@@ -7,5 +7,6 @@ export * from './FloatButton';
 export * from './Layout';
 export * from './Menu';
 export * from './Pagination';
+export * from './Steps';
 export * from './Splitter';
 export * from './Typography';

@@ -10,6 +10,7 @@ import {
   defineDsLayout,
   defineDsMenu,
   defineDsPagination,
+  defineDsSteps,
   defineDsSplitter,
   defineDsTypography,
 } from './components';
@@ -28,6 +29,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsLayout(registry);
   defineDsMenu(registry);
   defineDsPagination(registry);
+  defineDsSteps(registry);
   defineDsSplitter(registry);
 }
 
