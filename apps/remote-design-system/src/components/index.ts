@@ -19,3 +19,19 @@ export type {
   CollapseProps,
   CollapseSize
 } from "./Collapse";
+export {
+  defineDsLayout,
+  DsLayout,
+  DsLayoutContent,
+  DsLayoutFooter,
+  DsLayoutHeader,
+  DsLayoutSider
+} from "./Layout";
+export type {
+  LayoutBreakpoint,
+  LayoutProps,
+  LayoutSiderCollapseDetail,
+  LayoutSiderCollapseType,
+  LayoutSiderProps,
+  LayoutSiderTheme
+} from "./Layout";

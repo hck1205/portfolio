@@ -1,6 +1,6 @@
 import "./styles.css";
 
-import { defineDsButton, defineDsCollapse } from "./components";
+import { defineDsButton, defineDsCollapse, defineDsLayout } from "./components";
 
 export {
   breakPoints,
@@ -34,7 +34,13 @@ export {
   DsButton,
   defineDsCollapse,
   DsCollapse,
-  DsCollapseItem
+  DsCollapseItem,
+  defineDsLayout,
+  DsLayout,
+  DsLayoutContent,
+  DsLayoutFooter,
+  DsLayoutHeader,
+  DsLayoutSider
 } from "./components";
 export type {
   ButtonClickDetail,
@@ -51,12 +57,19 @@ export type {
   CollapseHeadingLevel,
   CollapseItemProps,
   CollapseProps,
-  CollapseSize
+  CollapseSize,
+  LayoutBreakpoint,
+  LayoutProps,
+  LayoutSiderCollapseDetail,
+  LayoutSiderCollapseType,
+  LayoutSiderProps,
+  LayoutSiderTheme
 } from "./components";
 
 export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsButton(registry);
   defineDsCollapse(registry);
+  defineDsLayout(registry);
 }
 
 defineDesignSystemElements();
