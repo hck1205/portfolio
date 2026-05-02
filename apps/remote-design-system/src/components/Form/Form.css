@@ -1,0 +1,215 @@
+ds-form {
+  color: var(--color-ds-text);
+  display: block;
+  font-family: var(--font-sans);
+  font-size: var(--text-ds-2);
+  line-height: var(--leading-ds-normal);
+  max-width: 100%;
+}
+
+ds-form[hidden],
+ds-form-item[hidden] {
+  display: none !important;
+}
+
+ds-form .ds-form__native {
+  display: grid;
+  gap: var(--spacing-ds-4);
+  margin: 0;
+}
+
+ds-form[data-layout="inline"] .ds-form__native {
+  align-items: start;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-ds-3);
+}
+
+ds-form-item {
+  display: grid;
+  gap: var(--spacing-ds-2);
+}
+
+ds-form-item[data-no-style] {
+  display: contents;
+}
+
+ds-form-item[data-layout="horizontal"] {
+  align-items: start;
+  column-gap: var(--spacing-ds-4);
+  grid-template-columns: var(--ds-form-label-width, 128px) minmax(0, 1fr);
+}
+
+ds-form-item[data-layout="vertical"] {
+  grid-template-columns: 1fr;
+}
+
+ds-form[data-layout="inline"] ds-form-item,
+ds-form-item[data-layout="inline"] {
+  align-items: start;
+  display: inline-grid;
+  grid-template-columns: 1fr;
+  min-width: 180px;
+}
+
+ds-form-item .ds-form-item__label {
+  color: var(--color-ds-text);
+  font: 600 var(--text-ds-2) / var(--leading-ds-normal) var(--font-sans);
+  min-height: 32px;
+  padding-top: 5px;
+}
+
+ds-form-item[data-label-align="right"] .ds-form-item__label {
+  text-align: end;
+}
+
+ds-form-item[data-label-align="left"] .ds-form-item__label,
+ds-form-item[data-layout="vertical"] .ds-form-item__label,
+ds-form[data-layout="inline"] ds-form-item .ds-form-item__label {
+  text-align: start;
+}
+
+ds-form-item[data-required] .ds-form-item__label::after {
+  color: var(--color-ds-danger);
+  content: "*";
+  display: inline-block;
+  margin-inline-start: 4px;
+}
+
+ds-form[required-mark="false"] ds-form-item[data-required] .ds-form-item__label::after {
+  content: none;
+}
+
+ds-form-item .ds-form-item__control {
+  display: grid;
+  gap: var(--spacing-ds-1);
+  min-width: 0;
+}
+
+ds-form-item .ds-form-item__control > input,
+ds-form-item .ds-form-item__control > select,
+ds-form-item .ds-form-item__control > textarea {
+  background: var(--color-ds-surface);
+  border: var(--ds-border-width-default) solid var(--color-ds-border);
+  border-radius: var(--radius-ds-sm);
+  color: var(--color-ds-text);
+  font: inherit;
+  min-height: 32px;
+  outline: 0;
+  padding: 0 var(--spacing-ds-3);
+  transition:
+    background-color 150ms ease-in-out,
+    border-color 150ms ease-in-out,
+    box-shadow 150ms ease-in-out;
+  width: 100%;
+}
+
+ds-form-item .ds-form-item__control > textarea {
+  min-height: 72px;
+  padding-block: var(--spacing-ds-2);
+  resize: vertical;
+}
+
+ds-form-item .ds-form-item__control > input:hover,
+ds-form-item .ds-form-item__control > select:hover,
+ds-form-item .ds-form-item__control > textarea:hover {
+  border-color: var(--color-ds-primary-hover);
+}
+
+ds-form-item .ds-form-item__control > input:focus,
+ds-form-item .ds-form-item__control > select:focus,
+ds-form-item .ds-form-item__control > textarea:focus {
+  border-color: var(--color-ds-primary);
+  box-shadow: 0 0 0 2px var(--color-indigo-alpha-indigo2);
+}
+
+ds-form[data-size="small"] ds-form-item .ds-form-item__control > input,
+ds-form[data-size="small"] ds-form-item .ds-form-item__control > select {
+  min-height: 24px;
+  padding-inline: var(--spacing-ds-2);
+}
+
+ds-form[data-size="large"] ds-form-item .ds-form-item__control > input,
+ds-form[data-size="large"] ds-form-item .ds-form-item__control > select {
+  font-size: var(--text-ds-3);
+  min-height: 40px;
+}
+
+ds-form[data-variant="filled"] ds-form-item .ds-form-item__control > input,
+ds-form[data-variant="filled"] ds-form-item .ds-form-item__control > select,
+ds-form[data-variant="filled"] ds-form-item .ds-form-item__control > textarea {
+  background: var(--color-ds-subtle-surface);
+  border-color: transparent;
+}
+
+ds-form[data-variant="borderless"] ds-form-item .ds-form-item__control > input,
+ds-form[data-variant="borderless"] ds-form-item .ds-form-item__control > select,
+ds-form[data-variant="borderless"] ds-form-item .ds-form-item__control > textarea {
+  border-color: transparent;
+}
+
+ds-form[data-variant="underlined"] ds-form-item .ds-form-item__control > input,
+ds-form[data-variant="underlined"] ds-form-item .ds-form-item__control > select,
+ds-form[data-variant="underlined"] ds-form-item .ds-form-item__control > textarea {
+  border-color: transparent transparent var(--color-ds-border);
+  border-radius: 0;
+}
+
+ds-form[data-disabled] {
+  color: var(--color-ds-muted);
+}
+
+ds-form[data-disabled] input,
+ds-form[data-disabled] select,
+ds-form[data-disabled] textarea,
+ds-form[data-disabled] button {
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+ds-form-item[data-validate-status="error"] .ds-form-item__control > input,
+ds-form-item[data-validate-status="error"] .ds-form-item__control > select,
+ds-form-item[data-validate-status="error"] .ds-form-item__control > textarea {
+  border-color: var(--color-ds-danger);
+}
+
+ds-form-item[data-validate-status="warning"] .ds-form-item__control > input,
+ds-form-item[data-validate-status="warning"] .ds-form-item__control > select,
+ds-form-item[data-validate-status="warning"] .ds-form-item__control > textarea {
+  border-color: var(--color-amber-solid-amber6);
+}
+
+ds-form-item[data-validate-status="success"] .ds-form-item__control > input,
+ds-form-item[data-validate-status="success"] .ds-form-item__control > select,
+ds-form-item[data-validate-status="success"] .ds-form-item__control > textarea {
+  border-color: var(--color-moss-solid-moss6);
+}
+
+ds-form-item .ds-form-item__help,
+ds-form-item .ds-form-item__extra {
+  color: var(--color-ds-muted);
+  font: var(--text-ds-1) / var(--leading-ds-normal) var(--font-sans);
+}
+
+ds-form-item[data-validate-status="error"] .ds-form-item__help {
+  color: var(--color-ds-danger);
+}
+
+ds-form-item[data-validate-status="warning"] .ds-form-item__help {
+  color: var(--color-amber-solid-amber7);
+}
+
+ds-form-item[data-validate-status="success"] .ds-form-item__help {
+  color: var(--color-moss-solid-moss7);
+}
+
+@media (max-width: 640px) {
+  ds-form-item[data-layout="horizontal"] {
+    grid-template-columns: 1fr;
+  }
+
+  ds-form-item[data-layout="horizontal"] .ds-form-item__label {
+    padding-top: 0;
+    text-align: start;
+  }
+}
