@@ -23,6 +23,7 @@ export * from './Slider';
 export * from './Steps';
 export * from './Splitter';
 export * from './Tabs';
+export * from './TreeSelect';
 export * from './Switch';
 export * from './TimePicker';
 export * from './Transfer';

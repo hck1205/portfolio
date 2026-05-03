@@ -27,6 +27,7 @@ import {
   defineDsSplitter,
   defineDsSwitch,
   defineDsTabs,
+  defineDsTreeSelect,
   defineDsTimePicker,
   defineDsTransfer,
   defineDsTypography,
@@ -63,6 +64,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsSplitter(registry);
   defineDsSwitch(registry);
   defineDsTabs(registry);
+  defineDsTreeSelect(registry);
   defineDsTimePicker(registry);
   defineDsTransfer(registry);
 }
