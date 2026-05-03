@@ -19,6 +19,9 @@ import {
   defineDsMenu,
   defineDsMentions,
   defineDsPagination,
+  defineDsRadio,
+  defineDsRate,
+  defineDsSelect,
   defineDsSlider,
   defineDsSteps,
   defineDsSplitter,
@@ -49,6 +52,9 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsMenu(registry);
   defineDsMentions(registry);
   defineDsPagination(registry);
+  defineDsRadio(registry);
+  defineDsRate(registry);
+  defineDsSelect(registry);
   defineDsSlider(registry);
   defineDsSteps(registry);
   defineDsSplitter(registry);
