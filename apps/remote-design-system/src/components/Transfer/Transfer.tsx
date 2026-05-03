@@ -200,6 +200,7 @@ export class DsTransfer extends HTMLElement {
     wrapper.className = "ds-transfer__search";
     wrapper.hidden = !this.showSearch;
     input.className = "ds-transfer__search-input";
+    input.dataset.direction = direction;
     input.placeholder = "Search here";
     input.value = value;
     input.addEventListener("input", () => {
@@ -216,10 +217,26 @@ export class DsTransfer extends HTMLElement {
         })
       );
       this.render();
+      this.focusSearchInput(direction);
     });
     wrapper.append(input);
 
     return wrapper;
+  }
+
+  private focusSearchInput(direction: TransferDirection) {
+    const input = this.rootElement?.querySelector<HTMLInputElement>(
+      `.ds-transfer__search-input[data-direction="${direction}"]`
+    );
+
+    if (!input) {
+      return;
+    }
+
+    const caretPosition = input.value.length;
+
+    input.focus();
+    input.setSelectionRange(caretPosition, caretPosition);
   }
 
   private createItem(direction: TransferDirection, item: TransferItem, checked: boolean) {
@@ -229,20 +246,21 @@ export class DsTransfer extends HTMLElement {
     const title = document.createElement("span");
     const description = document.createElement("span");
     const selectedKeys = direction === "left" ? this.sourceSelectedKeys : this.targetSelectedKeys;
+    const disabled = this.disabled || Boolean(item.disabled);
 
     row.className = "ds-transfer__item";
+    row.dataset.disabled = String(disabled);
     checkbox.type = "checkbox";
     checkbox.checked = checked;
-    checkbox.disabled = this.disabled || Boolean(item.disabled);
-    checkbox.addEventListener("change", () => {
-      if (checkbox.checked) {
-        selectedKeys.add(item.key);
-      } else {
-        selectedKeys.delete(item.key);
+    checkbox.disabled = disabled;
+    checkbox.addEventListener("click", (event) => event.stopPropagation());
+    checkbox.addEventListener("change", () => this.toggleItemSelection(selectedKeys, item.key, checkbox.checked));
+    row.addEventListener("click", () => {
+      if (checkbox.disabled) {
+        return;
       }
 
-      this.dispatchSelectChange();
-      this.render();
+      this.toggleItemSelection(selectedKeys, item.key, !selectedKeys.has(item.key));
     });
     title.className = "ds-transfer__item-title";
     title.textContent = item.title;
@@ -253,6 +271,17 @@ export class DsTransfer extends HTMLElement {
     row.append(checkbox, label);
 
     return row;
+  }
+
+  private toggleItemSelection(selectedKeys: Set<string>, key: string, checked: boolean) {
+    if (checked) {
+      selectedKeys.add(key);
+    } else {
+      selectedKeys.delete(key);
+    }
+
+    this.dispatchSelectChange();
+    this.render();
   }
 
   private createEmptyItem() {

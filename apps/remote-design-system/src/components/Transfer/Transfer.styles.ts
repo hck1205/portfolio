@@ -80,12 +80,23 @@ export const TRANSFER_STYLES = `
   }
 
   .ds-transfer__item {
-    align-items: flex-start;
+    align-items: center;
     display: grid;
-    gap: var(--spacing-ds-2);
+    gap: var(--spacing-ds-3);
     grid-template-columns: auto minmax(0, 1fr);
+    cursor: pointer;
     min-height: var(--spacing-m2);
     padding: var(--spacing-ds-2) var(--spacing-ds-3);
+  }
+
+  .ds-transfer__item[data-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.56;
+  }
+
+  .ds-transfer__item > input[type="checkbox"],
+  .ds-transfer__header > input[type="checkbox"] {
+    margin: 0;
   }
 
   .ds-transfer__item:hover {
