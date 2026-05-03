@@ -1,0 +1,28 @@
+.ds-badge-story-frame {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-ds-6, 24px);
+  min-width: 360px;
+  padding: var(--spacing-ds-5, 20px);
+}
+
+.ds-badge-story-target {
+  background: var(--color-neutral-alpha-n2);
+  border-radius: var(--radius-ds-sm);
+  height: 42px;
+  width: 42px;
+}
+
+.ds-badge-story-card {
+  background: var(--color-ds-surface);
+  border: var(--ds-border-width-default) solid var(--color-ds-border);
+  border-radius: var(--radius-ds-sm);
+  box-sizing: border-box;
+  color: var(--color-ds-text);
+  display: grid;
+  gap: var(--spacing-ds-2, 8px);
+  min-height: 92px;
+  padding: var(--spacing-ds-5, 20px);
+  width: 220px;
+}
