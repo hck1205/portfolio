@@ -10,6 +10,7 @@ export * from './Divider';
 export * from './Dropdown';
 export * from './FloatButton';
 export * from './Form';
+export * from './Image';
 export * from './Input';
 export * from './InputNumber';
 export * from './Layout';
