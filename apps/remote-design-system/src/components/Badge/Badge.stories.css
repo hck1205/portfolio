@@ -1,12 +1,17 @@
 .ds-badge-story-frame {
   align-items: center;
   display: inline-grid;
-  gap: var(--spacing-ds-6, 24px);
+  gap: var(--spacing-ds-7, 28px);
   grid-auto-flow: column;
   justify-content: center;
   min-width: 240px;
   padding: var(--spacing-ds-5, 20px);
   place-items: center;
+}
+
+.ds-badge-story-frame ds-badge {
+  margin-block-start: var(--spacing-ds-2, 8px);
+  margin-inline-end: var(--spacing-ds-4, 16px);
 }
 
 .ds-badge-story-target {
