@@ -24,7 +24,7 @@ export const TREE_SELECT_STYLES = `
     color: var(--color-ds-text);
     display: inline-grid;
     font-size: var(--text-ds-2);
-    line-height: var(--leading-ds-tight);
+    line-height: var(--leading-ds-normal, 1.5);
     position: relative;
     width: 100%;
   }
@@ -78,18 +78,62 @@ export const TREE_SELECT_STYLES = `
     overflow: hidden;
   }
 
+  .ds-tree-select__selected-text {
+    line-height: var(--leading-ds-normal, 1.5);
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .ds-tree-select__placeholder {
     color: var(--color-ds-muted);
   }
 
   .ds-tree-select__tag {
+    align-items: center;
     background: var(--color-neutral-alpha-n2);
     border-radius: var(--radius-level1);
+    display: inline-flex;
+    gap: var(--spacing-ds-1);
     max-width: 7rem;
+    min-height: 1.5em;
     overflow: hidden;
-    padding: var(--spacing-ds-1) var(--spacing-ds-2);
-    text-overflow: ellipsis;
+    padding: var(--spacing-ds-1);
     white-space: nowrap;
+  }
+
+  .ds-tree-select__tag-label {
+    line-height: var(--leading-ds-normal, 1.5);
+    min-width: 0;
+    overflow: hidden;
+    padding-inline-start: var(--spacing-ds-1);
+    text-overflow: ellipsis;
+  }
+
+  .ds-tree-select__tag-remove {
+    align-items: center;
+    appearance: none;
+    background: transparent;
+    border: 0;
+    border-radius: var(--radius-level1);
+    color: var(--color-ds-muted);
+    cursor: pointer;
+    display: inline-flex;
+    flex: none;
+    height: 16px;
+    justify-content: center;
+    padding: 0;
+    width: 16px;
+  }
+
+  .ds-tree-select__tag-remove svg {
+    display: block;
+  }
+
+  .ds-tree-select__tag-remove:hover {
+    background: var(--color-neutral-alpha-n3);
+    color: var(--color-ds-text);
   }
 
   .ds-tree-select__clear,
@@ -158,18 +202,66 @@ export const TREE_SELECT_STYLES = `
 
   .ds-tree-select__node {
     align-items: center;
+    cursor: pointer;
     display: grid;
     gap: var(--spacing-ds-2);
-    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-columns: 18px minmax(0, 1fr);
     min-height: var(--spacing-m1);
     padding: 0 var(--spacing-ds-2);
+  }
+
+  .ds-tree-select__node[data-has-control="true"] {
+    grid-template-columns: 18px auto minmax(0, 1fr);
   }
 
   .ds-tree-select__node:hover {
     background: var(--color-ds-surface-hover, var(--color-neutral-alpha-n2));
   }
 
+  .ds-tree-select__switcher {
+    align-items: center;
+    appearance: none;
+    background: transparent;
+    border: 0;
+    border-radius: var(--radius-level1);
+    color: var(--color-ds-muted);
+    cursor: pointer;
+    display: inline-flex;
+    height: 18px;
+    justify-content: center;
+    padding: 0;
+    width: 18px;
+  }
+
+  .ds-tree-select__switcher:disabled {
+    cursor: default;
+    opacity: 0;
+  }
+
+  .ds-tree-select__switcher svg {
+    display: block;
+  }
+
+  .ds-tree-select__node > input {
+    margin: 0;
+  }
+
+  .ds-tree-select__node[data-selected="true"] {
+    background: var(--color-ds-primary-subtle, #e6f4ff);
+    color: var(--color-ds-text);
+  }
+
+  .ds-tree-select__node[data-selected="true"]:hover {
+    background: var(--color-ds-primary-subtle-hover, #d9ecff);
+  }
+
+  .ds-tree-select__node[data-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.56;
+  }
+
   .ds-tree-select__node-label {
+    line-height: var(--leading-ds-normal, 1.5);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

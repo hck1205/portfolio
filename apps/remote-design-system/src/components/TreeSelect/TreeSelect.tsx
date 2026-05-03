@@ -1,4 +1,4 @@
-import { ChevronDown, Eraser, createElement as createLucideElement } from "lucide";
+import { ChevronDown, ChevronRight, Eraser, X, createElement as createLucideElement } from "lucide";
 
 import {
   TREE_SELECT_CHANGE_EVENT,
@@ -35,6 +35,8 @@ export class DsTreeSelect extends HTMLElement {
   static observedAttributes = TREE_SELECT_OBSERVED_ATTRIBUTES;
 
   private documentListenerAttached = false;
+  private expandedValues = new Set<string>();
+  private hasAppliedDefaultExpandedValues = false;
   private hasAppliedDefaultValue = false;
   private rootElement?: HTMLDivElement;
   private searchValue = "";
@@ -47,7 +49,16 @@ export class DsTreeSelect extends HTMLElement {
     this.detachDocumentListener();
   }
 
-  attributeChangedCallback() {
+  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
+    if (oldValue === newValue) {
+      return;
+    }
+
+    if (name === "tree-data") {
+      this.expandedValues.clear();
+      this.hasAppliedDefaultExpandedValues = false;
+    }
+
     this.render();
   }
 
@@ -184,7 +195,9 @@ export class DsTreeSelect extends HTMLElement {
     const value = document.createElement("div");
     const clearButton = document.createElement("button");
     const arrow = document.createElement("span");
-    const labels = getSelectedLabels(this.treeData, this.selectedValues);
+    const selectedValues = this.selectedValues;
+    const labels = getSelectedLabels(this.treeData, selectedValues);
+    const selectedNodesByValue = new Map(flattenTree(this.treeData).map((node) => [node.value, node]));
 
     field.className = "ds-tree-select__field";
     field.tabIndex = this.disabled ? -1 : 0;
@@ -201,8 +214,22 @@ export class DsTreeSelect extends HTMLElement {
     });
     value.className = "ds-tree-select__value";
 
-    if (labels.length) {
-      value.append(...labels.map((label) => this.createTag(label)));
+    if (labels.length && this.multiple) {
+      value.append(
+        ...selectedValues
+          .flatMap((selectedValue) => {
+            const node = selectedNodesByValue.get(selectedValue);
+
+            return node ? [node] : [];
+          })
+          .map((node) => this.createTag(node.label, node.value))
+      );
+    } else if (labels.length) {
+      const selectedLabel = document.createElement("span");
+
+      selectedLabel.className = "ds-tree-select__selected-text";
+      selectedLabel.textContent = labels[0];
+      value.append(selectedLabel);
     } else {
       const placeholder = document.createElement("span");
 
@@ -233,19 +260,23 @@ export class DsTreeSelect extends HTMLElement {
     const popup = document.createElement("div");
     const tree = document.createElement("ul");
     const filteredNodes = filterTree(this.treeData, this.searchValue);
-    const visibleNodes = flattenTree(filteredNodes);
 
     popup.className = "ds-tree-select__popup";
     popup.hidden = !this.open;
     tree.className = "ds-tree-select__tree";
+
+    if (!this.hasAppliedDefaultExpandedValues) {
+      this.applyDefaultExpandedValues(filteredNodes);
+      this.hasAppliedDefaultExpandedValues = true;
+    }
 
     if (this.showSearch) {
       popup.append(this.createSearch());
     }
 
     tree.append(
-      ...(visibleNodes.length
-        ? visibleNodes.map((node) => this.createNode(node))
+      ...(filteredNodes.length
+        ? this.createTreeNodes(filteredNodes)
         : [this.createEmptyNode()])
     );
     popup.append(tree);
@@ -273,38 +304,112 @@ export class DsTreeSelect extends HTMLElement {
     return input;
   }
 
-  private createNode(node: TreeSelectNode & { depth: number }) {
+  private createTreeNodes(nodes: TreeSelectNode[], depth = 0): HTMLLIElement[] {
+    return nodes.flatMap((node) => {
+      const item = this.createNode(node, depth);
+      const children = node.children ?? [];
+      const shouldRenderChildren = this.searchValue || this.expandedValues.has(node.value);
+
+      if (!children.length || !shouldRenderChildren) {
+        return [item];
+      }
+
+      return [item, ...this.createTreeNodes(children, depth + 1)];
+    });
+  }
+
+  private createNode(node: TreeSelectNode, depth: number) {
     const item = document.createElement("li");
-    const control = document.createElement("input");
+    const switcher = document.createElement("button");
+    const control = this.multiple ? document.createElement("input") : undefined;
     const label = document.createElement("span");
     const selectedValues = new Set(this.selectedValues);
+    const disabled = this.disabled || Boolean(node.disabled);
+    const hasChildren = Boolean(node.children?.length);
+    const expanded = this.searchValue ? true : this.expandedValues.has(node.value);
 
     item.className = "ds-tree-select__node";
-    item.style.paddingInlineStart = `calc(var(--spacing-ds-2) + ${node.depth} * var(--spacing-ds-4))`;
-    control.type = this.multiple ? "checkbox" : "radio";
-    control.name = "tree-select-value";
-    control.checked = selectedValues.has(node.value);
-    control.disabled = this.disabled || Boolean(node.disabled);
-    control.addEventListener("change", () => {
-      if (this.multiple) {
-        if (control.checked) {
-          selectedValues.add(node.value);
-        } else {
-          selectedValues.delete(node.value);
-        }
+    item.dataset.disabled = String(disabled);
+    item.dataset.selected = String(selectedValues.has(node.value));
+    item.style.paddingInlineStart = `calc(var(--spacing-ds-2) + ${depth} * var(--spacing-ds-4))`;
+    item.dataset.hasControl = String(this.multiple);
+    switcher.className = "ds-tree-select__switcher";
+    switcher.type = "button";
+    switcher.disabled = !hasChildren;
+    switcher.setAttribute("aria-label", expanded ? `Collapse ${node.label}` : `Expand ${node.label}`);
+    switcher.append(hasChildren ? this.createIcon(expanded ? ChevronDown : ChevronRight) : document.createTextNode(""));
+    switcher.addEventListener("click", (event) => {
+      event.stopPropagation();
 
-        this.setValue(Array.from(selectedValues), true);
+      if (hasChildren) {
+        this.toggleExpanded(node.value);
+      }
+    });
+
+    if (control) {
+      control.type = "checkbox";
+      control.checked = selectedValues.has(node.value);
+      control.disabled = disabled;
+      control.addEventListener("click", (event) => event.stopPropagation());
+      control.addEventListener("change", () => this.selectNode(node, control.checked));
+    }
+
+    item.addEventListener("click", () => {
+      if (disabled) {
         return;
       }
 
-      this.setValue([node.value], true);
-      this.setOpen(false);
+      this.selectNode(node, this.multiple ? !selectedValues.has(node.value) : true);
     });
     label.className = "ds-tree-select__node-label";
     label.textContent = node.label;
-    item.append(control, label);
+    item.append(switcher);
+
+    if (control) {
+      item.append(control);
+    }
+
+    item.append(label);
 
     return item;
+  }
+
+  private toggleExpanded(value: string) {
+    if (this.expandedValues.has(value)) {
+      this.expandedValues.delete(value);
+    } else {
+      this.expandedValues.add(value);
+    }
+
+    this.render();
+  }
+
+  private applyDefaultExpandedValues(nodes: TreeSelectNode[]) {
+    for (const node of nodes) {
+      if (node.children?.length && !this.expandedValues.has(node.value)) {
+        this.expandedValues.add(node.value);
+      }
+
+      this.applyDefaultExpandedValues(node.children ?? []);
+    }
+  }
+
+  private selectNode(node: TreeSelectNode, checked: boolean) {
+    if (this.multiple) {
+      const selectedValues = new Set(this.selectedValues);
+
+      if (checked) {
+        selectedValues.add(node.value);
+      } else {
+        selectedValues.delete(node.value);
+      }
+
+      this.setValue(Array.from(selectedValues), true);
+      return;
+    }
+
+    this.setValue([node.value], true);
+    this.setOpen(false);
   }
 
   private createEmptyNode() {
@@ -316,11 +421,24 @@ export class DsTreeSelect extends HTMLElement {
     return item;
   }
 
-  private createTag(label: string) {
+  private createTag(label: string, value: string) {
     const tag = document.createElement("span");
+    const labelElement = document.createElement("span");
+    const removeButton = document.createElement("button");
 
     tag.className = "ds-tree-select__tag";
-    tag.textContent = label;
+    labelElement.className = "ds-tree-select__tag-label";
+    labelElement.textContent = label;
+    removeButton.className = "ds-tree-select__tag-remove";
+    removeButton.type = "button";
+    removeButton.setAttribute("aria-label", `Remove ${label}`);
+    removeButton.append(this.createIcon(X));
+    removeButton.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      this.setValue(this.selectedValues.filter((selectedValue) => selectedValue !== value), true);
+    });
+    tag.append(labelElement, removeButton);
 
     return tag;
   }
