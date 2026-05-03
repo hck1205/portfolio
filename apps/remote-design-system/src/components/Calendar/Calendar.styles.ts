@@ -1,3 +1,5 @@
+import { createThinScrollbarStyles } from "../shared/styles/scrollbar";
+
 export const CALENDAR_STYLES = `
   :host {
     color: var(--color-ds-text);
@@ -33,45 +35,55 @@ export const CALENDAR_STYLES = `
     display: flex;
     flex-wrap: wrap;
     gap: var(--spacing-ds-2);
-    justify-content: space-between;
+    justify-content: flex-end;
   }
 
-  .ds-calendar__title {
-    font-size: var(--text-ds-4);
-    font-weight: var(--font-weight-ds-semibold, 600);
-    line-height: var(--leading-ds-tight);
-  }
-
-  .ds-calendar__controls,
+  .ds-calendar__selectors,
   .ds-calendar__mode {
     align-items: center;
     display: inline-flex;
     gap: var(--spacing-ds-1);
   }
 
-  .ds-calendar__button {
+  .ds-calendar__select {
+    --ds-select-height: var(--spacing-m1);
+    --ds-select-min-width: 4.75rem;
+    font-size: var(--text-ds-2);
+    inline-size: 4.75rem;
+  }
+
+  .ds-calendar__mode {
+    border: var(--ds-border-width-default) solid var(--color-ds-border);
+    border-radius: var(--radius-level1);
+    gap: 0;
+    overflow: hidden;
+  }
+
+  .ds-calendar__mode-option {
     align-items: center;
     appearance: none;
     background: var(--color-ds-surface);
-    border: var(--ds-border-width-default) solid var(--color-ds-border);
-    border-radius: var(--radius-level1);
+    border: 0;
     color: var(--color-ds-text);
     cursor: pointer;
     display: inline-flex;
     font: inherit;
-    height: var(--spacing-m1);
+    height: calc(var(--spacing-m1) - 2px);
     justify-content: center;
-    min-width: var(--spacing-m1);
+    min-width: 3.25rem;
     padding: 0 var(--spacing-ds-2);
   }
 
-  .ds-calendar__button:hover,
-  .ds-calendar__button[data-active="true"] {
-    border-color: var(--color-ds-primary);
+  .ds-calendar__mode-option + .ds-calendar__mode-option {
+    border-inline-start: var(--ds-border-width-default) solid var(--color-ds-border);
+  }
+
+  .ds-calendar__mode-option:hover,
+  .ds-calendar__mode-option[data-active="true"] {
     color: var(--color-ds-primary);
   }
 
-  .ds-calendar__button[data-active="true"] {
+  .ds-calendar__mode-option[data-active="true"] {
     background: var(--color-ds-primary-subtle, #e6f4ff);
   }
 
@@ -102,8 +114,11 @@ export const CALENDAR_STYLES = `
     color: var(--color-ds-text);
     cursor: pointer;
     display: grid;
+    gap: var(--spacing-ds-1);
+    grid-template-rows: auto minmax(0, 1fr);
     font: inherit;
     min-height: 5rem;
+    overflow: hidden;
     padding: var(--spacing-ds-2);
     text-align: start;
   }
@@ -148,6 +163,59 @@ export const CALENDAR_STYLES = `
     justify-self: center;
   }
 
+  .ds-calendar__notices {
+    align-content: start;
+    display: grid;
+    gap: 0.125rem;
+    max-height: 4.25rem;
+    min-width: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-inline-end: 0.125rem;
+  }
+
+  ${createThinScrollbarStyles(".ds-calendar__notices")}
+
+  :host([fullscreen="false"]) .ds-calendar__notices {
+    display: none;
+  }
+
+  .ds-calendar__notice {
+    align-items: center;
+    color: var(--color-ds-muted);
+    display: inline-grid;
+    font-size: var(--text-ds-1);
+    gap: var(--spacing-ds-1);
+    grid-template-columns: auto minmax(0, 1fr);
+    line-height: 1.35;
+    min-width: 0;
+  }
+
+  .ds-calendar__notice-marker {
+    background: var(--ds-calendar-notice-color, var(--color-ds-primary));
+    border-radius: var(--radius-full);
+    height: 0.45rem;
+    width: 0.45rem;
+  }
+
+  .ds-calendar__notice[data-type="success"] {
+    --ds-calendar-notice-color: var(--color-success, #52c41a);
+  }
+
+  .ds-calendar__notice[data-type="warning"] {
+    --ds-calendar-notice-color: var(--color-warning, #faad14);
+  }
+
+  .ds-calendar__notice[data-type="error"] {
+    --ds-calendar-notice-color: var(--color-danger, #ff4d4f);
+  }
+
+  .ds-calendar__notice-content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .ds-calendar__week {
     align-items: center;
     border-block-start: var(--ds-border-width-default) solid var(--color-ds-border);
@@ -170,8 +238,12 @@ export const CALENDAR_STYLES = `
     border-radius: var(--radius-ds-sm);
     color: var(--color-ds-text);
     cursor: pointer;
+    display: grid;
     font: inherit;
+    gap: var(--spacing-ds-2);
     min-height: 5rem;
+    padding: var(--spacing-ds-3);
+    place-items: center;
   }
 
   .ds-calendar__month:hover,
@@ -179,6 +251,28 @@ export const CALENDAR_STYLES = `
     background: var(--color-ds-primary-subtle, #e6f4ff);
     border-color: var(--color-ds-primary);
     color: var(--color-ds-primary);
+  }
+
+  .ds-calendar__month-label {
+    font-weight: var(--font-weight-ds-semibold, 600);
+  }
+
+  .ds-calendar__month-notice {
+    color: var(--color-ds-muted);
+    display: grid;
+    gap: 0.125rem;
+    line-height: var(--leading-ds-tight);
+    text-align: center;
+  }
+
+  .ds-calendar__month-count {
+    color: var(--color-ds-text);
+    font-size: var(--text-ds-5);
+    font-weight: var(--font-weight-ds-semibold, 600);
+  }
+
+  .ds-calendar__month-copy {
+    font-size: var(--text-ds-1);
   }
 `;
 

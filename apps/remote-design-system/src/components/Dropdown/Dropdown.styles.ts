@@ -1,3 +1,5 @@
+import { createThinScrollbarStyles } from "../shared/styles/scrollbar";
+
 export const DROPDOWN_STYLES = `
   :host {
     display: inline-block;
@@ -93,12 +95,16 @@ export const DROPDOWN_STYLES = `
     display: grid;
     gap: 2px;
     margin: 0;
+    max-height: var(--ds-dropdown-max-height, 16rem);
     min-width: var(--ds-dropdown-min-width, 148px);
+    overflow: auto;
     padding: var(--ds-dropdown-padding, var(--spacing-ds-1));
     position: absolute;
     width: max-content;
     z-index: var(--ds-dropdown-z-index, 1050);
   }
+
+  ${createThinScrollbarStyles(".ds-dropdown__popup")}
 
   .ds-dropdown__popup[hidden] {
     display: none;

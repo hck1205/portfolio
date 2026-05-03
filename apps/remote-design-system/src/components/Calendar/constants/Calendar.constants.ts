@@ -8,6 +8,7 @@ export const CALENDAR_OBSERVED_ATTRIBUTES = [
   "default-value",
   "fullscreen",
   "mode",
+  "notices",
   "show-week",
   "value"
 ] as const;

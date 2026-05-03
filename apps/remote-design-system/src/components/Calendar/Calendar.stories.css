@@ -8,3 +8,9 @@
 .ds-calendar-story-card {
   width: 360px;
 }
+
+.ds-calendar-story-selection {
+  color: var(--color-ds-text);
+  font: inherit;
+  margin: 0 0 var(--spacing-ds-3, 12px);
+}

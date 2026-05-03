@@ -1,6 +1,7 @@
 import dayjs, { type Dayjs } from "dayjs";
 import dayOfYear from "dayjs/plugin/dayOfYear";
 
+import { defineDsSelect } from "../Select/registration/defineDsSelect";
 import {
   CALENDAR_CHANGE_EVENT,
   CALENDAR_OBSERVED_ATTRIBUTES,
@@ -13,11 +14,21 @@ import {
   getMonthCells,
   getWeekNumber,
   getYearCells,
+  indexCalendarNotices,
+  normalizeCalendarNotices,
   normalizeBooleanAttribute,
-  parseCalendarDate
+  parseCalendarDate,
+  parseCalendarNotices
 } from "./dom/Calendar.dom";
+import { createCalendarHeader, createDateNotices, createMonthNotice } from "./render/Calendar.render";
 import { applyCalendarStyles } from "./Calendar.styles";
-import type { CalendarChangeDetail, CalendarMode, CalendarPanelChangeDetail, CalendarSelectDetail } from "./types/Calendar.types";
+import type {
+  CalendarChangeDetail,
+  CalendarMode,
+  CalendarNotice,
+  CalendarPanelChangeDetail,
+  CalendarSelectDetail
+} from "./types/Calendar.types";
 
 dayjs.extend(dayOfYear);
 
@@ -28,10 +39,13 @@ export class DsCalendar extends HTMLElement {
 
   private hasAppliedDefaultValue = false;
   private internalValue = dayjs();
+  private internalNotices: CalendarNotice[] = [];
+  private noticeIndexes = indexCalendarNotices([]);
   private rootElement?: HTMLDivElement;
   private viewDate = dayjs();
 
   connectedCallback() {
+    defineDsSelect();
     this.render();
   }
 
@@ -43,6 +57,10 @@ export class DsCalendar extends HTMLElement {
     if (name === "value") {
       this.internalValue = parseCalendarDate(newValue, this.internalValue);
       this.viewDate = this.internalValue;
+    }
+
+    if (name === "notices") {
+      this.setNotices(parseCalendarNotices(newValue), false);
     }
 
     this.render();
@@ -70,6 +88,50 @@ export class DsCalendar extends HTMLElement {
 
   set mode(value: CalendarMode) {
     this.setAttribute("mode", value);
+  }
+
+  get notices() {
+    return this.internalNotices;
+  }
+
+  set notices(value: CalendarNotice[]) {
+    this.setNotices(normalizeCalendarNotices(value));
+  }
+
+  private setNotices(notices: CalendarNotice[], shouldRender = true) {
+    this.internalNotices = notices;
+    this.noticeIndexes = indexCalendarNotices(notices);
+
+    if (shouldRender) {
+      this.render();
+    }
+  }
+
+  private getDateNotices(date: Dayjs) {
+    return this.noticeIndexes.dateNotices.get(date.format("YYYY-MM-DD"));
+  }
+
+  private getMonthNotice(month: Dayjs) {
+    return this.noticeIndexes.monthNotices.get(month.format("YYYY-MM"));
+  }
+
+  private createHeader() {
+    return createCalendarHeader({
+      mode: this.mode,
+      onModeChange: (mode) => this.setMode(mode),
+      onPanelDateChange: (value) => this.setPanelDate(value),
+      viewDate: this.viewDate
+    });
+  }
+
+  private setPanelDate(value: Dayjs) {
+    if (!value.isValid()) {
+      return;
+    }
+
+    this.viewDate = value;
+    this.dispatchPanelChange();
+    this.render();
   }
 
   get showWeek() {
@@ -111,31 +173,6 @@ export class DsCalendar extends HTMLElement {
     this.setAttributeIfChanged("mode", this.mode);
     this.setAttributeIfChanged("fullscreen", String(this.fullscreen));
     this.rootElement.replaceChildren(this.createHeader(), this.mode === "year" ? this.createYearPanel() : this.createMonthPanel());
-  }
-
-  private createHeader() {
-    const header = document.createElement("div");
-    const title = document.createElement("div");
-    const controls = document.createElement("div");
-    const mode = document.createElement("div");
-
-    header.className = "ds-calendar__header";
-    title.className = "ds-calendar__title";
-    title.textContent = this.mode === "year" ? this.viewDate.format("YYYY") : this.viewDate.format("YYYY MMM");
-    controls.className = "ds-calendar__controls";
-    controls.append(
-      this.createButton("‹", () => this.movePanel(-1)),
-      this.createButton("Today", () => this.setValue(dayjs(), true, "date")),
-      this.createButton("›", () => this.movePanel(1))
-    );
-    mode.className = "ds-calendar__mode";
-    mode.append(
-      this.createButton("Month", () => this.setMode("month"), this.mode === "month"),
-      this.createButton("Year", () => this.setMode("year"), this.mode === "year")
-    );
-    header.append(title, controls, mode);
-
-    return header;
   }
 
   private createMonthPanel() {
@@ -193,16 +230,32 @@ export class DsCalendar extends HTMLElement {
     inner.textContent = date.format("DD");
     cell.append(inner);
 
+    const notices = createDateNotices(this.getDateNotices(date));
+
+    if (notices) {
+      cell.append(notices);
+    }
+
     return cell;
   }
 
   private createMonthCell(month: Dayjs) {
     const cell = document.createElement("button");
+    const label = document.createElement("span");
 
     cell.className = "ds-calendar__month";
     cell.type = "button";
     cell.dataset.selected = String(month.isSame(this.value, "month"));
-    cell.textContent = month.format("MMM");
+    label.className = "ds-calendar__month-label";
+    label.textContent = month.format("MMM");
+    cell.append(label);
+
+    const notice = createMonthNotice(this.getMonthNotice(month));
+
+    if (notice) {
+      cell.append(notice);
+    }
+
     cell.addEventListener("click", () => {
       this.viewDate = this.viewDate.month(month.month());
       this.setMode("month");
@@ -228,24 +281,6 @@ export class DsCalendar extends HTMLElement {
     week.textContent = String(getWeekNumber(date)).padStart(2, "0");
 
     return week;
-  }
-
-  private createButton(label: string, onClick: () => void, active = false) {
-    const button = document.createElement("button");
-
-    button.className = "ds-calendar__button";
-    button.type = "button";
-    button.dataset.active = String(active);
-    button.textContent = label;
-    button.addEventListener("click", onClick);
-
-    return button;
-  }
-
-  private movePanel(amount: number) {
-    this.viewDate = this.mode === "year" ? this.viewDate.add(amount, "year") : this.viewDate.add(amount, "month");
-    this.dispatchPanelChange();
-    this.render();
   }
 
   private setMode(mode: CalendarMode) {
