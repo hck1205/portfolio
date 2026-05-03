@@ -21,6 +21,7 @@ import {
   defineDsPagination,
   defineDsRadio,
   defineDsRate,
+  defineDsSelect,
   defineDsSteps,
   defineDsSplitter,
   defineDsTabs,
@@ -52,6 +53,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsPagination(registry);
   defineDsRadio(registry);
   defineDsRate(registry);
+  defineDsSelect(registry);
   defineDsSteps(registry);
   defineDsSplitter(registry);
   defineDsTabs(registry);
