@@ -19,6 +19,7 @@ export class DsRadio extends HTMLElement {
   static observedAttributes = RADIO_OBSERVED_ATTRIBUTES;
 
   private elements?: RadioElements;
+  private groupBlock = false;
   private groupButtonStyle: RadioButtonStyle = "outline";
   private groupChecked?: boolean;
   private groupDisabled = false;
@@ -107,7 +108,16 @@ export class DsRadio extends HTMLElement {
     this.elements?.inputElement.focus();
   }
 
-  syncFromGroup({ buttonStyle, checked, disabled, name, optionType, size }: RadioGroupSyncOptions) {
+  syncFromGroup({
+    block,
+    buttonStyle,
+    checked,
+    disabled,
+    name,
+    optionType,
+    size
+  }: RadioGroupSyncOptions) {
+    this.groupBlock = block;
     this.groupButtonStyle = buttonStyle;
     this.groupChecked = checked;
     this.groupDisabled = disabled;
@@ -118,6 +128,7 @@ export class DsRadio extends HTMLElement {
   }
 
   clearGroupSync() {
+    this.groupBlock = false;
     this.groupButtonStyle = "outline";
     this.groupChecked = undefined;
     this.groupDisabled = false;
@@ -204,6 +215,7 @@ export class DsRadio extends HTMLElement {
   }
 
   private syncAttributes() {
+    this.toggleAttribute("data-block", this.groupBlock);
     this.toggleAttribute("data-checked", this.checked);
     this.toggleAttribute("data-disabled", this.effectiveDisabled);
     this.setAttribute("data-button-style", this.groupButtonStyle);

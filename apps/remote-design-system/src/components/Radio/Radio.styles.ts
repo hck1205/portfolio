@@ -92,6 +92,11 @@ export const RADIO_STYLES = `
     display: inline-flex;
   }
 
+  :host([data-option-type="button"][data-block]) {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
   :host([data-option-type="button"]) .ds-radio {
     align-items: center;
     background: var(--color-ds-surface);
@@ -125,10 +130,19 @@ export const RADIO_STYLES = `
     width: 1px;
   }
 
+  :host([data-option-type="button"][data-block]) .ds-radio {
+    width: 100%;
+  }
+
   :host([data-option-type="button"][data-checked]) .ds-radio {
     border-color: var(--color-ds-primary);
     color: var(--color-ds-primary);
     z-index: 1;
+  }
+
+  :host([data-option-type="button"][data-checked]:not(:first-child)) .ds-radio {
+    border-inline-start-width: var(--ds-border-width-default);
+    margin-inline-start: calc(var(--ds-border-width-default) * -1);
   }
 
   :host([data-option-type="button"][data-button-style="solid"][data-checked]) .ds-radio {

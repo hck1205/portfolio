@@ -56,7 +56,11 @@ export class DsRadioGroup extends HTMLElement {
     this.mutationObserver?.disconnect();
   }
 
-  attributeChangedCallback(name: string) {
+  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
+    if (oldValue === newValue) {
+      return;
+    }
+
     if (name === "options") {
       this.assignedOptions = undefined;
       this.optionsDirty = true;
@@ -290,9 +294,9 @@ export class DsRadioGroup extends HTMLElement {
       return;
     }
 
-    this.setAttribute("orientation", this.orientation);
-    this.setAttribute("option-type", this.optionType);
-    this.setAttribute("size", this.size);
+    this.setAttributeIfChanged("orientation", this.orientation);
+    this.setAttributeIfChanged("option-type", this.optionType);
+    this.setAttributeIfChanged("size", this.size);
     syncRadioGroupElements({
       ariaLabel: this.getAttribute("aria-label") ?? "",
       elements: this.elements
@@ -305,6 +309,7 @@ export class DsRadioGroup extends HTMLElement {
 
     for (const radio of this.radios) {
       radio.syncFromGroup({
+        block: this.block,
         buttonStyle: this.buttonStyle,
         checked: selectedKey === radioValueKey(radio.value),
         disabled: this.disabled,
@@ -329,5 +334,11 @@ export class DsRadioGroup extends HTMLElement {
     }
 
     this.render();
+  }
+
+  private setAttributeIfChanged(name: string, value: string) {
+    if (this.getAttribute(name) !== value) {
+      this.setAttribute(name, value);
+    }
   }
 }

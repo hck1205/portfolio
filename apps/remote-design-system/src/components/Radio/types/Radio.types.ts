@@ -27,6 +27,7 @@ export type RadioGroupChangeDetail = {
 };
 
 export type RadioGroupSyncOptions = {
+  block: boolean;
   buttonStyle: RadioButtonStyle;
   checked: boolean;
   disabled: boolean;
