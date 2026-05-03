@@ -19,4 +19,5 @@ export * from './Pagination';
 export * from './Steps';
 export * from './Splitter';
 export * from './Tabs';
+export * from './TimePicker';
 export * from './Typography';
