@@ -1,5 +1,7 @@
 export * from './AutoComplete';
 export * from './Anchor';
+export * from './Avatar';
+export * from './Badge';
 export * from './Button';
 export * from './Calendar';
 export * from './Checkbox';
