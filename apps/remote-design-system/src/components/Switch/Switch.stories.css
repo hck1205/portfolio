@@ -1,0 +1,20 @@
+.ds-switch-story-frame {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-ds-5, 20px);
+  min-width: 280px;
+  padding: var(--spacing-ds-5, 20px);
+}
+
+.ds-switch-story-row {
+  align-items: center;
+  display: flex;
+  gap: var(--spacing-ds-4, 16px);
+}
+
+.ds-switch-story-label {
+  color: var(--color-ds-muted);
+  font: var(--text-ds-2, 14px) / var(--leading-ds-normal, 1.5) var(--font-sans);
+  min-width: 96px;
+}
