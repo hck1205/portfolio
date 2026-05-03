@@ -13,6 +13,7 @@ import {
   defineDsDropdown,
   defineDsFloatButton,
   defineDsForm,
+  defineDsInput,
   defineDsLayout,
   defineDsMenu,
   defineDsPagination,
@@ -38,6 +39,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsTypography(registry);
   defineDsFloatButton(registry);
   defineDsForm(registry);
+  defineDsInput(registry);
   defineDsCollapse(registry);
   defineDsLayout(registry);
   defineDsMenu(registry);

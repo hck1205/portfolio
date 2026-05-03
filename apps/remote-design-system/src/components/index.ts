@@ -10,6 +10,7 @@ export * from './Divider';
 export * from './Dropdown';
 export * from './FloatButton';
 export * from './Form';
+export * from './Input';
 export * from './Layout';
 export * from './Menu';
 export * from './Pagination';
