@@ -22,7 +22,7 @@ const storyDescriptions = {
   half: "allow-half 속성은 반 단위 평가 선택을 허용합니다.",
   copy: "변경 이벤트를 받아 선택한 평가 값에 맞는 보조 문구를 함께 표시할 수 있습니다.",
   readonly: "disabled 상태에서는 현재 평가 값만 보여주고 상호작용을 막습니다.",
-  clear: "allow-clear 속성은 같은 값을 다시 선택했을 때 값을 0으로 지울 수 있는지 제어합니다.",
+  clear: "이미 선택한 별점을 다시 클릭해 선택을 해제할 수 있습니다.",
   character: "character 속성은 별 대신 다른 문자로 평가 항목을 표시합니다.",
   tooltip: "tooltips 속성은 각 평가 항목의 title 텍스트를 지정합니다."
 };
@@ -60,6 +60,18 @@ function createRow(children: HTMLElement[]) {
   row.append(...children);
 
   return row;
+}
+
+function createLabeled(label: string, rate: HTMLElement) {
+  const wrapper = document.createElement("div");
+  const labelElement = document.createElement("span");
+
+  wrapper.className = "ds-rate-story-labeled";
+  labelElement.className = "ds-rate-story-label";
+  labelElement.textContent = label;
+  wrapper.append(labelElement, rate);
+
+  return wrapper;
 }
 
 function createRate(args: Partial<RateStoryArgs> = {}) {
@@ -130,8 +142,8 @@ function renderClearStory() {
 
   return createFrame([
     createRow([
-      createRate({ allowClear: true, value: 3 }),
-      createRate({ allowClear: false, value: 3 })
+      createLabeled("Clear", createRate({ allowClear: true, value: 3 })),
+      createLabeled("Not clear", createRate({ allowClear: false, value: 3 }))
     ])
   ]);
 }
@@ -142,7 +154,7 @@ function renderCharacterStory() {
   return createFrame([
     createRow([
       createRate({ character: "A", defaultValue: 3 }),
-      createRate({ character: "好", defaultValue: 4 })
+      createRate({ character: "별", defaultValue: 4 })
     ])
   ]);
 }

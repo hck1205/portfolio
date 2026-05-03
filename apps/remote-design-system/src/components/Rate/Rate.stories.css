@@ -17,6 +17,18 @@
   gap: var(--spacing-ds-3);
 }
 
+.ds-rate-story-labeled {
+  align-items: center;
+  display: inline-flex;
+  gap: var(--spacing-ds-2);
+}
+
+.ds-rate-story-label {
+  color: var(--color-ds-muted);
+  font-size: var(--text-ds-2);
+  white-space: nowrap;
+}
+
 .ds-rate-story-text {
   color: var(--color-ds-muted);
   font-size: var(--text-ds-2);

@@ -21,6 +21,8 @@ export const RATE_STYLES = `
   }
 
   .ds-rate {
+    --ds-rate-active-color: var(--color-ds-warning, #fadb14);
+    --ds-rate-inactive-color: var(--color-neutral-alpha-n4);
     --ds-rate-size: var(--spacing-ds-5);
     align-items: center;
     display: inline-flex;
@@ -37,7 +39,7 @@ export const RATE_STYLES = `
     appearance: none;
     background: transparent;
     border: 0;
-    color: var(--color-neutral-alpha-n4);
+    color: var(--ds-rate-inactive-color);
     cursor: pointer;
     display: inline-grid;
     font: inherit;
@@ -63,11 +65,11 @@ export const RATE_STYLES = `
 
   .ds-rate__item[data-active="true"],
   .ds-rate__item[data-half="true"] {
-    color: var(--color-ds-warning, #fadb14);
+    color: var(--ds-rate-active-color);
   }
 
   .ds-rate__item[data-half="true"] .ds-rate__character {
-    background: linear-gradient(90deg, currentColor 50%, var(--color-neutral-alpha-n4) 50%);
+    background: linear-gradient(90deg, var(--ds-rate-active-color) 50%, var(--ds-rate-inactive-color) 50%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
