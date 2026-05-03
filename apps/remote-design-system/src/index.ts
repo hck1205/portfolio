@@ -22,6 +22,7 @@ import {
   defineDsSteps,
   defineDsSplitter,
   defineDsTabs,
+  defineDsTreeSelect,
   defineDsTypography,
 } from './components';
 
@@ -51,6 +52,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsSteps(registry);
   defineDsSplitter(registry);
   defineDsTabs(registry);
+  defineDsTreeSelect(registry);
 }
 
 defineDesignSystemElements();
