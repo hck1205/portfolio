@@ -116,7 +116,7 @@ export const BADGE_STYLES = `
 
     100% {
       opacity: 0;
-      transform: scale(2.4);
+      transform: scale(1.8);
     }
   }
 `;
