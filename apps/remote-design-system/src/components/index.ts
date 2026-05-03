@@ -19,6 +19,7 @@ export * from './Pagination';
 export * from './Radio';
 export * from './Rate';
 export * from './Select';
+export * from './Slider';
 export * from './Steps';
 export * from './Splitter';
 export * from './Tabs';
