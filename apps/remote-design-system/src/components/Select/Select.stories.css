@@ -1,6 +1,7 @@
 .ds-select-story-frame {
   display: grid;
   gap: var(--spacing-ds-5);
+  min-height: 14rem;
   min-width: 20rem;
 }
 
