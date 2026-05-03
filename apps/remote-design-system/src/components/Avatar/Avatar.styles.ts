@@ -35,10 +35,10 @@ export const AVATAR_STYLES = `
     font-size: var(--ds-avatar-font-size, 14px);
     font-weight: var(--font-weight-ds-medium, 500);
     height: var(--ds-avatar-size);
-    justify-content: center;
     line-height: 1;
     max-width: 100%;
     overflow: hidden;
+    place-items: center;
     position: relative;
     user-select: none;
     white-space: nowrap;
@@ -68,10 +68,11 @@ export const AVATAR_STYLES = `
     justify-items: center;
     line-height: 1;
     max-width: calc(100% - var(--ds-avatar-gap, 4px) * 2);
-    min-width: 0;
+    min-width: max-content;
     overflow: hidden;
     text-align: center;
     text-overflow: clip;
+    width: max-content;
   }
 
   .ds-avatar__icon {
