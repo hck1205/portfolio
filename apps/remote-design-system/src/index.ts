@@ -16,6 +16,7 @@ import {
   defineDsInput,
   defineDsLayout,
   defineDsMenu,
+  defineDsMentions,
   defineDsPagination,
   defineDsSteps,
   defineDsSplitter,
@@ -43,6 +44,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsCollapse(registry);
   defineDsLayout(registry);
   defineDsMenu(registry);
+  defineDsMentions(registry);
   defineDsPagination(registry);
   defineDsSteps(registry);
   defineDsSplitter(registry);
