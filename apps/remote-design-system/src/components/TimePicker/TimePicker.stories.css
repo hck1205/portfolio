@@ -1,0 +1,27 @@
+.ds-time-picker-story-frame {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-ds-5, 20px);
+  min-height: 320px;
+  min-width: 360px;
+  padding: var(--spacing-ds-5, 20px);
+}
+
+.ds-time-picker-story-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-ds-4, 16px);
+}
+
+.ds-time-picker-story-row {
+  align-items: center;
+  display: grid;
+  gap: var(--spacing-ds-4, 16px);
+  grid-template-columns: 112px minmax(180px, 1fr);
+}
+
+.ds-time-picker-story-label {
+  color: var(--color-ds-muted);
+  font: var(--text-ds-2, 14px) / var(--leading-ds-normal, 1.5) var(--font-sans);
+}
