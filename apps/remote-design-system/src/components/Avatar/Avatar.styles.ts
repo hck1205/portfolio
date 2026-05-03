@@ -92,6 +92,10 @@ export const AVATAR_GROUP_STYLES = `
     padding-inline-start: calc(var(--ds-avatar-group-overlap) * -1);
   }
 
+  .ds-avatar-group__slot {
+    display: contents;
+  }
+
   ::slotted(ds-avatar) {
     border-radius: var(--ds-avatar-radius, var(--radius-full));
     box-shadow: 0 0 0 2px var(--color-ds-surface);

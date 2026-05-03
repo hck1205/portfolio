@@ -249,6 +249,7 @@ export class DsAvatarGroup extends HTMLElement {
       this.rootElement = document.createElement("span");
       this.rootElement.className = "ds-avatar-group";
       this.overflowElement.className = "ds-avatar-group__overflow";
+      this.slotElement.className = "ds-avatar-group__slot";
       this.slotElement.addEventListener("slotchange", () => this.syncItems());
       this.rootElement.append(this.slotElement, this.overflowElement);
       shadowRoot.replaceChildren(this.rootElement);
