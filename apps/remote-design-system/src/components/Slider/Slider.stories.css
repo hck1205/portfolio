@@ -1,0 +1,37 @@
+.ds-slider-story-frame {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-ds-5, 20px);
+  min-width: 360px;
+  padding: var(--spacing-ds-5, 20px);
+}
+
+.ds-slider-story-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-ds-6, 24px);
+}
+
+.ds-slider-story-row {
+  align-items: center;
+  display: grid;
+  gap: var(--spacing-ds-4, 16px);
+  grid-template-columns: 96px minmax(220px, 1fr);
+}
+
+.ds-slider-story-label {
+  color: var(--color-ds-muted);
+  font: var(--text-ds-2, 14px) / var(--leading-ds-normal, 1.5) var(--font-sans);
+}
+
+.ds-slider-story-vertical {
+  align-items: flex-start;
+  display: flex;
+  gap: var(--spacing-ds-7, 32px);
+  min-height: 240px;
+}
+
+.ds-slider-story-vertical ds-slider {
+  height: 220px;
+}
