@@ -1,0 +1,16 @@
+.ds-select-story-frame {
+  display: grid;
+  gap: var(--spacing-ds-5);
+  min-width: 20rem;
+}
+
+.ds-select-story-row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-ds-3);
+}
+
+.ds-select-story-wide {
+  min-width: 32rem;
+}
