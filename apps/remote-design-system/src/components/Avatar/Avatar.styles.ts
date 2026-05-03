@@ -30,12 +30,13 @@ export const AVATAR_STYLES = `
     border-radius: var(--ds-avatar-radius);
     box-sizing: border-box;
     color: var(--color-ds-text);
-    display: inline-flex;
+    display: inline-grid;
     flex: none;
     font-size: var(--ds-avatar-font-size, 14px);
     font-weight: var(--font-weight-ds-medium, 500);
     height: var(--ds-avatar-size);
     justify-content: center;
+    line-height: 1;
     max-width: 100%;
     overflow: hidden;
     position: relative;
@@ -61,7 +62,11 @@ export const AVATAR_STYLES = `
   }
 
   .ds-avatar__text {
-    display: inline-block;
+    align-items: center;
+    display: inline-grid;
+    height: 100%;
+    justify-items: center;
+    line-height: 1;
     max-width: calc(100% - var(--ds-avatar-gap, 4px) * 2);
     min-width: 0;
     overflow: hidden;
@@ -71,6 +76,7 @@ export const AVATAR_STYLES = `
 
   .ds-avatar__icon {
     display: block;
+    margin: auto;
   }
 `;
 
