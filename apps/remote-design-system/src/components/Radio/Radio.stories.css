@@ -1,0 +1,16 @@
+.ds-radio-story-frame {
+  display: grid;
+  gap: var(--spacing-ds-5);
+  min-width: 22rem;
+}
+
+.ds-radio-story-row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-ds-3);
+}
+
+.ds-radio-story-block {
+  width: 32rem;
+}
