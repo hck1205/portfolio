@@ -93,17 +93,22 @@ export const AVATAR_GROUP_STYLES = `
   }
 
   ::slotted(ds-avatar) {
-    border: 2px solid var(--color-ds-surface);
-    box-sizing: content-box;
+    border-radius: var(--ds-avatar-radius, var(--radius-full));
+    box-shadow: 0 0 0 2px var(--color-ds-surface);
     margin-inline-start: var(--ds-avatar-group-overlap);
+    position: relative;
+  }
+
+  ::slotted(ds-avatar:hover) {
+    z-index: 1;
   }
 
   .ds-avatar-group__overflow {
     align-items: center;
     background: var(--color-neutral-alpha-n3);
-    border: 2px solid var(--color-ds-surface);
     border-radius: var(--ds-avatar-radius, var(--radius-full));
-    box-sizing: content-box;
+    box-shadow: 0 0 0 2px var(--color-ds-surface);
+    box-sizing: border-box;
     color: var(--color-ds-text);
     display: none;
     flex: none;
@@ -112,8 +117,9 @@ export const AVATAR_GROUP_STYLES = `
     height: var(--ds-avatar-size, 32px);
     justify-content: center;
     margin-inline-start: var(--ds-avatar-group-overlap);
-    min-width: var(--ds-avatar-size, 32px);
-    padding: 0 var(--spacing-ds-1);
+    min-width: 0;
+    padding: 0;
+    width: var(--ds-avatar-size, 32px);
   }
 
   .ds-avatar-group__overflow[data-visible="true"] {
