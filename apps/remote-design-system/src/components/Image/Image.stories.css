@@ -1,0 +1,32 @@
+.ds-image-story-frame {
+  align-items: center;
+  display: grid;
+  gap: var(--spacing-ds-5, 20px);
+  justify-items: center;
+  padding: var(--spacing-ds-5, 20px);
+}
+
+.ds-image-story-grid {
+  display: grid;
+  gap: var(--spacing-ds-5, 20px);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: min(760px, calc(100vw - 48px));
+}
+
+.ds-image-story-card {
+  align-items: center;
+  background: var(--color-ds-bg-container);
+  border: 1px solid var(--color-ds-border);
+  border-radius: var(--radius-ds-2, 8px);
+  display: grid;
+  justify-items: center;
+  min-height: 180px;
+  min-width: 0;
+  padding: var(--spacing-ds-4, 16px);
+}
+
+@media (max-width: 720px) {
+  .ds-image-story-grid {
+    grid-template-columns: 1fr;
+  }
+}
