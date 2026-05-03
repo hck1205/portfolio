@@ -25,6 +25,7 @@ import {
   defineDsSlider,
   defineDsSteps,
   defineDsSplitter,
+  defineDsSwitch,
   defineDsTabs,
   defineDsTypography,
 } from './components';
@@ -58,6 +59,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsSlider(registry);
   defineDsSteps(registry);
   defineDsSplitter(registry);
+  defineDsSwitch(registry);
   defineDsTabs(registry);
 }
 

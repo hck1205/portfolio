@@ -23,4 +23,5 @@ export * from './Slider';
 export * from './Steps';
 export * from './Splitter';
 export * from './Tabs';
+export * from './Switch';
 export * from './Typography';
