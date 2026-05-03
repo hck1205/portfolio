@@ -1,0 +1,8 @@
+.ds-transfer-story-frame {
+  min-width: min(760px, 92vw);
+  padding: var(--spacing-ds-5, 20px);
+}
+
+.ds-transfer-story-frame ds-transfer {
+  width: 100%;
+}
