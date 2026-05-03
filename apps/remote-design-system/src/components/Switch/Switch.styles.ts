@@ -11,7 +11,10 @@ export const SWITCH_STYLES = `
   .ds-switch__button {
     --ds-switch-handle-size: 18px;
     --ds-switch-height: 22px;
+    --ds-switch-inner-max-margin: 24px;
+    --ds-switch-inner-min-margin: 9px;
     --ds-switch-min-width: 44px;
+    --ds-switch-padding: 2px;
     align-items: center;
     appearance: none;
     background: var(--color-neutral-alpha-n6);
@@ -29,7 +32,7 @@ export const SWITCH_STYLES = `
     margin: 0;
     min-width: var(--ds-switch-min-width);
     overflow: hidden;
-    padding: 2px;
+    padding: var(--ds-switch-padding);
     position: relative;
     transition:
       background-color 150ms ease-in-out,
@@ -70,24 +73,28 @@ export const SWITCH_STYLES = `
     display: inline-flex;
     height: var(--ds-switch-handle-size);
     justify-content: center;
-    left: 2px;
+    left: var(--ds-switch-padding);
     position: absolute;
-    top: 2px;
-    transform: translateX(0);
-    transition: transform 150ms ease-in-out;
+    top: var(--ds-switch-padding);
+    transition: left 150ms ease-in-out;
     width: var(--ds-switch-handle-size);
   }
 
   .ds-switch__button[aria-checked="true"] .ds-switch__handle {
-    transform: translateX(calc(var(--ds-switch-min-width) - var(--ds-switch-handle-size) - 4px));
+    left: calc(100% - var(--ds-switch-handle-size) - var(--ds-switch-padding));
   }
 
   .ds-switch__content {
+    align-items: center;
     box-sizing: border-box;
-    display: inline-block;
-    min-width: calc(var(--ds-switch-min-width) - var(--ds-switch-handle-size));
+    display: inline-flex;
+    inset: 0;
+    justify-content: center;
+    min-width: 0;
     overflow: hidden;
-    padding-inline: calc(var(--ds-switch-handle-size) + 4px) 6px;
+    padding-inline: var(--ds-switch-inner-max-margin) var(--ds-switch-inner-min-margin);
+    pointer-events: none;
+    position: absolute;
     text-align: center;
     text-overflow: ellipsis;
     transition: opacity 120ms ease-in-out;
@@ -96,7 +103,7 @@ export const SWITCH_STYLES = `
 
   .ds-switch__content--checked {
     opacity: 0;
-    padding-inline: 6px calc(var(--ds-switch-handle-size) + 4px);
+    padding-inline: var(--ds-switch-inner-min-margin) var(--ds-switch-inner-max-margin);
   }
 
   .ds-switch__button[aria-checked="true"] .ds-switch__content--checked {
@@ -129,17 +136,10 @@ export const SWITCH_STYLES = `
   .ds-switch__button[data-size="small"] {
     --ds-switch-handle-size: 12px;
     --ds-switch-height: 16px;
+    --ds-switch-inner-max-margin: 18px;
+    --ds-switch-inner-min-margin: 6px;
     --ds-switch-min-width: 28px;
     font-size: 10px;
-    padding: 2px;
-  }
-
-  .ds-switch__button[data-size="small"] .ds-switch__content {
-    padding-inline: calc(var(--ds-switch-handle-size) + 4px) 5px;
-  }
-
-  .ds-switch__button[data-size="small"] .ds-switch__content--checked {
-    padding-inline: 5px calc(var(--ds-switch-handle-size) + 4px);
   }
 
   @keyframes ds-switch-spin {

@@ -13,13 +13,18 @@ export class DsSwitch extends HTMLElement {
 
   private elements?: SwitchElements;
   private internalChecked?: boolean;
+  private isSyncingAttributes = false;
 
   connectedCallback() {
     this.internalChecked ??= getInitialChecked(this);
     this.render();
   }
 
-  attributeChangedCallback(name: string) {
+  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
+    if (this.isSyncingAttributes || oldValue === newValue) {
+      return;
+    }
+
     if (name === "checked" || name === "value") {
       this.internalChecked = getInitialChecked(this);
     }
@@ -134,9 +139,15 @@ export class DsSwitch extends HTMLElement {
   }
 
   private syncAttributes() {
-    this.setAttributeIfChanged("size", this.size);
-    this.toggleAttributeIfChanged("checked", this.checked);
-    this.toggleAttributeIfChanged("value", this.checked);
+    this.isSyncingAttributes = true;
+
+    try {
+      this.setAttributeIfChanged("size", this.size);
+      this.toggleAttributeIfChanged("checked", this.checked);
+      this.toggleAttributeIfChanged("value", this.checked);
+    } finally {
+      this.isSyncingAttributes = false;
+    }
   }
 
   private syncStructure() {

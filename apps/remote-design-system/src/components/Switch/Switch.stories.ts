@@ -25,7 +25,7 @@ const storyDescriptions = {
   default: "기본 Switch는 클릭 즉시 켜짐과 꺼짐 상태를 전환합니다.",
   disabled: "disabled 상태에서는 사용자 입력을 막고 현재 상태만 표시합니다.",
   content: "checked-children과 unchecked-children으로 상태별 짧은 텍스트를 표시합니다.",
-  sizes: "medium과 small 두 크기를 제공해 밀도 높은 UI에도 배치할 수 있습니다.",
+  sizes: "medium과 small 두 크기를 제공해 좁은 UI에도 배치할 수 있습니다.",
   loading: "loading 상태는 대기 중임을 표시하고 추가 토글 입력을 막습니다."
 };
 
@@ -102,7 +102,7 @@ function renderContentStory() {
   ensureSwitchDefined();
 
   return createFrame([
-    createRow("한글", createSwitch({ ...defaultArgs, checkedChildren: "켜짐", uncheckedChildren: "꺼짐" })),
+    createRow("문자", createSwitch({ ...defaultArgs, checkedChildren: "켜짐", uncheckedChildren: "꺼짐" })),
     createRow("숫자", createSwitch({ ...defaultArgs, checkedChildren: "1", uncheckedChildren: "0" })),
     createRow("영문", createSwitch({ ...defaultArgs, checked: true, checkedChildren: "ON", uncheckedChildren: "OFF" }))
   ]);
