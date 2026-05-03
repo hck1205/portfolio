@@ -39,6 +39,7 @@ export class DsTimePicker extends HTMLElement {
   private elements?: TimePickerElements;
   private hasAppliedDefaultValue = false;
   private internalValue: TimeValue = { hour: 0, minute: 0, second: 0 };
+  private isSyncingAttributes = false;
 
   connectedCallback() {
     this.render();
@@ -48,7 +49,11 @@ export class DsTimePicker extends HTMLElement {
     this.detachDocumentListener();
   }
 
-  attributeChangedCallback() {
+  attributeChangedCallback(_name: string, oldValue: string | null, newValue: string | null) {
+    if (this.isSyncingAttributes || oldValue === newValue) {
+      return;
+    }
+
     this.render();
   }
 
@@ -264,9 +269,16 @@ export class DsTimePicker extends HTMLElement {
   }
 
   private syncAttributes() {
-    this.setAttributeIfChanged("placement", this.placement);
-    this.setAttributeIfChanged("size", this.size);
-    this.setAttributeIfChanged("variant", this.variant);
+    this.isSyncingAttributes = true;
+
+    try {
+      this.setAttributeIfChanged("placement", this.placement);
+      this.setAttributeIfChanged("size", this.size);
+      this.setAttributeIfChanged("variant", this.variant);
+    } finally {
+      this.isSyncingAttributes = false;
+    }
+
     this.applyDefaultValue();
 
     if (this.disabled && this.open) {
@@ -318,7 +330,15 @@ export class DsTimePicker extends HTMLElement {
       return;
     }
 
-    this.open = open;
+    this.isSyncingAttributes = true;
+
+    try {
+      this.open = open;
+    } finally {
+      this.isSyncingAttributes = false;
+    }
+
+    this.render();
     this.dispatchEvent(
       new CustomEvent<TimePickerOpenChangeDetail>(TIME_PICKER_OPEN_CHANGE_EVENT, {
         bubbles: true,
@@ -330,10 +350,16 @@ export class DsTimePicker extends HTMLElement {
   private setValue(value: string, emitChange: boolean) {
     const previousValue = this.value;
 
-    if (value) {
-      this.setAttributeIfChanged("value", value);
-    } else {
-      this.removeAttribute("value");
+    this.isSyncingAttributes = true;
+
+    try {
+      if (value) {
+        this.setAttributeIfChanged("value", value);
+      } else {
+        this.removeAttribute("value");
+      }
+    } finally {
+      this.isSyncingAttributes = false;
     }
 
     if (emitChange && previousValue !== this.value) {

@@ -130,8 +130,8 @@ export const TIME_PICKER_STYLES = `
     gap: var(--spacing-ds-3);
     inset-block-start: calc(100% + var(--ds-time-picker-popup-gap));
     inset-inline-start: 0;
-    min-width: 14rem;
-    padding: var(--spacing-ds-2);
+    min-width: max-content;
+    padding: var(--spacing-ds-1);
     position: absolute;
     z-index: 20;
   }
@@ -150,17 +150,32 @@ export const TIME_PICKER_STYLES = `
 
   .ds-time-picker__columns {
     display: grid;
-    gap: var(--spacing-ds-1);
-    grid-auto-columns: minmax(48px, 1fr);
+    gap: 0;
+    grid-auto-columns: 40px;
     grid-auto-flow: column;
   }
 
   .ds-time-picker__column {
     display: grid;
-    gap: var(--spacing-ds-1);
-    max-height: 14rem;
+    max-height: 12rem;
     overflow: auto;
     overscroll-behavior: contain;
+    scrollbar-color: var(--color-neutral-alpha-n5) transparent;
+    scrollbar-width: thin;
+  }
+
+  .ds-time-picker__column::-webkit-scrollbar {
+    height: 6px;
+    width: 6px;
+  }
+
+  .ds-time-picker__column::-webkit-scrollbar-thumb {
+    background: var(--color-neutral-alpha-n5);
+    border-radius: var(--radius-full);
+  }
+
+  .ds-time-picker__column::-webkit-scrollbar-track {
+    background: transparent;
   }
 
   .ds-time-picker__option,
@@ -172,8 +187,8 @@ export const TIME_PICKER_STYLES = `
     color: var(--color-ds-text);
     cursor: pointer;
     font: inherit;
-    min-height: var(--spacing-m1);
-    padding: 0 var(--spacing-ds-2);
+    min-height: var(--spacing-ds-7);
+    padding: 0 var(--spacing-ds-1);
     text-align: center;
   }
 
