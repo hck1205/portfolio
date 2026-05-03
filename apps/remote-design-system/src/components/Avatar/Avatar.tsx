@@ -271,11 +271,15 @@ export class DsAvatarGroup extends HTMLElement {
       item.setAttribute("shape", this.shape);
       item.setAttribute("size", this.size);
       item.style.display = index < visibleCount ? "" : "none";
+      item.style.marginInlineStart = index === 0 ? "0px" : "var(--ds-avatar-group-overlap, -8px)";
+      item.style.zIndex = String(items.length - index);
     });
 
     if (this.overflowElement) {
       this.overflowElement.dataset.visible = String(hiddenCount > 0);
       this.overflowElement.textContent = hiddenCount > 0 ? `+${hiddenCount}` : "";
+      this.overflowElement.style.marginInlineStart =
+        hiddenCount > 0 && visibleCount > 0 ? "var(--ds-avatar-group-overlap, -8px)" : "0px";
     }
   }
 
