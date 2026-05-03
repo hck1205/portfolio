@@ -177,7 +177,7 @@ export const SLIDER_STYLES = `
     font-size: var(--text-ds-1);
     line-height: var(--leading-ds-normal);
     position: absolute;
-    top: calc(50% + var(--spacing-ds-4));
+    top: calc(var(--spacing-ds-3) + var(--ds-slider-rail-size) + var(--spacing-ds-3));
     transform: translateX(-50%);
     white-space: nowrap;
   }
@@ -196,7 +196,7 @@ export const SLIDER_STYLES = `
     height: 8px;
     left: 50%;
     position: absolute;
-    top: calc((var(--spacing-ds-4) + 8px) * -1);
+    top: calc((var(--spacing-ds-3) + (var(--ds-slider-rail-size) / 2) + 4px) * -1);
     transform: translateX(-50%);
     width: 8px;
   }
