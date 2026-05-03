@@ -1,0 +1,38 @@
+.ds-empty-story-frame {
+  align-items: center;
+  display: grid;
+  min-height: 260px;
+  min-width: min(520px, calc(100vw - 48px));
+  padding: var(--spacing-ds-5, 20px);
+}
+
+.ds-empty-story-grid {
+  display: grid;
+  gap: var(--spacing-ds-5, 20px);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: min(720px, calc(100vw - 48px));
+}
+
+.ds-empty-story-panel {
+  border: 1px solid var(--color-ds-border);
+  border-radius: var(--radius-ds-2, 8px);
+  min-width: 0;
+}
+
+.ds-empty-story-button {
+  appearance: none;
+  background: var(--color-ds-primary);
+  border: 1px solid var(--color-ds-primary);
+  border-radius: var(--radius-ds-1, 4px);
+  color: var(--color-ds-on-primary, #fff);
+  cursor: pointer;
+  font: inherit;
+  min-height: 32px;
+  padding: 0 var(--spacing-ds-3, 12px);
+}
+
+@media (max-width: 640px) {
+  .ds-empty-story-grid {
+    grid-template-columns: 1fr;
+  }
+}
