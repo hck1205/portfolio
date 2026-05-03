@@ -30,6 +30,7 @@ import {
   defineDsTreeSelect,
   defineDsTimePicker,
   defineDsTransfer,
+  defineDsUpload,
   defineDsTypography,
 } from './components';
 
@@ -67,6 +68,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsTreeSelect(registry);
   defineDsTimePicker(registry);
   defineDsTransfer(registry);
+  defineDsUpload(registry);
 }
 
 defineDesignSystemElements();

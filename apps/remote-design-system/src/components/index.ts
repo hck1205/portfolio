@@ -27,4 +27,5 @@ export * from './TreeSelect';
 export * from './Switch';
 export * from './TimePicker';
 export * from './Transfer';
+export * from './Upload';
 export * from './Typography';
