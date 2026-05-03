@@ -11,6 +11,7 @@ import {
   defineDsDatePicker,
   defineDsDivider,
   defineDsDropdown,
+  defineDsEmpty,
   defineDsFloatButton,
   defineDsForm,
   defineDsInput,
@@ -47,6 +48,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsCascader(registry);
   defineDsDivider(registry);
   defineDsDropdown(registry);
+  defineDsEmpty(registry);
   defineDsTypography(registry);
   defineDsFloatButton(registry);
   defineDsForm(registry);

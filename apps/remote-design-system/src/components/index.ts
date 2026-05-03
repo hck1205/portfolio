@@ -8,6 +8,7 @@ export * from './Collapse';
 export * from './DatePicker';
 export * from './Divider';
 export * from './Dropdown';
+export * from './Empty';
 export * from './FloatButton';
 export * from './Form';
 export * from './Input';
