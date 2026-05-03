@@ -1,3 +1,4 @@
+export * from './AutoComplete';
 export * from './Anchor';
 export * from './Button';
 export * from './Checkbox';

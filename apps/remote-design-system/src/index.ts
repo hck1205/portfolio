@@ -2,6 +2,7 @@ import './styles.css';
 
 import {
   defineDsAnchor,
+  defineDsAutoComplete,
   defineDsButton,
   defineDsCheckbox,
   defineDsColorPicker,
@@ -25,6 +26,7 @@ export * from './foundation';
 
 export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsAnchor(registry);
+  defineDsAutoComplete(registry);
   defineDsButton(registry);
   defineDsCheckbox(registry);
   defineDsColorPicker(registry);
