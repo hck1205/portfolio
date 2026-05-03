@@ -1,0 +1,37 @@
+.ds-date-picker-story-frame {
+  display: grid;
+  gap: var(--spacing-ds-4);
+  min-width: 22rem;
+}
+
+.ds-date-picker-story-row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-ds-3);
+}
+
+.ds-date-picker-story-picker {
+  gap: var(--spacing-ds-2);
+  min-height: 54rem;
+}
+
+.ds-date-picker-story-picker-item {
+  min-height: 17rem;
+}
+
+.ds-date-picker-story-size,
+.ds-date-picker-story-variant {
+  min-height: 24rem;
+}
+
+.ds-date-picker-story-format,
+.ds-date-picker-story-range {
+  min-height: 22rem;
+}
+
+.ds-date-picker-story-placement {
+  gap: var(--spacing-ds-16);
+  min-height: 62rem;
+  padding: var(--spacing-ds-12);
+}

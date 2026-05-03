@@ -4,6 +4,7 @@ import {
   defineDsAnchor,
   defineDsButton,
   defineDsCollapse,
+  defineDsDatePicker,
   defineDsDivider,
   defineDsDropdown,
   defineDsFloatButton,
@@ -22,6 +23,7 @@ export * from './foundation';
 export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsAnchor(registry);
   defineDsButton(registry);
+  defineDsDatePicker(registry);
   defineDsDivider(registry);
   defineDsDropdown(registry);
   defineDsTypography(registry);

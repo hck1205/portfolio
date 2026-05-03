@@ -1,6 +1,7 @@
 export * from './Anchor';
 export * from './Button';
 export * from './Collapse';
+export * from './DatePicker';
 export * from './Divider';
 export * from './Dropdown';
 export * from './FloatButton';
