@@ -138,6 +138,6 @@ export const Fade: Story = {
 };
 
 export const DotPlacement: Story = {
-  args: { dotPlacement: "end" },
+  args: { arrows: true, dotPlacement: "end" },
   parameters: createDocsDescription(storyDescriptions.placement)
 };

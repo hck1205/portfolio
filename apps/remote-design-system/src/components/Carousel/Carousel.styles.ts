@@ -23,11 +23,26 @@ export const CAROUSEL_STYLES = `
     touch-action: pan-y;
   }
 
+  :host([data-axis="vertical"]) .ds-carousel__viewport {
+    block-size: var(--ds-carousel-viewport-height, 220px);
+    touch-action: pan-x;
+  }
+
   .ds-carousel__track {
     display: flex;
     transform: translateX(calc(var(--ds-carousel-index, 0) * -100%));
     transition: transform 500ms ease;
     will-change: transform;
+  }
+
+  :host([data-axis="vertical"]) .ds-carousel__track {
+    block-size: 100%;
+    flex-direction: column;
+    transform: translateY(calc(var(--ds-carousel-index, 0) * -100%));
+  }
+
+  .ds-carousel__track[data-instant] {
+    transition: none;
   }
 
   :host([effect="fade"]) .ds-carousel__track {
@@ -39,6 +54,13 @@ export const CAROUSEL_STYLES = `
     box-sizing: border-box;
     flex: 0 0 100%;
     min-width: 100%;
+  }
+
+  :host([data-axis="vertical"]) ::slotted(*) {
+    flex-basis: 100%;
+    min-height: 100%;
+    min-width: 0;
+    width: 100%;
   }
 
   :host([effect="fade"]) ::slotted(*) {
@@ -83,6 +105,21 @@ export const CAROUSEL_STYLES = `
     right: var(--spacing-ds-2);
   }
 
+  :host([data-axis="vertical"]) .ds-carousel__arrow {
+    left: 50%;
+    top: auto;
+    transform: translateX(-50%);
+  }
+
+  :host([data-axis="vertical"]) .ds-carousel__arrow[data-direction="prev"] {
+    top: var(--spacing-ds-2);
+  }
+
+  :host([data-axis="vertical"]) .ds-carousel__arrow[data-direction="next"] {
+    bottom: var(--spacing-ds-2);
+    right: auto;
+  }
+
   .ds-carousel__arrow[hidden] {
     display: none;
   }
@@ -120,6 +157,18 @@ export const CAROUSEL_STYLES = `
     flex-direction: column;
   }
 
+  :host([dot-placement="start"]) .ds-carousel__dot,
+  :host([dot-placement="end"]) .ds-carousel__dot {
+    height: 16px;
+    width: 3px;
+  }
+
+  :host([dot-placement="start"]) .ds-carousel__dot[data-active="true"],
+  :host([dot-placement="end"]) .ds-carousel__dot[data-active="true"] {
+    height: 24px;
+    width: 3px;
+  }
+
   :host([dot-placement="start"]) .ds-carousel__dots {
     order: -1;
   }
@@ -134,6 +183,7 @@ export const CAROUSEL_STYLES = `
     padding: 0;
     transition:
       background 150ms ease,
+      height 150ms ease,
       width 150ms ease;
     width: 16px;
   }
