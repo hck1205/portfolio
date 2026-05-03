@@ -1,0 +1,16 @@
+.ds-segmented-story-frame {
+  display: grid;
+  gap: var(--spacing-ds-5, 20px);
+  padding: var(--spacing-ds-5, 20px);
+  width: min(620px, calc(100vw - 48px));
+}
+
+.ds-segmented-story-stack {
+  align-items: start;
+  display: grid;
+  gap: var(--spacing-ds-4, 16px);
+}
+
+.ds-segmented-story-block {
+  width: 100%;
+}
