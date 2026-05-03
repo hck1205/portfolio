@@ -1,6 +1,7 @@
 export * from './AutoComplete';
 export * from './Anchor';
 export * from './Button';
+export * from './Calendar';
 export * from './Checkbox';
 export * from './ColorPicker';
 export * from './Cascader';
