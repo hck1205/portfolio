@@ -1,3 +1,5 @@
+import { createThinScrollbarStyles } from "../shared/styles/scrollbar";
+
 export const TIME_PICKER_STYLES = `
   :host {
     --ds-time-picker-height: var(--spacing-m2);
@@ -160,23 +162,9 @@ export const TIME_PICKER_STYLES = `
     max-height: 12rem;
     overflow: auto;
     overscroll-behavior: contain;
-    scrollbar-color: var(--color-neutral-alpha-n5) transparent;
-    scrollbar-width: thin;
   }
 
-  .ds-time-picker__column::-webkit-scrollbar {
-    height: 6px;
-    width: 6px;
-  }
-
-  .ds-time-picker__column::-webkit-scrollbar-thumb {
-    background: var(--color-neutral-alpha-n5);
-    border-radius: var(--radius-full);
-  }
-
-  .ds-time-picker__column::-webkit-scrollbar-track {
-    background: transparent;
-  }
+  ${createThinScrollbarStyles(".ds-time-picker__column")}
 
   .ds-time-picker__option,
   .ds-time-picker__now {

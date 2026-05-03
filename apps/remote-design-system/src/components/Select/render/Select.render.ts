@@ -24,6 +24,7 @@ type CreateSelectElementsOptions = {
 
 type SyncSelectElementsOptions = {
   activeIndex: number;
+  allowClear: boolean;
   disabled: boolean;
   elements: SelectElements;
   emptyText: string;
@@ -132,6 +133,7 @@ export function createSelectElements({
 
 export function syncSelectElements({
   activeIndex,
+  allowClear,
   disabled,
   elements,
   emptyText,
@@ -153,7 +155,7 @@ export function syncSelectElements({
   elements.selectorElement.setAttribute("aria-expanded", String(open));
   elements.selectorElement.setAttribute("aria-haspopup", "listbox");
   elements.selectorElement.setAttribute("role", "combobox");
-  elements.clearButtonElement.hidden = disabled || !hasValue;
+  elements.clearButtonElement.hidden = !allowClear || disabled || !hasValue;
   elements.popupElement.hidden = !open;
   elements.searchElement.hidden = !showSearch;
   elements.searchElement.value = searchValue;

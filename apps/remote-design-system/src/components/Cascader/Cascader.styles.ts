@@ -1,3 +1,5 @@
+import { createThinScrollbarStyles } from "../shared/styles/scrollbar";
+
 export const CASCADER_STYLES = `
   :host {
     --ds-cascader-control-height: 32px;
@@ -267,6 +269,8 @@ export const CASCADER_STYLES = `
     padding: var(--spacing-ds-1);
   }
 
+  ${createThinScrollbarStyles(".ds-cascader__column")}
+
   .ds-cascader__column:last-child {
     border-inline-end: 0;
   }
@@ -355,6 +359,8 @@ export const CASCADER_STYLES = `
     overflow: auto;
     padding: var(--spacing-ds-1);
   }
+
+  ${createThinScrollbarStyles(".ds-cascader__search-results")}
 
   .ds-cascader__search-result {
     border-radius: var(--radius-ds-sm);
