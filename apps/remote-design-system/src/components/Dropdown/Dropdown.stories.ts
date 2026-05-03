@@ -1,4 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
+import {
+  Archive,
+  Check,
+  ChevronDown,
+  Copy,
+  FilePlus,
+  MoreHorizontal,
+  Trash2,
+  createElement as createLucideElement
+} from "lucide";
 
 import "./Dropdown.stories.css";
 import { defineDsDropdown, type DropdownPlacement, type DropdownTrigger } from ".";
@@ -21,6 +31,8 @@ const storyDescriptions = {
     "click, hover, context-menu trigger를 비교하는 예시입니다. 터치 환경에서는 hover보다 click trigger 사용을 권장합니다.",
   otherElements:
     "divider, disabled, danger, 보조 라벨 label을 포함한 메뉴 예시입니다.",
+  icon:
+    "trigger와 menu item에 icon을 함께 배치하는 Dropdown 예시입니다. icon은 장식 요소로 처리하고 label semantics는 유지합니다.",
   selectable:
     "selectable 메뉴 예시입니다. 선택된 item은 `selected-key`와 동기화되고 menuitemcheckbox semantics를 사용합니다."
 };
@@ -36,6 +48,29 @@ function createTrigger(label: string) {
   trigger.slot = "trigger";
   trigger.type = "button";
   trigger.textContent = label;
+
+  return trigger;
+}
+
+function createIconTrigger(label: string, options: { prefix?: boolean; suffix?: boolean } = {}) {
+  const trigger = createTrigger(label);
+  const labelElement = document.createElement("span");
+  const children: Node[] = [];
+
+  labelElement.className = "ds-dropdown-story-trigger-label";
+  labelElement.textContent = label;
+
+  if (options.prefix) {
+    children.push(createStoryTriggerIcon(MoreHorizontal));
+  }
+
+  children.push(labelElement);
+
+  if (options.suffix) {
+    children.push(createStoryTriggerIcon(ChevronDown, "ds-dropdown-story-trigger-icon--arrow"));
+  }
+
+  trigger.replaceChildren(...children);
 
   return trigger;
 }
@@ -76,12 +111,81 @@ function createItem(
 
 function createMenuItems() {
   return [
-    createItem("new", "New file", { shortcut: "⌘N" }),
-    createItem("duplicate", "Duplicate", { shortcut: "⌘D" }),
+    createItem("new", "New file", { shortcut: "Ctrl+N" }),
+    createItem("duplicate", "Duplicate", { shortcut: "Ctrl+D" }),
     createItem("divider-1", "", { type: "divider" }),
     createItem("archive", "Archive"),
     createItem("delete", "Delete", { danger: true })
   ];
+}
+
+function createStoryTriggerIcon(icon: Parameters<typeof createLucideElement>[0], className = "") {
+  const wrapperElement = document.createElement("span");
+
+  wrapperElement.className = ["ds-dropdown-story-trigger-icon", className].filter(Boolean).join(" ");
+  wrapperElement.append(createStoryIcon(icon));
+
+  return wrapperElement;
+}
+
+function createIconMenuItemsByVariant(variant: "prefix" | "suffix" | "prefix-suffix") {
+  const prefixIcons = [FilePlus, Copy, Archive, Trash2];
+
+  return [
+    createItem("new", "New file"),
+    createItem("duplicate", "Duplicate"),
+    createItem("archive", "Archive"),
+    createItem("delete", "Delete", { danger: true })
+  ].map((item, index) => {
+    const label = item.getAttribute("label") ?? "";
+
+    item.replaceChildren(
+      createIconItemContent(label, {
+        prefix: variant === "prefix" || variant === "prefix-suffix" ? prefixIcons[index] : undefined,
+        suffix: variant === "suffix" || variant === "prefix-suffix" ? Check : undefined
+      })
+    );
+
+    return item;
+  });
+}
+
+function createIconItemContent(
+  label: string,
+  {
+    prefix,
+    suffix
+  }: {
+    prefix?: Parameters<typeof createLucideElement>[0];
+    suffix?: Parameters<typeof createLucideElement>[0];
+  }
+) {
+  const contentElement = document.createElement("span");
+  const mainElement = document.createElement("span");
+  const labelElement = document.createElement("span");
+
+  contentElement.className = [
+    "ds-dropdown-story-item-content",
+    suffix ? "ds-dropdown-story-item-content--suffix" : ""
+  ]
+    .filter(Boolean)
+    .join(" ");
+  mainElement.className = "ds-dropdown-story-item-main";
+  labelElement.className = "ds-dropdown-story-item-label";
+  labelElement.textContent = label;
+
+  if (prefix) {
+    mainElement.append(createStoryIcon(prefix));
+  }
+
+  mainElement.append(labelElement);
+  contentElement.append(mainElement);
+
+  if (suffix) {
+    contentElement.append(createStoryIcon(suffix));
+  }
+
+  return contentElement;
 }
 
 function createDropdown(args: DropdownStoryArgs, label = "Actions") {
@@ -179,6 +283,56 @@ function renderOtherElements(args: DropdownStoryArgs) {
   return frame;
 }
 
+function renderIcon(args: DropdownStoryArgs) {
+  ensureDropdownElementsDefined();
+
+  const frame = document.createElement("div");
+  const variants = [
+    {
+      itemVariant: "prefix",
+      label: "Prefix icon",
+      triggerOptions: { prefix: true }
+    },
+    {
+      itemVariant: "suffix",
+      label: "Suffix icon",
+      triggerOptions: { suffix: true }
+    },
+    {
+      itemVariant: "prefix-suffix",
+      label: "Prefix + suffix",
+      triggerOptions: { prefix: true, suffix: true }
+    }
+  ] satisfies Array<{
+    itemVariant: "prefix" | "suffix" | "prefix-suffix";
+    label: string;
+    triggerOptions: { prefix?: boolean; suffix?: boolean };
+  }>;
+
+  frame.className = "ds-dropdown-story-icon-grid";
+
+  for (const variant of variants) {
+    const group = document.createElement("section");
+    const title = document.createElement("h3");
+    const dropdown = document.createElement("ds-dropdown");
+
+    group.className = "ds-dropdown-story-icon-case";
+    title.className = "ds-dropdown-story-icon-title";
+    title.textContent = variant.label;
+    dropdown.setAttribute("placement", args.placement);
+    dropdown.setAttribute("trigger", args.trigger);
+    dropdown.toggleAttribute("arrow", args.arrow);
+    dropdown.append(
+      createIconTrigger("Actions", variant.triggerOptions),
+      ...createIconMenuItemsByVariant(variant.itemVariant)
+    );
+    group.append(title, dropdown);
+    frame.append(group);
+  }
+
+  return frame;
+}
+
 function renderSelectable(args: DropdownStoryArgs) {
   return renderDefault({
     ...args,
@@ -214,7 +368,7 @@ const meta: Meta<DropdownStoryArgs> = {
     }
   },
   args: {
-    arrow: false,
+    arrow: true,
     disabled: false,
     placement: "bottom-left",
     selectable: false,
@@ -271,6 +425,17 @@ export const OtherElements: Story = {
   }
 };
 
+export const Icon: Story = {
+  render: renderIcon,
+  parameters: {
+    docs: {
+      description: {
+        story: storyDescriptions.icon
+      }
+    }
+  }
+};
+
 export const Selectable: Story = {
   render: renderSelectable,
   parameters: {
@@ -281,3 +446,14 @@ export const Selectable: Story = {
     }
   }
 };
+
+function createStoryIcon(icon: Parameters<typeof createLucideElement>[0], className = "") {
+  return createLucideElement(icon, {
+    "aria-hidden": "true",
+    class: ["ds-dropdown-story-icon", className].filter(Boolean).join(" "),
+    focusable: "false",
+    height: 14,
+    width: 14,
+    "stroke-width": 2.25
+  });
+}

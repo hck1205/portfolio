@@ -1,5 +1,6 @@
 export * from './Anchor';
 export * from './Button';
+export * from './ColorPicker';
 export * from './Collapse';
 export * from './DatePicker';
 export * from './Divider';

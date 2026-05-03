@@ -11,9 +11,72 @@
     box-shadow: var(--shadow-ds-card);
   }
 
+  .ds-dropdown-story-icon-grid {
+    @apply grid min-h-[320px] w-[720px] max-w-full grid-cols-3 items-start justify-items-center gap-ds-5 rounded-ds-sm border border-ds-border bg-ds-surface p-ds-8 text-ds-text;
+    box-shadow: var(--shadow-ds-card);
+  }
+
+  .ds-dropdown-story-icon-case {
+    @apply grid min-w-0 justify-items-center gap-ds-3;
+  }
+
+  .ds-dropdown-story-icon-title {
+    @apply m-0 text-ds-1 font-ds-strong leading-ds-tight text-ds-muted;
+  }
+
   .ds-dropdown-story-trigger {
     @apply inline-flex min-h-[30px] items-center justify-center rounded-ds-sm border border-ds-border bg-ds-surface px-ds-2 py-ds-1 text-ds-1 font-ds-strong leading-ds-tight text-ds-text;
+    box-sizing: border-box;
     cursor: pointer;
+    gap: var(--spacing-ds-2, var(--spacing-xs1));
+  }
+
+  .ds-dropdown-story-trigger-label,
+  .ds-dropdown-story-item-label {
+    @apply min-w-0 truncate;
+  }
+
+  .ds-dropdown-story-trigger-icon {
+    @apply grid shrink-0 place-items-center;
+    height: 14px;
+    line-height: 0;
+    margin-inline-start: 1px;
+    transition: transform 150ms ease-in-out;
+    transform-origin: center;
+    width: 14px;
+  }
+
+  .ds-dropdown-story-trigger-icon .ds-dropdown-story-icon {
+    transition: none;
+  }
+
+  .ds-dropdown-story-trigger-icon--arrow {
+    margin-inline-start: 2px;
+  }
+
+  .ds-dropdown-story-trigger[aria-expanded="true"] .ds-dropdown-story-trigger-icon--arrow {
+    transform: rotate(180deg);
+  }
+
+  .ds-dropdown-story-item-content {
+    @apply flex w-full min-w-0 items-center gap-ds-2;
+  }
+
+  .ds-dropdown-story-item-content--suffix {
+    justify-content: space-between;
+  }
+
+  .ds-dropdown-story-item-main {
+    @apply inline-flex min-w-0 items-center gap-ds-2;
+  }
+
+  .ds-dropdown-story-icon {
+    @apply block shrink-0;
+    align-self: center;
+    overflow: visible;
+    transition: transform 150ms ease-in-out;
+    transform-box: fill-box;
+    transform-origin: center;
   }
 
   .ds-dropdown-story-trigger:hover {

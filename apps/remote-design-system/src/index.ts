@@ -3,6 +3,7 @@ import './styles.css';
 import {
   defineDsAnchor,
   defineDsButton,
+  defineDsColorPicker,
   defineDsCollapse,
   defineDsDatePicker,
   defineDsDivider,
@@ -23,6 +24,7 @@ export * from './foundation';
 export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsAnchor(registry);
   defineDsButton(registry);
+  defineDsColorPicker(registry);
   defineDsDatePicker(registry);
   defineDsDivider(registry);
   defineDsDropdown(registry);

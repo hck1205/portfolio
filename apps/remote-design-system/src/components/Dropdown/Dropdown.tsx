@@ -110,6 +110,14 @@ export class DsDropdown extends HTMLElement {
     this.setAttribute("trigger", value);
   }
 
+  get triggerLabel() {
+    return this.getAttribute("trigger-label") ?? "Dropdown";
+  }
+
+  set triggerLabel(value: string) {
+    this.syncNullableAttribute("trigger-label", value);
+  }
+
   private handleTriggerClick = (event: Event) => {
     if (this.trigger !== "click" || this.disabled) {
       return;
@@ -257,7 +265,8 @@ export class DsDropdown extends HTMLElement {
       disabled: this.disabled,
       elements: this.elements,
       open: this.open,
-      placement: this.placement
+      placement: this.placement,
+      triggerLabel: this.triggerLabel
     });
     this.syncDocumentListener();
   }
