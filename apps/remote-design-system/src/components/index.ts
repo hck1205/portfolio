@@ -25,4 +25,5 @@ export * from './Splitter';
 export * from './Tabs';
 export * from './Switch';
 export * from './TimePicker';
+export * from './Transfer';
 export * from './Typography';

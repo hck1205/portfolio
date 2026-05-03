@@ -28,6 +28,7 @@ import {
   defineDsSwitch,
   defineDsTabs,
   defineDsTimePicker,
+  defineDsTransfer,
   defineDsTypography,
 } from './components';
 
@@ -63,6 +64,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsSwitch(registry);
   defineDsTabs(registry);
   defineDsTimePicker(registry);
+  defineDsTransfer(registry);
 }
 
 defineDesignSystemElements();
