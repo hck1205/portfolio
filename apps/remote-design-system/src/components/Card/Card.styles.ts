@@ -38,6 +38,10 @@ export const CARD_STYLES = `
     background: var(--color-ds-surface-muted, var(--color-neutral-alpha-n1));
   }
 
+  :host([type="inner"]) .ds-card__body {
+    background: var(--color-ds-surface, #fff);
+  }
+
   .ds-card__cover {
     display: block;
     min-width: 0;
@@ -84,6 +88,21 @@ export const CARD_STYLES = `
     font-size: var(--text-ds-1);
   }
 
+  .ds-card__extra-link {
+    color: var(--color-ds-primary);
+    text-decoration: none;
+  }
+
+  .ds-card__extra-link:hover {
+    text-decoration: underline;
+  }
+
+  .ds-card__extra-link:focus-visible {
+    border-radius: var(--radius-level1);
+    outline: var(--ds-focus-ring-width) solid var(--color-ds-primary);
+    outline-offset: var(--ds-focus-ring-offset);
+  }
+
   .ds-card__body {
     min-width: 0;
     padding: var(--spacing-ds-5);
@@ -113,6 +132,12 @@ export const CARD_STYLES = `
   .ds-card__loading {
     display: grid;
     gap: var(--spacing-ds-3);
+    min-width: 0;
+    padding: var(--spacing-ds-5);
+  }
+
+  :host([size="small"]) .ds-card__loading {
+    padding: var(--spacing-ds-3);
   }
 
   .ds-card__skeleton {

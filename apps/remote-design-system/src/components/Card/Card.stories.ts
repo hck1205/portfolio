@@ -6,6 +6,9 @@ import { defineDsCard, type CardSize, type CardVariant } from ".";
 type CardStoryArgs = {
   coverSrc: string;
   extra: string;
+  extraHref: string;
+  extraRel: string;
+  extraTarget: string;
   hoverable: boolean;
   loading: boolean;
   size: CardSize;
@@ -17,6 +20,9 @@ type CardStoryArgs = {
 const defaultArgs = {
   coverSrc: "",
   extra: "More",
+  extraHref: "#more",
+  extraRel: "",
+  extraTarget: "",
   hoverable: false,
   loading: false,
   size: "medium",
@@ -26,13 +32,35 @@ const defaultArgs = {
 } satisfies CardStoryArgs;
 
 const storyDescriptions = {
-  basic: "Card는 단일 주제와 관련된 정보를 담는 컨테이너입니다.",
+  basic: "Card는 단일 주제와 관련된 정보를 담는 컨테이너입니다. extra와 extra-href를 함께 사용하면 우측 More 영역이 링크로 동작합니다.",
+  column: "여러 Card를 컬럼 레이아웃으로 배치해 개요 화면이나 목록형 콘텐츠를 구성합니다.",
   cover: "cover와 Card.Meta를 조합해 이미지 중심 콘텐츠를 구성합니다.",
   grid: "Card.Grid는 카드 내부 정보를 격자로 배치합니다.",
   inner: "inner card는 다단계 정보 구조 안에 배치하기 좋습니다.",
   loading: "loading 상태에서는 body 대신 skeleton을 표시합니다.",
   variant: "outlined와 borderless variant를 제공합니다."
 };
+
+const contentCards = [
+  {
+    avatarSrc: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80",
+    coverSrc: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80",
+    description: "www.instagram.com",
+    title: "Europe Street beat"
+  },
+  {
+    avatarSrc: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80",
+    coverSrc: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=800&q=80",
+    description: "Design system overview",
+    title: "Object Card"
+  },
+  {
+    avatarSrc: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=120&q=80",
+    coverSrc: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=800&q=80",
+    description: "Component documentation",
+    title: "Function Card"
+  }
+] as const;
 
 function ensureCardDefined() {
   defineDsCard();
@@ -49,11 +77,50 @@ function createCard(args: Partial<CardStoryArgs> = {}, content = "Card content")
   card.setAttribute("variant", mergedArgs.variant);
   syncOptionalAttribute(card, "cover-src", mergedArgs.coverSrc);
   syncOptionalAttribute(card, "extra", mergedArgs.extra);
+  syncOptionalAttribute(card, "extra-href", mergedArgs.extraHref);
+  syncOptionalAttribute(card, "extra-rel", mergedArgs.extraRel);
+  syncOptionalAttribute(card, "extra-target", mergedArgs.extraTarget);
   syncOptionalAttribute(card, "title", mergedArgs.title);
   syncOptionalAttribute(card, "type", mergedArgs.type);
   body.className = "ds-card-story-text";
   body.textContent = content;
   card.append(body);
+
+  return card;
+}
+
+function createMeta({
+  avatarSrc,
+  description,
+  title
+}: {
+  avatarSrc?: string;
+  description: string;
+  title: string;
+}) {
+  const meta = document.createElement("ds-card-meta");
+
+  syncOptionalAttribute(meta, "avatar-src", avatarSrc ?? "");
+  meta.setAttribute("title", title);
+  meta.setAttribute("description", description);
+
+  return meta;
+}
+
+function createContentCard({
+  avatarSrc,
+  coverSrc,
+  description,
+  title
+}: {
+  avatarSrc: string;
+  coverSrc: string;
+  description: string;
+  title: string;
+}) {
+  const card = createCard({ coverSrc, hoverable: true, title: "" }, "");
+
+  card.replaceChildren(createMeta({ avatarSrc, description, title }));
 
   return card;
 }
@@ -106,21 +173,13 @@ function renderVariantStory() {
 function renderCoverStory() {
   ensureCardDefined();
 
-  const card = createCard(
-    {
-      coverSrc: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80",
-      hoverable: true,
-      title: ""
-    },
-    ""
-  );
-  const meta = document.createElement("ds-card-meta");
+  return createFrame([createContentCard(contentCards[0])]);
+}
 
-  meta.setAttribute("title", "Europe Street beat");
-  meta.setAttribute("description", "www.instagram.com");
-  card.replaceChildren(meta);
+function renderColumnStory() {
+  ensureCardDefined();
 
-  return createFrame([card]);
+  return createFrame([createRow(contentCards.map(createContentCard))]);
 }
 
 function renderGridStory() {
@@ -207,6 +266,11 @@ export const Variant: Story = {
 export const Cover: Story = {
   render: renderCoverStory,
   parameters: createDocsDescription(storyDescriptions.cover)
+};
+
+export const CardInColumn: Story = {
+  render: renderColumnStory,
+  parameters: createDocsDescription(storyDescriptions.column)
 };
 
 export const Grid: Story = {

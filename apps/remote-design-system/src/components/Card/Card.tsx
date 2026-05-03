@@ -12,8 +12,8 @@ export class DsCard extends HTMLElement {
   private coverImageElement?: HTMLImageElement;
   private coverSlot?: HTMLSlotElement;
   private extraElement?: HTMLDivElement;
+  private extraLinkElement?: HTMLAnchorElement;
   private extraSlot?: HTMLSlotElement;
-  private extraTextElement?: HTMLSpanElement;
   private headerElement?: HTMLDivElement;
   private loadingElement?: HTMLDivElement;
   private rootElement?: HTMLDivElement;
@@ -43,6 +43,30 @@ export class DsCard extends HTMLElement {
 
   set extra(value: string) {
     syncNullableAttribute(this, "extra", value);
+  }
+
+  get extraHref() {
+    return this.getAttribute("extra-href") ?? "";
+  }
+
+  set extraHref(value: string) {
+    syncNullableAttribute(this, "extra-href", value);
+  }
+
+  get extraRel() {
+    return this.getAttribute("extra-rel") ?? "";
+  }
+
+  set extraRel(value: string) {
+    syncNullableAttribute(this, "extra-rel", value);
+  }
+
+  get extraTarget() {
+    return this.getAttribute("extra-target") ?? "";
+  }
+
+  set extraTarget(value: string) {
+    syncNullableAttribute(this, "extra-target", value);
   }
 
   get hoverable() {
@@ -115,7 +139,7 @@ export class DsCard extends HTMLElement {
     this.titleTextElement = document.createElement("span");
     this.titleSlot = document.createElement("slot");
     this.extraElement = document.createElement("div");
-    this.extraTextElement = document.createElement("span");
+    this.extraLinkElement = document.createElement("a");
     this.extraSlot = document.createElement("slot");
     this.bodyElement = document.createElement("div");
     this.loadingElement = document.createElement("div");
@@ -125,6 +149,7 @@ export class DsCard extends HTMLElement {
     this.headerElement.className = "ds-card__header";
     this.titleElement.className = "ds-card__title";
     this.extraElement.className = "ds-card__extra";
+    this.extraLinkElement.className = "ds-card__extra-link";
     this.bodyElement.className = "ds-card__body";
     this.loadingElement.className = "ds-card__loading";
     this.actionsSlot.className = "ds-card__actions";
@@ -133,7 +158,7 @@ export class DsCard extends HTMLElement {
     this.coverSlot.name = "cover";
     this.actionsSlot.name = "actions";
     this.titleElement.append(this.titleTextElement, this.titleSlot);
-    this.extraElement.append(this.extraTextElement, this.extraSlot);
+    this.extraElement.append(this.extraLinkElement, this.extraSlot);
     this.coverElement.append(this.coverImageElement, this.coverSlot);
     this.bodyElement.append(defaultSlot);
     this.loadingElement.append(...Array.from({ length: 3 }, () => this.createSkeleton()));
@@ -160,7 +185,7 @@ export class DsCard extends HTMLElement {
   }
 
   private syncHeader() {
-    if (!this.headerElement || !this.titleElement || !this.extraElement || !this.titleTextElement || !this.extraTextElement || !this.titleSlot || !this.extraSlot) {
+    if (!this.headerElement || !this.titleElement || !this.extraElement || !this.extraLinkElement || !this.titleTextElement || !this.titleSlot || !this.extraSlot) {
       return;
     }
 
@@ -170,10 +195,24 @@ export class DsCard extends HTMLElement {
     this.titleTextElement.hidden = Boolean(assignedTitle);
     this.titleTextElement.textContent = assignedTitle ? "" : this.title;
     this.titleSlot.hidden = !assignedTitle;
-    this.extraTextElement.hidden = Boolean(assignedExtra);
-    this.extraTextElement.textContent = assignedExtra ? "" : this.extra;
+    this.extraLinkElement.hidden = Boolean(assignedExtra) || !this.extra;
+    this.extraLinkElement.textContent = assignedExtra ? "" : this.extra;
+    this.syncExtraLink();
     this.extraSlot.hidden = !assignedExtra;
     this.headerElement.hidden = !this.title && !this.extra && !assignedTitle && !assignedExtra;
+  }
+
+  private syncExtraLink() {
+    if (!this.extraLinkElement) {
+      return;
+    }
+
+    const isHashLink = this.extraHref.startsWith("#");
+    const target = isHashLink ? "" : this.extraTarget;
+
+    syncNullableAttribute(this.extraLinkElement, "href", this.extraHref);
+    syncNullableAttribute(this.extraLinkElement, "target", target);
+    syncNullableAttribute(this.extraLinkElement, "rel", this.extraRel || (target === "_blank" ? "noopener noreferrer" : ""));
   }
 
   private syncBody() {

@@ -5,6 +5,9 @@ export const CARD_META_ELEMENT_NAME = "ds-card-meta";
 export const CARD_OBSERVED_ATTRIBUTES = [
   "cover-src",
   "extra",
+  "extra-href",
+  "extra-rel",
+  "extra-target",
   "hoverable",
   "loading",
   "size",
