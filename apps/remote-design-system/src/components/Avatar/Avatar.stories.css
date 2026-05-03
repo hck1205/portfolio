@@ -1,0 +1,26 @@
+.ds-avatar-story-frame {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-ds-5, 20px);
+  min-width: 360px;
+  padding: var(--spacing-ds-5, 20px);
+}
+
+.ds-avatar-story-stack {
+  display: grid;
+  gap: var(--spacing-ds-4, 16px);
+}
+
+.ds-avatar-story-row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-ds-3, 12px);
+}
+
+.ds-avatar-story-label {
+  color: var(--color-ds-muted);
+  font-size: var(--text-ds-1);
+  min-width: 72px;
+}

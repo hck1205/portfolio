@@ -3,6 +3,7 @@ import './styles.css';
 import {
   defineDsAnchor,
   defineDsAutoComplete,
+  defineDsAvatar,
   defineDsButton,
   defineDsCheckbox,
   defineDsColorPicker,
@@ -40,6 +41,7 @@ export * from './foundation';
 export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsAnchor(registry);
   defineDsAutoComplete(registry);
+  defineDsAvatar(registry);
   defineDsButton(registry);
   defineDsCheckbox(registry);
   defineDsColorPicker(registry);
