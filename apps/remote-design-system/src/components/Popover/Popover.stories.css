@@ -1,0 +1,38 @@
+.ds-popover-story-frame {
+  align-items: center;
+  display: grid;
+  min-height: 280px;
+  padding: var(--spacing-ds-8, 32px);
+  place-items: center;
+  width: min(720px, calc(100vw - 48px));
+}
+
+.ds-popover-story-grid {
+  display: grid;
+  gap: var(--spacing-ds-4, 16px);
+  grid-template-columns: repeat(3, max-content);
+}
+
+.ds-popover-story-row {
+  display: flex;
+  gap: var(--spacing-ds-3, 12px);
+}
+
+.ds-popover-story-button {
+  appearance: none;
+  background: var(--color-ds-bg-container);
+  border: 1px solid var(--color-ds-border);
+  border-radius: var(--radius-ds-1, 4px);
+  color: var(--color-ds-text);
+  cursor: pointer;
+  font: inherit;
+  min-height: 32px;
+  padding: 0 var(--spacing-ds-3, 12px);
+}
+
+.ds-popover-story-button:hover,
+.ds-popover-story-button:focus-visible {
+  border-color: var(--color-ds-primary);
+  color: var(--color-ds-primary);
+  outline: 0;
+}
