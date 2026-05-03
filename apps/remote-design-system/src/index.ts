@@ -7,6 +7,7 @@ import {
   defineDsCheckbox,
   defineDsColorPicker,
   defineDsCascader,
+  defineDsCarousel,
   defineDsCollapse,
   defineDsDatePicker,
   defineDsDivider,
@@ -45,6 +46,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsColorPicker(registry);
   defineDsDatePicker(registry);
   defineDsCascader(registry);
+  defineDsCarousel(registry);
   defineDsDivider(registry);
   defineDsDropdown(registry);
   defineDsTypography(registry);

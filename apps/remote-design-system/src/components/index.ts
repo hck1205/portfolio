@@ -4,6 +4,7 @@ export * from './Button';
 export * from './Checkbox';
 export * from './ColorPicker';
 export * from './Cascader';
+export * from './Carousel';
 export * from './Collapse';
 export * from './DatePicker';
 export * from './Divider';
