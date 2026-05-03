@@ -4,6 +4,7 @@ import {
   defineDsAnchor,
   defineDsAutoComplete,
   defineDsAvatar,
+  defineDsBadge,
   defineDsButton,
   defineDsCheckbox,
   defineDsColorPicker,
@@ -42,6 +43,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsAnchor(registry);
   defineDsAutoComplete(registry);
   defineDsAvatar(registry);
+  defineDsBadge(registry);
   defineDsButton(registry);
   defineDsCheckbox(registry);
   defineDsColorPicker(registry);
