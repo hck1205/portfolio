@@ -1,0 +1,32 @@
+.ds-descriptions-story-frame {
+  width: min(920px, calc(100vw - 48px));
+  padding: var(--spacing-ds-5, 20px);
+}
+
+.ds-descriptions-story-stack {
+  display: grid;
+  gap: var(--spacing-ds-6, 24px);
+}
+
+.ds-descriptions-story-actions {
+  align-items: center;
+  display: inline-flex;
+  gap: var(--spacing-ds-2, 8px);
+}
+
+.ds-descriptions-story-link {
+  color: var(--color-ds-primary);
+  font: inherit;
+  text-decoration: none;
+}
+
+.ds-descriptions-story-status {
+  align-items: center;
+  background: var(--color-ds-success-bg, #f6ffed);
+  border: 1px solid var(--color-ds-success-border, #b7eb8f);
+  border-radius: var(--radius-ds-1, 4px);
+  color: var(--color-ds-success, #389e0d);
+  display: inline-flex;
+  min-height: 24px;
+  padding: 0 var(--spacing-ds-2, 8px);
+}

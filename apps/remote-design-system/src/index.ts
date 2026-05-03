@@ -9,6 +9,7 @@ import {
   defineDsCascader,
   defineDsCollapse,
   defineDsDatePicker,
+  defineDsDescriptions,
   defineDsDivider,
   defineDsDropdown,
   defineDsFloatButton,
@@ -45,6 +46,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsColorPicker(registry);
   defineDsDatePicker(registry);
   defineDsCascader(registry);
+  defineDsDescriptions(registry);
   defineDsDivider(registry);
   defineDsDropdown(registry);
   defineDsTypography(registry);
