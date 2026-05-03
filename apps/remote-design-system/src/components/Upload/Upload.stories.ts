@@ -8,6 +8,7 @@ type UploadStoryArgs = {
   directory: boolean;
   disabled: boolean;
   drag: boolean;
+  hint: string;
   listType: UploadListType;
   maxCount?: number;
   multiple: boolean;
@@ -20,6 +21,7 @@ const defaultArgs = {
   directory: false,
   disabled: false,
   drag: false,
+  hint: "Support for a single or bulk upload.",
   listType: "text",
   maxCount: undefined,
   multiple: false,
@@ -28,11 +30,11 @@ const defaultArgs = {
 } satisfies UploadStoryArgs;
 
 const storyDescriptions = {
-  default: "기본 Upload는 버튼을 눌러 파일 선택 창을 열고 선택된 파일 목록을 표시합니다.",
+  default: "기본 Upload는 버튼을 눌러 파일 선택 창을 열고 선택한 파일 목록을 표시합니다.",
   drag: "drag 상태에서는 점선 영역에 파일을 드래그 앤 드롭할 수 있습니다.",
   multiple: "multiple과 max-count로 여러 파일 선택과 최대 개수를 제한합니다.",
   listType: "picture, picture-card, picture-circle 목록 표현을 확인합니다.",
-  disabled: "disabled 상태에서는 파일 선택과 드롭을 막습니다."
+  disabled: "disabled 상태에서는 파일 선택과 드래그 앤 드롭이 막힙니다."
 };
 
 function ensureUploadDefined() {
@@ -43,6 +45,7 @@ function createUpload(args: UploadStoryArgs) {
   const element = document.createElement("ds-upload");
 
   element.setAttribute("accept", args.accept);
+  element.setAttribute("hint", args.hint);
   element.setAttribute("list-type", args.listType);
   element.setAttribute("show-upload-list", String(args.showUploadList));
   element.setAttribute("text", args.text);
@@ -121,6 +124,7 @@ const meta: Meta<UploadStoryArgs> = {
     directory: { control: "boolean" },
     disabled: { control: "boolean" },
     drag: { control: "boolean" },
+    hint: { control: "text" },
     listType: {
       control: "inline-radio",
       options: ["text", "picture", "picture-card", "picture-circle"]
@@ -143,7 +147,12 @@ export const Default: Story = {
 };
 
 export const Drag: Story = {
-  args: { drag: true, multiple: true, text: "Click or drag file to this area" },
+  args: {
+    drag: true,
+    hint: "Support for a single or bulk upload. Do not upload sensitive files.",
+    multiple: true,
+    text: "Click or drag file to this area to upload"
+  },
   parameters: createDocsDescription(storyDescriptions.drag)
 };
 

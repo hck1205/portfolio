@@ -1,4 +1,4 @@
-import { File, Trash2, UploadCloud, createElement as createLucideElement } from "lucide";
+import { Eye, File, Trash2, UploadCloud, createElement as createLucideElement } from "lucide";
 
 import {
   UPLOAD_CHANGE_EVENT,
@@ -30,6 +30,10 @@ export class DsUpload extends HTMLElement {
 
   connectedCallback() {
     this.render();
+  }
+
+  disconnectedCallback() {
+    this.revokePreviewUrls(this.fileList);
   }
 
   attributeChangedCallback() {
@@ -74,6 +78,14 @@ export class DsUpload extends HTMLElement {
 
   set listType(value: UploadListType) {
     this.setAttribute("list-type", value);
+  }
+
+  get hint() {
+    return this.getAttribute("hint") ?? "Support for a single or bulk upload.";
+  }
+
+  set hint(value: string) {
+    this.syncNullableAttribute("hint", value);
   }
 
   get maxCount() {
@@ -162,16 +174,24 @@ export class DsUpload extends HTMLElement {
 
   private createDropzone() {
     const dropzone = document.createElement("div");
-    const icon = this.createIcon(UploadCloud, 24);
+    const content = document.createElement("div");
+    const icon = this.createIcon(UploadCloud, 32);
     const text = document.createElement("span");
+    const hint = document.createElement("span");
 
     dropzone.className = "ds-upload__dropzone";
     dropzone.dataset.dragging = String(this.isDragging);
     dropzone.setAttribute("aria-disabled", String(this.disabled));
     dropzone.setAttribute("role", "button");
     dropzone.tabIndex = this.disabled ? -1 : 0;
+    content.className = "ds-upload__dropzone-content";
+    icon.classList.add("ds-upload__dropzone-icon");
+    text.className = "ds-upload__dropzone-title";
     text.textContent = this.text;
-    dropzone.append(icon, text);
+    hint.className = "ds-upload__dropzone-hint";
+    hint.textContent = this.hint;
+    content.append(icon, text, hint);
+    dropzone.append(content);
     dropzone.addEventListener("click", () => this.openFileDialog());
     dropzone.addEventListener("keydown", (event) => {
       if (event.key === "Enter" || event.key === " ") {
@@ -179,18 +199,31 @@ export class DsUpload extends HTMLElement {
         this.openFileDialog();
       }
     });
+    dropzone.addEventListener("dragenter", (event) => {
+      if (this.disabled) {
+        return;
+      }
+
+      event.preventDefault();
+      this.setDragging(true, dropzone);
+    });
     dropzone.addEventListener("dragover", (event) => {
       if (this.disabled) {
         return;
       }
 
       event.preventDefault();
-      this.isDragging = true;
-      this.render();
+      if (event.dataTransfer) {
+        event.dataTransfer.dropEffect = "copy";
+      }
+      this.setDragging(true, dropzone);
     });
-    dropzone.addEventListener("dragleave", () => {
-      this.isDragging = false;
-      this.render();
+    dropzone.addEventListener("dragleave", (event) => {
+      if (event.relatedTarget instanceof Node && dropzone.contains(event.relatedTarget)) {
+        return;
+      }
+
+      this.setDragging(false, dropzone);
     });
     dropzone.addEventListener("drop", (event) => {
       if (this.disabled) {
@@ -198,7 +231,7 @@ export class DsUpload extends HTMLElement {
       }
 
       event.preventDefault();
-      this.isDragging = false;
+      this.setDragging(false, dropzone);
       this.addFiles(event.dataTransfer?.files ?? null);
     });
 
@@ -221,23 +254,47 @@ export class DsUpload extends HTMLElement {
     const body = document.createElement("span");
     const name = document.createElement("span");
     const meta = document.createElement("span");
+    const actions = document.createElement("span");
+    const previewButton = document.createElement("button");
     const removeButton = document.createElement("button");
 
     item.className = "ds-upload__item";
     thumb.className = "ds-upload__thumb";
-    thumb.append(this.createIcon(File));
+
+    if (file.previewUrl && this.listType !== "text") {
+      const image = document.createElement("img");
+
+      image.alt = file.name;
+      image.src = file.previewUrl;
+      thumb.append(image);
+    } else {
+      thumb.append(this.createIcon(File));
+    }
+
     body.className = "ds-upload__body";
     name.className = "ds-upload__name";
     name.textContent = file.name;
     meta.className = "ds-upload__meta";
-    meta.textContent = `${formatFileSize(file.size)} · ${file.status}`;
+    meta.textContent = `${formatFileSize(file.size)} - ${file.status}`;
     body.append(name, meta);
+    actions.className = "ds-upload__actions";
+
+    if (file.previewUrl) {
+      previewButton.className = "ds-upload__action";
+      previewButton.type = "button";
+      previewButton.setAttribute("aria-label", `Preview ${file.name}`);
+      previewButton.append(this.createIcon(Eye));
+      previewButton.addEventListener("click", () => this.previewFile(file));
+      actions.append(previewButton);
+    }
+
     removeButton.className = "ds-upload__remove";
     removeButton.type = "button";
     removeButton.setAttribute("aria-label", `Remove ${file.name}`);
     removeButton.append(this.createIcon(Trash2));
     removeButton.addEventListener("click", () => this.removeFile(file.uid));
-    item.append(thumb, body, removeButton);
+    actions.append(removeButton);
+    item.append(thumb, body, actions);
 
     return item;
   }
@@ -249,8 +306,10 @@ export class DsUpload extends HTMLElement {
 
     const nextFiles = [...this.fileList, ...Array.from(files).map(fileToUploadItem)];
     const maxCount = this.maxCount;
+    const limitedFiles = maxCount ? nextFiles.slice(maxCount * -1) : nextFiles;
 
-    this.fileList = maxCount ? nextFiles.slice(maxCount * -1) : nextFiles;
+    this.revokePreviewUrls(nextFiles.filter((file) => !limitedFiles.includes(file)));
+    this.fileList = limitedFiles;
     this.dispatchChange();
     this.render();
   }
@@ -263,6 +322,7 @@ export class DsUpload extends HTMLElement {
     }
 
     this.fileList = this.fileList.filter((item) => item.uid !== uid);
+    this.revokePreviewUrls([file]);
     this.dispatchEvent(
       new CustomEvent<UploadRemoveDetail>(UPLOAD_REMOVE_EVENT, {
         bubbles: true,
@@ -295,6 +355,17 @@ export class DsUpload extends HTMLElement {
     this.inputElement?.click();
   }
 
+  private previewFile(file: UploadFileItem) {
+    if (file.previewUrl) {
+      window.open(file.previewUrl, "_blank", "noopener,noreferrer");
+    }
+  }
+
+  private setDragging(value: boolean, dropzone: HTMLElement) {
+    this.isDragging = value;
+    dropzone.dataset.dragging = String(value);
+  }
+
   private createIcon(icon: Parameters<typeof createLucideElement>[0], size = 16) {
     return createLucideElement(icon, {
       "aria-hidden": "true",
@@ -303,6 +374,14 @@ export class DsUpload extends HTMLElement {
       width: size,
       "stroke-width": 2
     });
+  }
+
+  private revokePreviewUrls(files: UploadFileItem[]) {
+    for (const file of files) {
+      if (file.previewUrl) {
+        URL.revokeObjectURL(file.previewUrl);
+      }
+    }
   }
 
   private syncNullableAttribute(name: string, value: string) {

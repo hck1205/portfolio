@@ -8,6 +8,7 @@ export const UPLOAD_OBSERVED_ATTRIBUTES = [
   "disabled",
   "directory",
   "drag",
+  "hint",
   "list-type",
   "max-count",
   "multiple",

@@ -27,9 +27,12 @@ export function getUploadListType(element: HTMLElement): UploadListType {
 }
 
 export function fileToUploadItem(file: File): UploadFileItem {
+  const canPreview = file.type.startsWith("image/") && typeof URL !== "undefined";
+
   return {
     lastModified: file.lastModified,
     name: file.name,
+    previewUrl: canPreview ? URL.createObjectURL(file) : undefined,
     size: file.size,
     status: "done",
     type: file.type,

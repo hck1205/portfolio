@@ -3,6 +3,7 @@ export type UploadListType = "text" | "picture" | "picture-card" | "picture-circ
 export type UploadFileItem = {
   lastModified: number;
   name: string;
+  previewUrl?: string;
   size: number;
   status: "done";
   type: string;
