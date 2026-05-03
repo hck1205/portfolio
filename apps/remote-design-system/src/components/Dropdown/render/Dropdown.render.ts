@@ -1,12 +1,16 @@
+import { ChevronDown, createElement as createLucideElement } from "lucide";
+
 import { DROPDOWN_ITEM_STYLES, DROPDOWN_STYLES } from "../Dropdown.styles";
 import type { DropdownItemType, DropdownPlacement } from "../types/Dropdown.types";
 
 export type DropdownElements = {
   arrowElement: HTMLSpanElement;
   fallbackTriggerElement: HTMLButtonElement;
+  fallbackTriggerLabelElement: HTMLSpanElement;
   popupElement: HTMLDivElement;
   rootElement: HTMLDivElement;
   triggerElement: HTMLSpanElement;
+  triggerSlotElement: HTMLSlotElement;
 };
 
 export type DropdownItemElements = {
@@ -81,6 +85,7 @@ export function createDropdownElements({
   const triggerElement = document.createElement("span");
   const triggerSlotElement = document.createElement("slot");
   const fallbackTriggerElement = document.createElement("button");
+  const fallbackTriggerLabelElement = document.createElement("span");
   const popupElement = document.createElement("div");
   const arrowElement = document.createElement("span");
   const menuSlotElement = document.createElement("slot");
@@ -90,7 +95,8 @@ export function createDropdownElements({
   triggerSlotElement.name = "trigger";
   fallbackTriggerElement.className = "ds-dropdown__fallback-trigger";
   fallbackTriggerElement.type = "button";
-  fallbackTriggerElement.textContent = "Dropdown";
+  fallbackTriggerLabelElement.className = "ds-dropdown__fallback-trigger-label";
+  fallbackTriggerElement.append(fallbackTriggerLabelElement, createDropdownChevron());
   popupElement.className = "ds-dropdown__popup";
   popupElement.hidden = true;
   popupElement.setAttribute("role", "menu");
@@ -106,10 +112,29 @@ export function createDropdownElements({
   return {
     arrowElement,
     fallbackTriggerElement,
+    fallbackTriggerLabelElement,
     popupElement,
     rootElement,
-    triggerElement
+    triggerElement,
+    triggerSlotElement
   };
+}
+
+function createDropdownChevron() {
+  const iconElement = document.createElement("span");
+
+  iconElement.className = "ds-dropdown__trigger-icon";
+  iconElement.append(
+    createLucideElement(ChevronDown, {
+      "aria-hidden": "true",
+      focusable: "false",
+      height: 14,
+      width: 14,
+      "stroke-width": 2.25
+    })
+  );
+
+  return iconElement;
 }
 
 export function syncDropdownElements({
@@ -117,22 +142,47 @@ export function syncDropdownElements({
   disabled,
   elements,
   open,
-  placement
+  placement,
+  triggerLabel
 }: {
   arrow: boolean;
   disabled: boolean;
   elements: DropdownElements;
   open: boolean;
   placement: DropdownPlacement;
+  triggerLabel: string;
 }) {
   elements.arrowElement.hidden = !arrow;
   elements.fallbackTriggerElement.disabled = disabled;
   elements.fallbackTriggerElement.setAttribute("aria-expanded", String(open));
   elements.fallbackTriggerElement.setAttribute("aria-haspopup", "menu");
+  elements.fallbackTriggerLabelElement.textContent = triggerLabel;
   elements.popupElement.dataset.placement = placement;
   elements.popupElement.hidden = !open;
   elements.triggerElement.setAttribute("aria-expanded", String(open));
   elements.triggerElement.setAttribute("aria-haspopup", "menu");
+  syncAssignedTriggerElements(elements.triggerSlotElement, { disabled, open });
+}
+
+function syncAssignedTriggerElements(
+  triggerSlotElement: HTMLSlotElement,
+  { disabled, open }: { disabled: boolean; open: boolean }
+) {
+  for (const element of triggerSlotElement.assignedElements({ flatten: true })) {
+    if (!(element instanceof HTMLElement)) {
+      continue;
+    }
+
+    element.setAttribute("aria-expanded", String(open));
+    element.setAttribute("aria-haspopup", "menu");
+
+    if (element instanceof HTMLButtonElement) {
+      element.disabled = disabled;
+    } else {
+      element.setAttribute("aria-disabled", String(disabled));
+      element.tabIndex = disabled ? -1 : 0;
+    }
+  }
 }
 
 function createDropdownItemControl(href: string) {
@@ -162,6 +212,7 @@ export function createDropdownItemElements({
   shortcutElement.className = "ds-dropdown-item__shortcut";
   dividerElement.className = "ds-dropdown-item__divider";
   dividerElement.setAttribute("role", "separator");
+  labelSlotElement.className = "ds-dropdown-item__label-slot";
   controlElement.addEventListener("click", onClick);
   labelSlotElement.append(labelElement);
   controlElement.append(labelSlotElement, shortcutElement);

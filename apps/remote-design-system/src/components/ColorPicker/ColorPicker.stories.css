@@ -1,0 +1,36 @@
+.ds-color-picker-story-frame {
+  align-items: flex-start;
+  background: var(--color-ds-surface);
+  border: var(--ds-border-width-default) solid var(--color-ds-border);
+  border-radius: var(--radius-ds-sm);
+  display: grid;
+  gap: var(--spacing-ds-5);
+  min-height: 18rem;
+  min-width: min(620px, calc(100vw - 48px));
+  padding: var(--spacing-ds-5);
+}
+
+.ds-color-picker-story-frame--placement {
+  min-height: 34rem;
+  min-width: min(980px, calc(100vw - 48px));
+  padding: var(--spacing-m3);
+}
+
+.ds-color-picker-story-row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-ds-3) var(--spacing-ds-5);
+}
+
+.ds-color-picker-story-panel {
+  align-items: center;
+  display: flex;
+  gap: var(--spacing-ds-3);
+}
+
+.ds-color-picker-story-label {
+  color: var(--color-ds-muted);
+  font-size: var(--text-ds-2);
+  font-weight: var(--ds-font-weight-strong);
+}

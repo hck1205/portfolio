@@ -12,7 +12,8 @@ export const DROPDOWN_OBSERVED_ATTRIBUTES = [
   "placement",
   "selectable",
   "selected-key",
-  "trigger"
+  "trigger",
+  "trigger-label"
 ] as const;
 
 export const DROPDOWN_ITEM_OBSERVED_ATTRIBUTES = [
