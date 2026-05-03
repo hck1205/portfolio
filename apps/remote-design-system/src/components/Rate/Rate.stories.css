@@ -1,0 +1,23 @@
+.ds-rate-story-frame {
+  display: grid;
+  gap: var(--spacing-ds-5);
+  min-width: 18rem;
+}
+
+.ds-rate-story-row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-ds-4);
+}
+
+.ds-rate-story-copy {
+  align-items: center;
+  display: inline-flex;
+  gap: var(--spacing-ds-3);
+}
+
+.ds-rate-story-text {
+  color: var(--color-ds-muted);
+  font-size: var(--text-ds-2);
+}
