@@ -1,10 +1,12 @@
 .ds-avatar-story-frame {
   align-items: center;
-  display: flex;
-  flex-wrap: wrap;
+  display: inline-grid;
   gap: var(--spacing-ds-5, 20px);
-  min-width: 360px;
+  grid-auto-flow: column;
+  justify-content: center;
+  min-width: 240px;
   padding: var(--spacing-ds-5, 20px);
+  place-items: center;
 }
 
 .ds-avatar-story-stack {
