@@ -19,9 +19,15 @@ import {
   defineDsMenu,
   defineDsMentions,
   defineDsPagination,
+  defineDsRadio,
+  defineDsRate,
+  defineDsSelect,
+  defineDsSlider,
   defineDsSteps,
   defineDsSplitter,
+  defineDsSwitch,
   defineDsTabs,
+  defineDsTimePicker,
   defineDsTransfer,
   defineDsTypography,
 } from './components';
@@ -49,9 +55,15 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsMenu(registry);
   defineDsMentions(registry);
   defineDsPagination(registry);
+  defineDsRadio(registry);
+  defineDsRate(registry);
+  defineDsSelect(registry);
+  defineDsSlider(registry);
   defineDsSteps(registry);
   defineDsSplitter(registry);
+  defineDsSwitch(registry);
   defineDsTabs(registry);
+  defineDsTimePicker(registry);
   defineDsTransfer(registry);
 }
 
