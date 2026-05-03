@@ -123,11 +123,7 @@ function renderOverflowStory() {
 function renderStandaloneStory() {
   ensureBadgeDefined();
 
-  return createFrame([
-    createBadge({ count: "25" }, undefined),
-    createBadge({ count: "0", showZero: true }, undefined),
-    createBadge({ dot: true }, undefined)
-  ]);
+  return createFrame([createBadge({ count: "25" }), createBadge({ count: "0", showZero: true }), createBadge({ dot: true })]);
 }
 
 function renderStatusStory() {
@@ -146,7 +142,7 @@ function renderColorStory() {
   return createFrame([
     createBadge({ color: "#1677ff", count: "5" }),
     createBadge({ color: "#52c41a", dot: true }),
-    createBadge({ color: "rgb(45, 183, 245)", count: "New" }, undefined)
+    createBadge({ color: "rgb(45, 183, 245)", count: "New" })
   ]);
 }
 
