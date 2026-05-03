@@ -15,8 +15,12 @@
 }
 
 .ds-badge-story-target {
-  background: var(--color-neutral-alpha-n2);
+  background: #f0f5ff;
+  border: 1px solid #adc6ff;
   border-radius: var(--radius-ds-sm);
+  box-shadow: inset 0 0 0 1px rgba(22, 119, 255, 0.08);
+  box-sizing: border-box;
+  display: inline-block;
   height: 42px;
   width: 42px;
 }
