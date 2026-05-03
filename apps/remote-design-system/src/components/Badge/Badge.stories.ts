@@ -146,6 +146,12 @@ function renderColorStory() {
   ]);
 }
 
+function renderSizeStory() {
+  ensureBadgeDefined();
+
+  return createFrame([createBadge({ count: "5", size: "middle" }), createBadge({ count: "5", size: "small" })]);
+}
+
 function renderRibbonStory() {
   ensureBadgeDefined();
 
@@ -218,6 +224,11 @@ export const Status: Story = {
 export const Colorful: Story = {
   render: renderColorStory,
   parameters: createDocsDescription(storyDescriptions.color)
+};
+
+export const Size: Story = {
+  render: renderSizeStory,
+  parameters: createDocsDescription("Size shows middle and small badges on the same target item.")
 };
 
 export const Ribbon: Story = {
