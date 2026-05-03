@@ -9,7 +9,7 @@
   place-items: center;
 }
 
-.ds-badge-story-frame ds-badge {
+.ds-badge-story-frame ds-badge:has(.ds-badge-story-target) {
   margin-block-start: var(--spacing-ds-2, 8px);
   margin-inline-end: var(--spacing-ds-4, 16px);
 }
@@ -23,6 +23,28 @@
   display: inline-block;
   height: 42px;
   width: 42px;
+}
+
+.ds-badge-story-status-item {
+  align-items: center;
+  display: inline-grid;
+  gap: var(--spacing-ds-2, 8px);
+  justify-items: center;
+  margin: 0;
+  min-width: 72px;
+}
+
+.ds-badge-story-frame .ds-badge-story-status-item ds-badge {
+  margin: 0;
+}
+
+.ds-badge-story-status-item figcaption {
+  color: var(--color-ds-text-secondary, #667085);
+  font-size: var(--text-ds-1);
+  line-height: var(--leading-ds-normal, 1.5);
+  min-height: 18px;
+  text-align: center;
+  width: 100%;
 }
 
 .ds-badge-story-card {

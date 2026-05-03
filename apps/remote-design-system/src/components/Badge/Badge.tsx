@@ -7,6 +7,7 @@ import {
   getBadgeStatus,
   getRibbonPlacement,
   normalizeBooleanAttribute,
+  setAttributeIfChanged,
   syncNullableAttribute
 } from "./dom/Badge.dom";
 import { applyBadgeRibbonStyles, applyBadgeStyles } from "./Badge.styles";
@@ -101,14 +102,16 @@ export class DsBadge extends HTMLElement {
       this.initializeStructure();
     }
 
-    const hasContent = Boolean(this.slotElement?.assignedNodes({ flatten: true }).some((node) => node.textContent?.trim() || node.nodeType === Node.ELEMENT_NODE));
+    const hasContent = this.hasAssignedContent();
     const status = this.status;
-    const standalone = !hasContent || Boolean(status);
+    const standalone = !hasContent;
+    const statusMode = Boolean(status && standalone);
     const [offsetX, offsetY] = getBadgeOffset(this);
 
-    this.setAttributeIfChanged("size", this.size);
+    setAttributeIfChanged(this, "size", this.size);
     if (this.rootElement) {
       this.rootElement.dataset.standalone = String(standalone);
+      this.rootElement.dataset.statusMode = String(statusMode);
     }
     this.indicatorElement?.style.setProperty("--ds-badge-offset-x", `${offsetX}px`);
     this.indicatorElement?.style.setProperty("--ds-badge-offset-y", `${offsetY}px`);
@@ -152,14 +155,16 @@ export class DsBadge extends HTMLElement {
     this.indicatorElement.dataset.status = status ?? "";
     this.indicatorElement.title = this.getAttribute("title") ?? countText;
     this.indicatorElement.textContent = this.dot || status ? "" : countText;
-    this.statusTextElement.hidden = !status || !this.text;
+    this.statusTextElement.hidden = !status || !this.text || !standalone;
     this.statusTextElement.textContent = this.text;
   }
 
-  private setAttributeIfChanged(name: string, value: string) {
-    if (this.getAttribute(name) !== value) {
-      this.setAttribute(name, value);
-    }
+  private hasAssignedContent() {
+    return Boolean(
+      this.slotElement
+        ?.assignedNodes({ flatten: true })
+        .some((node) => node.nodeType === Node.ELEMENT_NODE || Boolean(node.textContent?.trim()))
+    );
   }
 }
 
@@ -220,7 +225,7 @@ export class DsBadgeRibbon extends HTMLElement {
       applyBadgeRibbonStyles(shadowRoot);
     }
 
-    this.setAttributeIfChanged("placement", this.placement);
+    setAttributeIfChanged(this, "placement", this.placement);
     if (this.color) {
       this.labelElement!.style.setProperty("--ds-ribbon-color", this.color);
     } else {
@@ -228,11 +233,5 @@ export class DsBadgeRibbon extends HTMLElement {
     }
     this.labelElement!.textContent = this.text;
     this.labelElement!.hidden = !this.text;
-  }
-
-  private setAttributeIfChanged(name: string, value: string) {
-    if (this.getAttribute(name) !== value) {
-      this.setAttribute(name, value);
-    }
   }
 }

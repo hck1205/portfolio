@@ -29,13 +29,15 @@ const defaultArgs = {
   title: ""
 } satisfies BadgeStoryArgs;
 
+const STATUS_OPTIONS: BadgeStatus[] = ["success", "error", "default", "processing", "warning"];
+
 const storyDescriptions = {
-  basic: "Badge는 대상 주변에 알림 수나 작은 상태 정보를 표시합니다.",
-  color: "color 속성으로 dot 또는 count badge 색상을 바꿀 수 있습니다.",
-  overflow: "overflow-count를 넘는 숫자는 축약해서 표시합니다.",
-  ribbon: "Ribbon은 카드 같은 콘텐츠 모서리에 보조 라벨을 붙입니다.",
-  standalone: "children이 없는 badge는 독립 배지로 표시됩니다.",
-  status: "status와 text 조합으로 상태 설명을 표시합니다."
+  basic: "Displays a count or dot on a target element.",
+  color: "Uses color to customize count and dot badges.",
+  overflow: "Collapses large counts with overflow-count.",
+  ribbon: "Attaches a ribbon label to the corner of card-like content.",
+  standalone: "Shows badges without target content.",
+  status: "Shows status dots on target elements with labels for comparison."
 };
 
 function ensureBadgeDefined() {
@@ -94,6 +96,17 @@ function createCard() {
   return card;
 }
 
+function createStatusExample(status: BadgeStatus) {
+  const item = document.createElement("figure");
+  const label = document.createElement("figcaption");
+
+  item.className = "ds-badge-story-status-item";
+  label.textContent = status;
+  item.append(createBadge({ status, text: "" }), label);
+
+  return item;
+}
+
 function createDocsDescription(story: string) {
   return {
     docs: {
@@ -129,11 +142,7 @@ function renderStandaloneStory() {
 function renderStatusStory() {
   ensureBadgeDefined();
 
-  return createFrame(
-    (["success", "error", "default", "processing", "warning"] as BadgeStatus[]).map((status) =>
-      createBadge({ status, text: status }, undefined)
-    )
-  );
+  return createFrame(STATUS_OPTIONS.map(createStatusExample));
 }
 
 function renderColorStory() {
@@ -180,7 +189,7 @@ const meta: Meta<BadgeStoryArgs> = {
     docs: {
       description: {
         component:
-          "Badge는 알림 수, dot, 상태 텍스트, ribbon을 표시하는 Data Display 컴포넌트입니다. Ant Design의 count, overflow, status, color, offset, ribbon 패턴을 Web Component API로 제공합니다."
+          "Badge displays notification counts, dots, status indicators, and ribbon labels for data display patterns."
       }
     }
   },
@@ -191,7 +200,7 @@ const meta: Meta<BadgeStoryArgs> = {
     },
     status: {
       control: "inline-radio",
-      options: ["", "success", "error", "default", "processing", "warning"]
+      options: ["", ...STATUS_OPTIONS]
     }
   },
   args: defaultArgs,

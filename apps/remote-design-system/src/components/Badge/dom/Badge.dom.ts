@@ -60,3 +60,9 @@ export function syncNullableAttribute(element: HTMLElement, name: string, value:
 
   element.removeAttribute(name);
 }
+
+export function setAttributeIfChanged(element: HTMLElement, name: string, value: string) {
+  if (element.getAttribute(name) !== value) {
+    element.setAttribute(name, value);
+  }
+}

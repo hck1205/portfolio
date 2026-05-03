@@ -16,6 +16,17 @@ export const BADGE_STYLES = `
     position: relative;
   }
 
+  .ds-badge[data-status-mode="true"] {
+    align-items: center;
+    display: inline-flex;
+    line-height: var(--leading-ds-normal, 1.5);
+    position: static;
+  }
+
+  .ds-badge[data-status-mode="true"] .ds-badge__content {
+    display: none;
+  }
+
   .ds-badge__content {
     display: inline-block;
     max-width: 100%;
@@ -52,6 +63,21 @@ export const BADGE_STYLES = `
   .ds-badge__indicator[data-standalone="true"] {
     position: static;
     transform: none;
+    vertical-align: middle;
+  }
+
+  .ds-badge__indicator[data-status]:not([data-status=""]) {
+    font-size: 0;
+    line-height: 0;
+  }
+
+  .ds-badge[data-status-mode="true"] .ds-badge__indicator[data-status]:not([data-status=""]) {
+    flex: 0 0 6px;
+    font-size: 0;
+    line-height: 0;
+    margin-inline-end: var(--spacing-ds-2, 8px);
+    position: static;
+    transform: none;
   }
 
   .ds-badge__indicator[data-dot="true"] {
@@ -83,6 +109,10 @@ export const BADGE_STYLES = `
     --ds-badge-color: var(--color-ds-primary);
   }
 
+  .ds-badge[data-status-mode="true"] .ds-badge__indicator[data-status="processing"] {
+    position: relative;
+  }
+
   .ds-badge__indicator[data-status="success"] {
     --ds-badge-color: var(--color-ds-success, #52c41a);
   }
@@ -92,11 +122,12 @@ export const BADGE_STYLES = `
   }
 
   .ds-badge__indicator[data-status="processing"]::after {
-    animation: ds-badge-pulse 1.2s infinite ease-in-out;
-    border: 1px solid var(--ds-badge-color);
+    animation: ds-badge-status-pulse 1.8s infinite ease-out;
+    border: 1.5px solid var(--ds-badge-color);
     border-radius: inherit;
     content: "";
-    inset: 0;
+    inset: -2px;
+    opacity: 0;
     position: absolute;
   }
 
@@ -106,17 +137,18 @@ export const BADGE_STYLES = `
     display: inline-flex;
     gap: var(--spacing-ds-2);
     line-height: var(--leading-ds-normal, 1.5);
+    vertical-align: middle;
   }
 
-  @keyframes ds-badge-pulse {
+  @keyframes ds-badge-status-pulse {
     0% {
-      opacity: 0.8;
+      opacity: 0.42;
       transform: scale(1);
     }
 
     100% {
       opacity: 0;
-      transform: scale(1.8);
+      transform: scale(1.9);
     }
   }
 `;
@@ -140,23 +172,38 @@ export const BADGE_RIBBON_STYLES = `
 
   .ds-badge-ribbon__content {
     display: block;
+    position: relative;
   }
 
   .ds-badge-ribbon__label {
     --ds-ribbon-color: var(--color-ds-primary);
+    --ds-ribbon-fold-color: color-mix(in srgb, var(--ds-ribbon-color) 78%, black);
     background: var(--ds-ribbon-color);
     border-radius: var(--radius-level1) var(--radius-level1) 0 var(--radius-level1);
+    box-shadow: var(--shadow-ds-xs, 0 1px 2px rgb(0 0 0 / 0.08));
+    box-sizing: border-box;
     color: var(--color-white, #fff);
     font-size: var(--text-ds-1);
-    line-height: var(--leading-ds-normal, 1.5);
+    font-weight: var(--font-weight-ds-medium, 500);
+    line-height: 22px;
     max-width: calc(100% - var(--spacing-ds-4));
-    overflow: hidden;
-    padding: var(--spacing-ds-1) var(--spacing-ds-3);
+    overflow: visible;
+    padding: 0 var(--spacing-ds-3);
     position: absolute;
     text-overflow: ellipsis;
-    top: var(--spacing-ds-3);
+    top: var(--spacing-ds-2);
     white-space: nowrap;
     z-index: 1;
+  }
+
+  .ds-badge-ribbon__label::after {
+    background: var(--ds-ribbon-fold-color);
+    clip-path: polygon(0 0, 100% 0, 0 100%);
+    content: "";
+    height: 8px;
+    position: absolute;
+    top: 100%;
+    width: 8px;
   }
 
   :host([placement="end"]) .ds-badge-ribbon__label {
@@ -164,9 +211,20 @@ export const BADGE_RIBBON_STYLES = `
     right: calc(var(--spacing-ds-2) * -1);
   }
 
+  :host([placement="end"]) .ds-badge-ribbon__label::after {
+    right: 0;
+    transform: translateY(0);
+  }
+
   :host([placement="start"]) .ds-badge-ribbon__label {
     border-radius: var(--radius-level1) var(--radius-level1) var(--radius-level1) 0;
     left: calc(var(--spacing-ds-2) * -1);
+  }
+
+  :host([placement="start"]) .ds-badge-ribbon__label::after {
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+    left: 0;
+    transform: translateY(0);
   }
 `;
 
