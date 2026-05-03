@@ -14,6 +14,7 @@ import {
   defineDsFloatButton,
   defineDsForm,
   defineDsInput,
+  defineDsInputNumber,
   defineDsLayout,
   defineDsMenu,
   defineDsMentions,
@@ -41,6 +42,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsFloatButton(registry);
   defineDsForm(registry);
   defineDsInput(registry);
+  defineDsInputNumber(registry);
   defineDsCollapse(registry);
   defineDsLayout(registry);
   defineDsMenu(registry);

@@ -1,0 +1,73 @@
+.ds-input-number-story-frame {
+  justify-items: center;
+  display: grid;
+  gap: 24px;
+  max-width: min(520px, calc(100vw - 48px));
+  min-width: min(360px, calc(100vw - 48px));
+  width: 100%;
+}
+
+.ds-input-number-story-stack {
+  justify-items: center;
+  display: grid;
+  gap: 12px;
+  width: 100%;
+}
+
+.ds-input-number-story-row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.ds-input-number-story-field-row {
+  align-items: center;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: auto minmax(180px, 1fr);
+  width: 100%;
+}
+
+.ds-input-number-story-field-desc {
+  color: var(--color-ds-muted);
+  font: 400 var(--text-ds-1) / var(--leading-ds-readable) var(--font-sans);
+}
+
+.ds-input-number-story-section {
+  border: 1px solid var(--color-ds-border);
+  border-radius: var(--radius-ds-sm);
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  width: 100%;
+}
+
+.ds-input-number-story-section__title {
+  color: var(--color-ds-text);
+  font: 600 var(--text-ds-2) / var(--leading-ds-tight) var(--font-sans);
+  margin: 0;
+}
+
+.ds-input-number-story-section ds-input-number {
+  justify-self: center;
+}
+
+.ds-input-number-story-icon {
+  align-items: center;
+  color: var(--color-ds-muted);
+  display: inline-flex;
+  line-height: 0;
+}
+
+@media (max-width: 640px) {
+  .ds-input-number-story-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .ds-input-number-story-field-row {
+    align-items: start;
+    grid-template-columns: 1fr;
+  }
+}
