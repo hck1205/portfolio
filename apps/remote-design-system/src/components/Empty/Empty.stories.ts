@@ -1,106 +1,36 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
 import "./Empty.stories.css";
-import { defineDsEmpty, type EmptySize } from ".";
-
-type EmptyStoryArgs = {
-  description: string;
-  image: string;
-  size: EmptySize;
-};
-
-const defaultArgs = {
-  description: "No data",
-  image: "default",
-  size: "middle"
-} satisfies EmptyStoryArgs;
-
-const storyDescriptions = {
-  default: "Friendly placeholder for empty states.",
-  simple: "Simple built-in image for compact components such as selects and tables.",
-  customize: "Custom description, image, and action content can be combined.",
-  noDescription: "Description can be hidden with `description=false`."
-};
-
-function ensureEmptyDefined() {
-  defineDsEmpty();
-}
-
-function createEmpty(args: EmptyStoryArgs, actionText?: string) {
-  const element = document.createElement("ds-empty");
-
-  element.setAttribute("description", args.description);
-  element.setAttribute("image", args.image);
-  element.setAttribute("size", args.size);
-
-  if (actionText) {
-    const button = document.createElement("button");
-
-    button.className = "ds-empty-story-button";
-    button.type = "button";
-    button.textContent = actionText;
-    element.append(button);
-  }
-
-  return element;
-}
-
-function createFrame(children: HTMLElement[]) {
-  const frame = document.createElement("div");
-
-  frame.className = "ds-empty-story-frame";
-  frame.append(...children);
-
-  return frame;
-}
-
-function createGrid(children: HTMLElement[]) {
-  const grid = document.createElement("div");
-
-  grid.className = "ds-empty-story-grid";
-  grid.append(...children);
-
-  return grid;
-}
-
-function createPanel(child: HTMLElement) {
-  const panel = document.createElement("div");
-
-  panel.className = "ds-empty-story-panel";
-  panel.append(child);
-
-  return panel;
-}
-
-function createDocsDescription(story: string) {
-  return {
-    docs: {
-      description: {
-        story
-      }
-    }
-  };
-}
+import { defineDsEmpty } from ".";
+import { renderComponentEmptyStates } from "./stories/Empty.componentStates";
+import {
+  defaultEmptyStoryArgs,
+  emptyComponentDescription,
+  emptySizeOptions,
+  emptyStoryDescriptions
+} from "./stories/Empty.storyData";
+import { createDocsDescription, createEmpty, createFrame, createGrid, createPanel } from "./stories/Empty.storyDom";
+import type { EmptyStoryArgs } from "./stories/Empty.storyTypes";
 
 function renderDefault(args: EmptyStoryArgs) {
-  ensureEmptyDefined();
+  defineDsEmpty();
 
   return createFrame([createEmpty(args)]);
 }
 
 function renderSimple() {
-  ensureEmptyDefined();
+  defineDsEmpty();
 
   return createFrame([
     createGrid([
-      createPanel(createEmpty({ ...defaultArgs, image: "simple", size: "small" })),
-      createPanel(createEmpty({ ...defaultArgs, description: "Data Not Found", image: "simple", size: "small" }))
+      createPanel(createEmpty({ ...defaultEmptyStoryArgs, image: "simple", size: "small" })),
+      createPanel(createEmpty({ ...defaultEmptyStoryArgs, description: "Data Not Found", image: "simple", size: "small" }))
     ])
   ]);
 }
 
 function renderCustomize() {
-  ensureEmptyDefined();
+  defineDsEmpty();
 
   return createFrame([
     createEmpty(
@@ -121,8 +51,7 @@ const meta: Meta<EmptyStoryArgs> = {
     layout: "centered",
     docs: {
       description: {
-        component:
-          "Empty renders a centered placeholder when no data is available. It supports default and simple images, custom image URLs, custom description text, hidden description, size, and footer action content."
+        component: emptyComponentDescription
       }
     }
   },
@@ -131,10 +60,10 @@ const meta: Meta<EmptyStoryArgs> = {
     image: { control: "text" },
     size: {
       control: "inline-radio",
-      options: ["middle", "small"]
+      options: emptySizeOptions
     }
   },
-  args: defaultArgs,
+  args: defaultEmptyStoryArgs,
   render: renderDefault
 };
 
@@ -143,17 +72,23 @@ export default meta;
 type Story = StoryObj<EmptyStoryArgs>;
 
 export const Default: Story = {
-  parameters: createDocsDescription(storyDescriptions.default)
+  parameters: createDocsDescription(emptyStoryDescriptions.default)
 };
 
 export const SimpleImage: Story = {
   render: renderSimple,
-  parameters: createDocsDescription(storyDescriptions.simple)
+  parameters: createDocsDescription(emptyStoryDescriptions.simple)
 };
 
 export const Customize: Story = {
   render: renderCustomize,
-  parameters: createDocsDescription(storyDescriptions.customize)
+  parameters: createDocsDescription(emptyStoryDescriptions.customize)
+};
+
+export const ComponentEmptyStates: Story = {
+  name: "Component Empty States",
+  render: renderComponentEmptyStates,
+  parameters: createDocsDescription(emptyStoryDescriptions.components)
 };
 
 export const NoDescription: Story = {
@@ -161,5 +96,5 @@ export const NoDescription: Story = {
     description: "false",
     image: "simple"
   },
-  parameters: createDocsDescription(storyDescriptions.noDescription)
+  parameters: createDocsDescription(emptyStoryDescriptions.noDescription)
 };

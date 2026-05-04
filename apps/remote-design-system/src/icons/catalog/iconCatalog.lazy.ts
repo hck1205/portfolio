@@ -23,7 +23,7 @@ export function mountLazyIconSections(
   gridsByGroup: Map<string, HTMLElement>,
   sentinelsByGroup: Map<string, HTMLElement>,
   statusElement: HTMLElement,
-) {
+): () => void {
   const totalIconCount = Array.from(entriesByGroup.values()).reduce(
     (total, entries) => total + entries.length,
     0
@@ -56,9 +56,13 @@ export function mountLazyIconSections(
       return;
     }
 
+    const fragment = document.createDocumentFragment();
+
     for (const icon of entries) {
-      grid.append(createIconTile(icon));
+      fragment.append(createIconTile(icon));
     }
+
+    grid.append(fragment);
 
     sectionElementsByGroup.get(group)?.style.removeProperty("min-height");
     renderedGroups.add(group);
@@ -105,7 +109,9 @@ export function mountLazyIconSections(
   });
 
   if (typeof IntersectionObserver === "undefined") {
-    return;
+    return () => {
+      scrollListenerController.abort();
+    };
   }
 
   const observer = new IntersectionObserver((entries) => {
@@ -128,4 +134,9 @@ export function mountLazyIconSections(
     sentinel.dataset.iconGroup = group;
     observer.observe(sentinel);
   }
+
+  return () => {
+    scrollListenerController.abort();
+    observer.disconnect();
+  };
 }

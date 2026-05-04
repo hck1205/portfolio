@@ -15,7 +15,11 @@ export class DsEmpty extends HTMLElement {
     this.render();
   }
 
-  attributeChangedCallback() {
+  attributeChangedCallback(_name: string, oldValue: string | null, newValue: string | null) {
+    if (oldValue === newValue) {
+      return;
+    }
+
     this.render();
   }
 
@@ -40,7 +44,7 @@ export class DsEmpty extends HTMLElement {
   }
 
   set size(value: EmptySize) {
-    this.setAttribute("size", value);
+    this.setAttributeIfChanged("size", value);
   }
 
   private render() {
@@ -52,7 +56,7 @@ export class DsEmpty extends HTMLElement {
       this.initializeStructure();
     }
 
-    this.setAttribute("size", this.size);
+    this.setAttributeIfChanged("size", this.size);
     this.syncImage();
     this.syncDescription();
   }
@@ -69,6 +73,10 @@ export class DsEmpty extends HTMLElement {
     imageElement.className = "ds-empty__image";
     descriptionElement.className = "ds-empty__description";
     footerElement.className = "ds-empty__footer";
+    rootElement.setAttribute("part", "root");
+    imageElement.setAttribute("part", "image");
+    descriptionElement.setAttribute("part", "description");
+    footerElement.setAttribute("part", "footer");
     footerElement.append(slotElement);
     rootElement.append(imageElement, descriptionElement, footerElement);
     shadowRoot.replaceChildren(rootElement);
@@ -109,5 +117,11 @@ export class DsEmpty extends HTMLElement {
     }
 
     this.imageElement.replaceChildren(createEmptyIllustration(image === "simple" ? "simple" : "default"));
+  }
+
+  private setAttributeIfChanged(name: string, value: string) {
+    if (this.getAttribute(name) !== value) {
+      this.setAttribute(name, value);
+    }
   }
 }

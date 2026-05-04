@@ -1,7 +1,13 @@
 import type { EmptySize } from "../types/Empty.types";
 
 export function getEmptySize(element: HTMLElement): EmptySize {
-  return element.getAttribute("size") === "small" ? "small" : "middle";
+  const size = element.getAttribute("size");
+
+  if (size === "large" || size === "small") {
+    return size;
+  }
+
+  return "middle";
 }
 
 export function syncNullableAttribute(element: HTMLElement, name: string, value: string | null | undefined) {
