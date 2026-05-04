@@ -6,7 +6,6 @@ import type { DescriptionsItemConfig, DescriptionsLayout, DescriptionsSize } fro
 export class DsDescriptionsItem extends HTMLElement {
   static observedAttributes = DESCRIPTIONS_ITEM_OBSERVED_ATTRIBUTES;
 
-  private contentElement?: HTMLSpanElement;
   private labelElement?: HTMLSpanElement;
   private rootElement?: HTMLDivElement;
 
@@ -14,7 +13,11 @@ export class DsDescriptionsItem extends HTMLElement {
     this.render();
   }
 
-  attributeChangedCallback() {
+  attributeChangedCallback(_name: string, oldValue: string | null, newValue: string | null) {
+    if (oldValue === newValue) {
+      return;
+    }
+
     this.render();
   }
 
@@ -31,7 +34,7 @@ export class DsDescriptionsItem extends HTMLElement {
   }
 
   set colon(value: boolean) {
-    this.setAttribute("colon", String(value));
+    this.setAttributeIfChanged("colon", String(value));
   }
 
   get label() {
@@ -39,7 +42,7 @@ export class DsDescriptionsItem extends HTMLElement {
   }
 
   set label(value: string) {
-    this.setAttribute("label", value);
+    this.setAttributeIfChanged("label", value);
   }
 
   get layout(): DescriptionsLayout {
@@ -47,7 +50,7 @@ export class DsDescriptionsItem extends HTMLElement {
   }
 
   set layout(value: DescriptionsLayout) {
-    this.setAttribute("layout", value);
+    this.setAttributeIfChanged("layout", value);
   }
 
   get size(): DescriptionsSize {
@@ -55,7 +58,7 @@ export class DsDescriptionsItem extends HTMLElement {
   }
 
   set size(value: DescriptionsSize) {
-    this.setAttribute("size", value);
+    this.setAttributeIfChanged("size", value);
   }
 
   get span() {
@@ -63,15 +66,16 @@ export class DsDescriptionsItem extends HTMLElement {
   }
 
   set span(value: number | "filled") {
-    this.setAttribute("span", String(value));
+    this.setAttributeIfChanged("span", String(value));
   }
 
-  syncFromParent(config: DescriptionsItemConfig, column: number) {
+  syncFromParent(config: DescriptionsItemConfig, effectiveSpan: number) {
     this.toggleAttribute("bordered", config.bordered);
-    this.setAttribute("colon", String(config.colon));
-    this.setAttribute("layout", config.layout);
-    this.setAttribute("size", config.size);
-    this.style.setProperty("--ds-descriptions-item-span", String(this.span === "filled" ? column : Math.min(this.span, column)));
+    this.setAttributeIfChanged("colon", String(config.colon));
+    this.setAttributeIfChanged("layout", config.layout);
+    this.setAttributeIfChanged("size", config.size);
+    this.style.setProperty("--ds-descriptions-item-span", String(config.bordered ? effectiveSpan * 2 : effectiveSpan));
+    this.style.setProperty("--ds-descriptions-item-content-span", String(Math.max(1, effectiveSpan * 2 - 1)));
     this.render();
   }
 
@@ -101,6 +105,9 @@ export class DsDescriptionsItem extends HTMLElement {
     rootElement.className = "ds-descriptions-item";
     labelElement.className = "ds-descriptions-item__label";
     contentElement.className = "ds-descriptions-item__content";
+    rootElement.setAttribute("part", "item");
+    labelElement.setAttribute("part", "label");
+    contentElement.setAttribute("part", "content");
     contentElement.append(slotElement);
     rootElement.append(labelElement, contentElement);
     shadowRoot.replaceChildren(rootElement);
@@ -108,6 +115,11 @@ export class DsDescriptionsItem extends HTMLElement {
 
     this.rootElement = rootElement;
     this.labelElement = labelElement;
-    this.contentElement = contentElement;
+  }
+
+  private setAttributeIfChanged(name: string, value: string) {
+    if (this.getAttribute(name) !== value) {
+      this.setAttribute(name, value);
+    }
   }
 }

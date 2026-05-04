@@ -4,8 +4,7 @@ import {
   getDescriptionsColumn,
   getDescriptionsLayout,
   getDescriptionsSize,
-  normalizeBooleanAttribute,
-  syncNullableAttribute
+  normalizeBooleanAttribute
 } from "./dom/Descriptions.dom";
 import { applyDescriptionsStyles } from "./Descriptions.render";
 import type { DescriptionsLayout, DescriptionsSize } from "./types/Descriptions.types";
@@ -27,9 +26,14 @@ export class DsDescriptions extends HTMLElement {
 
   disconnectedCallback() {
     this.itemObserver?.disconnect();
+    this.itemObserver = undefined;
   }
 
-  attributeChangedCallback() {
+  attributeChangedCallback(_name: string, oldValue: string | null, newValue: string | null) {
+    if (oldValue === newValue) {
+      return;
+    }
+
     this.render();
   }
 
@@ -46,7 +50,7 @@ export class DsDescriptions extends HTMLElement {
   }
 
   set colon(value: boolean) {
-    this.setAttribute("colon", String(value));
+    this.setAttributeIfChanged("colon", String(value));
   }
 
   get column() {
@@ -54,7 +58,7 @@ export class DsDescriptions extends HTMLElement {
   }
 
   set column(value: number) {
-    this.setAttribute("column", String(value));
+    this.setAttributeIfChanged("column", String(value));
   }
 
   get layout(): DescriptionsLayout {
@@ -62,7 +66,7 @@ export class DsDescriptions extends HTMLElement {
   }
 
   set layout(value: DescriptionsLayout) {
-    this.setAttribute("layout", value);
+    this.setAttributeIfChanged("layout", value);
   }
 
   get size(): DescriptionsSize {
@@ -70,7 +74,7 @@ export class DsDescriptions extends HTMLElement {
   }
 
   set size(value: DescriptionsSize) {
-    this.setAttribute("size", value);
+    this.setAttributeIfChanged("size", value);
   }
 
   get title() {
@@ -78,7 +82,7 @@ export class DsDescriptions extends HTMLElement {
   }
 
   set title(value: string) {
-    syncNullableAttribute(this, "title", value);
+    this.syncNullableAttribute("title", value);
   }
 
   private get items() {
@@ -96,9 +100,10 @@ export class DsDescriptions extends HTMLElement {
       this.initializeStructure();
     }
 
-    this.setAttribute("size", this.size);
-    this.setAttribute("layout", this.layout);
+    this.setAttributeIfChanged("size", this.size);
+    this.setAttributeIfChanged("layout", this.layout);
     this.style.setProperty("--ds-descriptions-column", String(this.column));
+    this.style.setProperty("--ds-descriptions-grid-column", String(this.bordered ? this.column * 2 : this.column));
 
     if (this.titleElement) {
       this.titleElement.textContent = this.title;
@@ -129,6 +134,12 @@ export class DsDescriptions extends HTMLElement {
     extraSlot.name = "extra";
     bodyElement.className = "ds-descriptions__body";
     itemSlot.className = "ds-descriptions__items";
+    rootElement.setAttribute("part", "root");
+    headerElement.setAttribute("part", "header");
+    titleElement.setAttribute("part", "title");
+    extraElement.setAttribute("part", "extra");
+    bodyElement.setAttribute("part", "body");
+    itemSlot.setAttribute("part", "items");
 
     titleWrapElement.append(titleElement, titleSlot);
     extraElement.append(extraSlot);
@@ -155,7 +166,10 @@ export class DsDescriptions extends HTMLElement {
 
     this.itemObserver = new MutationObserver(() => this.syncItems());
     this.itemObserver.observe(this, {
-      childList: true
+      attributeFilter: ["span"],
+      attributes: true,
+      childList: true,
+      subtree: true
     });
   }
 
@@ -171,15 +185,73 @@ export class DsDescriptions extends HTMLElement {
   }
 
   private syncItems() {
+    const column = this.column;
     const config = {
       bordered: this.bordered,
       colon: this.colon,
       layout: this.layout,
       size: this.size
     };
+    const itemSpans = this.getEffectiveItemSpans(this.items, column);
 
     for (const item of this.items) {
-      item.syncFromParent(config, this.column);
+      item.syncFromParent(config, itemSpans.get(item) ?? 1);
+    }
+  }
+
+  private getEffectiveItemSpans(items: DsDescriptionsItem[], column: number) {
+    const spans = new Map<DsDescriptionsItem, number>();
+    let rowItems: Array<{ item: DsDescriptionsItem; span: number }> = [];
+    let rowSpan = 0;
+
+    const commitRow = () => {
+      if (rowItems.length === 0) {
+        return;
+      }
+
+      if (rowSpan < column) {
+        rowItems[rowItems.length - 1].span += column - rowSpan;
+      }
+
+      for (const rowItem of rowItems) {
+        spans.set(rowItem.item, rowItem.span);
+      }
+
+      rowItems = [];
+      rowSpan = 0;
+    };
+
+    for (const item of items) {
+      const rawSpan = item.span;
+      const remainingSpan = column - rowSpan;
+      const nextSpan =
+        rawSpan === "filled" ? Math.max(1, remainingSpan) : Math.min(rawSpan, Math.max(1, remainingSpan), column);
+
+      rowItems.push({ item, span: nextSpan });
+      rowSpan += nextSpan;
+
+      if (rowSpan >= column || rawSpan === "filled") {
+        commitRow();
+      }
+    }
+
+    commitRow();
+
+    return spans;
+  }
+
+  private syncNullableAttribute(name: string, value: string | null | undefined) {
+    if (value) {
+      this.setAttributeIfChanged(name, value);
+      return;
+    }
+
+    this.removeAttribute(name);
+  }
+
+  private setAttributeIfChanged(name: string, value: string) {
+    if (this.getAttribute(name) !== value) {
+      this.setAttribute(name, value);
     }
   }
 }
