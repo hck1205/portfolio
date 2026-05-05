@@ -1,3 +1,4 @@
+export * from './Alert';
 export * from './AutoComplete';
 export * from './Anchor';
 export * from './Avatar';
