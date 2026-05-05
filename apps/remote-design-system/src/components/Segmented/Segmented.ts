@@ -1,15 +1,21 @@
-import { SEGMENTED_CHANGE_EVENT, SEGMENTED_OBSERVED_ATTRIBUTES } from "./constants/Segmented.constants";
+import {
+  SEGMENTED_CHANGE_EVENT,
+  SEGMENTED_NAVIGATION_KEYS,
+  SEGMENTED_OBSERVED_ATTRIBUTES
+} from "./constants/Segmented.constants";
 import {
   getSegmentedOrientation,
   getSegmentedShape,
   getSegmentedSize,
   normalizeBooleanAttribute,
-  parseSegmentedOptions
+  parseSegmentedOptions,
+  syncAttribute
 } from "./dom/Segmented.dom";
 import {
   applySegmentedStyles,
   createSegmentedElements,
-  syncSegmentedOptions,
+  syncSegmentedIndicator,
+  syncSegmentedState,
   type SegmentedElements
 } from "./Segmented.render";
 import type {
@@ -24,14 +30,31 @@ export class DsSegmented extends HTMLElement {
   static observedAttributes = SEGMENTED_OBSERVED_ATTRIBUTES;
 
   private elements?: SegmentedElements;
+  private generatedName = `ds-segmented-${Math.random().toString(36).slice(2)}`;
   private hasAppliedDefaultValue = false;
+  private indicatorFrame?: number;
   private internalValue = "";
+  private isSyncingHostAttributes = false;
+  private resizeObserver?: ResizeObserver;
 
   connectedCallback() {
     this.render();
   }
 
-  attributeChangedCallback() {
+  disconnectedCallback() {
+    if (this.indicatorFrame) {
+      window.cancelAnimationFrame(this.indicatorFrame);
+    }
+
+    this.resizeObserver?.disconnect();
+    this.resizeObserver = undefined;
+  }
+
+  attributeChangedCallback(_name: string, oldValue: string | null, newValue: string | null) {
+    if (oldValue === newValue || this.isSyncingHostAttributes) {
+      return;
+    }
+
     this.render();
   }
 
@@ -60,7 +83,7 @@ export class DsSegmented extends HTMLElement {
   }
 
   get name() {
-    return this.getAttribute("name") || `ds-segmented-${Math.random().toString(36).slice(2)}`;
+    return this.getAttribute("name") || this.generatedName;
   }
 
   set name(value: string) {
@@ -122,7 +145,7 @@ export class DsSegmented extends HTMLElement {
   };
 
   private handleKeyDown = (event: KeyboardEvent) => {
-    if (!["ArrowRight", "ArrowDown", "ArrowLeft", "ArrowUp", "Home", "End"].includes(event.key)) {
+    if (!SEGMENTED_NAVIGATION_KEYS.includes(event.key as (typeof SEGMENTED_NAVIGATION_KEYS)[number])) {
       return;
     }
 
@@ -153,7 +176,9 @@ export class DsSegmented extends HTMLElement {
   };
 
   private render() {
-    this.applyDefaultValue();
+    const options = this.options;
+
+    this.applyDefaultValue(options);
 
     if (!this.elements) {
       this.initializeStructure();
@@ -163,16 +188,15 @@ export class DsSegmented extends HTMLElement {
       return;
     }
 
-    this.setAttribute("orientation", this.orientation);
-    this.setAttribute("shape", this.shape);
-    this.setAttribute("size", this.size);
-    syncSegmentedOptions({
+    this.syncHostAttributes();
+    syncSegmentedState({
       disabled: this.disabled,
+      elements: this.elements,
       name: this.name,
-      options: this.options,
-      rootElement: this.elements.rootElement,
+      options,
       value: this.value
     });
+    this.syncIndicatorPosition();
   }
 
   private initializeStructure() {
@@ -181,14 +205,16 @@ export class DsSegmented extends HTMLElement {
     this.elements = createSegmentedElements(this.handleClick, this.handleKeyDown);
     shadowRoot.replaceChildren(this.elements.rootElement);
     applySegmentedStyles(shadowRoot);
+    this.resizeObserver = new ResizeObserver(() => this.syncIndicatorPosition());
+    this.resizeObserver.observe(this.elements.rootElement);
   }
 
-  private applyDefaultValue() {
+  private applyDefaultValue(options: SegmentedOption[]) {
     if (this.hasAppliedDefaultValue) {
       return;
     }
 
-    const [firstOption] = this.options;
+    const [firstOption] = options;
 
     this.internalValue = this.defaultValue || firstOption?.value || "";
     this.hasAppliedDefaultValue = true;
@@ -197,10 +223,14 @@ export class DsSegmented extends HTMLElement {
   private setValue(value: string, emitChange: boolean) {
     const previousValue = this.value;
 
+    if (previousValue === value) {
+      return;
+    }
+
     this.internalValue = value;
 
     if (this.hasAttribute("value")) {
-      this.setAttribute("value", value);
+      this.setAttributeFromInternalState("value", value);
     }
 
     this.render();
@@ -214,6 +244,46 @@ export class DsSegmented extends HTMLElement {
           }
         })
       );
+    }
+  }
+
+  private syncIndicatorPosition() {
+    if (!this.elements) {
+      return;
+    }
+
+    if (this.indicatorFrame) {
+      window.cancelAnimationFrame(this.indicatorFrame);
+    }
+
+    this.indicatorFrame = window.requestAnimationFrame(() => {
+      this.indicatorFrame = undefined;
+
+      if (this.elements) {
+        syncSegmentedIndicator(this.elements);
+      }
+    });
+  }
+
+  private syncHostAttributes() {
+    this.isSyncingHostAttributes = true;
+
+    try {
+      syncAttribute(this, "orientation", this.orientation);
+      syncAttribute(this, "shape", this.shape);
+      syncAttribute(this, "size", this.size);
+    } finally {
+      this.isSyncingHostAttributes = false;
+    }
+  }
+
+  private setAttributeFromInternalState(name: string, value: string) {
+    this.isSyncingHostAttributes = true;
+
+    try {
+      this.setAttribute(name, value);
+    } finally {
+      this.isSyncingHostAttributes = false;
     }
   }
 }

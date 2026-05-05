@@ -1,4 +1,16 @@
-import type { SegmentedOption, SegmentedOrientation, SegmentedShape, SegmentedSize } from "../types/Segmented.types";
+import type {
+  SegmentedIconName,
+  SegmentedOption,
+  SegmentedOrientation,
+  SegmentedShape,
+  SegmentedSize
+} from "../types/Segmented.types";
+
+const SEGMENTED_ICON_NAMES = new Set<SegmentedIconName>(["calendar", "chart", "table"]);
+
+function isSegmentedIconName(value: unknown): value is SegmentedIconName {
+  return typeof value === "string" && SEGMENTED_ICON_NAMES.has(value as SegmentedIconName);
+}
 
 export function normalizeBooleanAttribute(element: HTMLElement, name: string, fallback: boolean) {
   const value = element.getAttribute(name);
@@ -8,6 +20,14 @@ export function normalizeBooleanAttribute(element: HTMLElement, name: string, fa
   }
 
   return value !== "false";
+}
+
+export function syncAttribute(element: HTMLElement, name: string, value: string) {
+  if (element.getAttribute(name) === value) {
+    return;
+  }
+
+  element.setAttribute(name, value);
 }
 
 export function getSegmentedSize(element: HTMLElement): SegmentedSize {
@@ -50,11 +70,13 @@ export function parseSegmentedOptions(value: string | null): SegmentedOption[] {
           }
 
           if (item && typeof item === "object" && "value" in item) {
-            const option = item as { disabled?: boolean; label?: unknown; value: unknown };
+            const option = item as { disabled?: boolean; icon?: unknown; label?: unknown; value: unknown };
             const optionValue = String(option.value);
+            const icon = isSegmentedIconName(option.icon) ? option.icon : undefined;
 
             return {
               disabled: option.disabled,
+              icon,
               label: String(option.label ?? optionValue),
               value: optionValue
             };
