@@ -30,6 +30,7 @@ import {
   defineDsMessage,
   defineDsMentions,
   defineDsModal,
+  defineDsNotification,
   defineDsPagination,
   defineDsPopover,
   defineDsRadio,
@@ -82,6 +83,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsMessage(registry);
   defineDsMentions(registry);
   defineDsModal(registry);
+  defineDsNotification(registry);
   defineDsPagination(registry);
   defineDsPopover(registry);
   defineDsRadio(registry);
