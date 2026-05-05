@@ -1,3 +1,5 @@
+import { createThinScrollbarStyles } from "../shared/styles/scrollbar";
+
 export const SELECT_STYLES = `
   :host {
     --ds-select-height: var(--spacing-m2);
@@ -26,7 +28,7 @@ export const SELECT_STYLES = `
 
   .ds-select {
     display: inline-grid;
-    min-width: 12rem;
+    min-width: var(--ds-select-min-width, 12rem);
     position: relative;
     width: 100%;
   }
@@ -172,6 +174,8 @@ export const SELECT_STYLES = `
     max-height: 16rem;
     overflow: auto;
   }
+
+  ${createThinScrollbarStyles(".ds-select__list")}
 
   .ds-select__option {
     appearance: none;

@@ -1,3 +1,5 @@
+import { createThinScrollbarStyles } from "../shared/styles/scrollbar";
+
 export const AUTO_COMPLETE_STYLES = `
   :host {
     --ds-auto-complete-height: 32px;
@@ -168,6 +170,8 @@ export const AUTO_COMPLETE_STYLES = `
     width: 100%;
     z-index: var(--ds-auto-complete-z-index, 1050);
   }
+
+  ${createThinScrollbarStyles(".ds-auto-complete__popup")}
 
   .ds-auto-complete__popup[hidden] {
     display: none;

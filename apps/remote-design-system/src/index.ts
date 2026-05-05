@@ -6,6 +6,7 @@ import {
   defineDsAvatar,
   defineDsBadge,
   defineDsButton,
+  defineDsCalendar,
   defineDsCheckbox,
   defineDsColorPicker,
   defineDsCascader,
@@ -46,6 +47,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsAvatar(registry);
   defineDsBadge(registry);
   defineDsButton(registry);
+  defineDsCalendar(registry);
   defineDsCheckbox(registry);
   defineDsColorPicker(registry);
   defineDsDatePicker(registry);

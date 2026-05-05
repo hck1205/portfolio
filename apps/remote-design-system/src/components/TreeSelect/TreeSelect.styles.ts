@@ -1,3 +1,5 @@
+import { createThinScrollbarStyles } from "../shared/styles/scrollbar";
+
 export const TREE_SELECT_STYLES = `
   :host {
     --ds-tree-select-height: var(--spacing-m2);
@@ -199,6 +201,8 @@ export const TREE_SELECT_STYLES = `
     overflow: auto;
     padding: 0;
   }
+
+  ${createThinScrollbarStyles(".ds-tree-select__tree")}
 
   .ds-tree-select__node {
     align-items: center;

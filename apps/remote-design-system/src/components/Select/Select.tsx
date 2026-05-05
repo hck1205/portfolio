@@ -30,7 +30,6 @@ import type {
   SelectClearDetail,
   SelectMode,
   SelectOpenChangeDetail,
-  SelectOpenChangeDetail as SelectOpenDetail,
   SelectOption,
   SelectPlacement,
   SelectSelectDetail,
@@ -394,6 +393,7 @@ export class DsSelect extends HTMLElement {
 
     syncSelectElements({
       activeIndex: this.activeIndex,
+      allowClear: this.allowClear,
       disabled: this.disabled,
       elements: this.elements,
       emptyText: this.notFoundContent,
@@ -471,7 +471,7 @@ export class DsSelect extends HTMLElement {
     this.value = serializeSelectValue(value);
   }
 
-  private setOpen(open: boolean, source: SelectOpenDetail["source"]) {
+  private setOpen(open: boolean, source: SelectOpenChangeDetail["source"]) {
     if (this.disabled && open) {
       return;
     }
