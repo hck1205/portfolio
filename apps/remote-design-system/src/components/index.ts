@@ -29,6 +29,7 @@ export * from './Radio';
 export * from './Rate';
 export * from './Select';
 export * from './Segmented';
+export * from './Skeleton';
 export * from './Slider';
 export * from './Steps';
 export * from './Splitter';
