@@ -1,12 +1,16 @@
-import { POPOVER_OBSERVED_ATTRIBUTES, POPOVER_OPEN_CHANGE_EVENT } from "./constants/Popover.constants";
+import {
+  POPOVER_LEAVE_DELAY_MS,
+  POPOVER_OBSERVED_ATTRIBUTES,
+  POPOVER_OPEN_CHANGE_EVENT
+} from "./constants/Popover.constants";
 import {
   getPopoverPlacement,
   getPopoverTriggers,
   normalizeBooleanAttribute,
   syncNullableAttribute
 } from "./dom/Popover.dom";
-import { applyPopoverStyles, createPopoverElements, type PopoverElements } from "./Popover.render";
-import type { PopoverOpenChangeDetail, PopoverPlacement } from "./types/Popover.types";
+import { applyPopoverStyles, createPopoverElements, syncPopoverElements, type PopoverElements } from "./Popover.render";
+import type { PopoverOpenChangeDetail, PopoverPlacement, PopoverTrigger } from "./types/Popover.types";
 
 export class DsPopover extends HTMLElement {
   static observedAttributes = POPOVER_OBSERVED_ATTRIBUTES;
@@ -14,7 +18,9 @@ export class DsPopover extends HTMLElement {
   private elements?: PopoverElements;
   private hasAppliedDefaultOpen = false;
   private internalOpen = false;
+  private isDocumentPointerListenerAttached = false;
   private leaveTimer?: number;
+  private triggers: PopoverTrigger[] = ["hover"];
 
   connectedCallback() {
     this.render();
@@ -22,7 +28,9 @@ export class DsPopover extends HTMLElement {
 
   disconnectedCallback() {
     window.clearTimeout(this.leaveTimer);
-    document.removeEventListener("pointerdown", this.handleDocumentPointerDown);
+    this.removeEventListener("focusin", this.handleFocusIn);
+    this.removeEventListener("focusout", this.handleFocusOut);
+    this.detachDocumentPointerListener();
   }
 
   attributeChangedCallback() {
@@ -98,7 +106,7 @@ export class DsPopover extends HTMLElement {
   }
 
   private handleDocumentPointerDown = (event: PointerEvent) => {
-    if (!this.open || !getPopoverTriggers(this).includes("click")) {
+    if (!this.open || !this.hasTrigger("click")) {
       return;
     }
 
@@ -108,19 +116,19 @@ export class DsPopover extends HTMLElement {
   };
 
   private handleFocusIn = () => {
-    if (getPopoverTriggers(this).includes("focus")) {
+    if (this.hasTrigger("focus")) {
       this.setOpen(true);
     }
   };
 
   private handleFocusOut = () => {
-    if (getPopoverTriggers(this).includes("focus")) {
+    if (this.hasTrigger("focus")) {
       this.setOpen(false);
     }
   };
 
   private handlePointerEnter = () => {
-    if (!getPopoverTriggers(this).includes("hover")) {
+    if (!this.hasTrigger("hover")) {
       return;
     }
 
@@ -128,20 +136,28 @@ export class DsPopover extends HTMLElement {
     this.setOpen(true);
   };
 
-  private handlePointerLeave = () => {
-    if (getPopoverTriggers(this).includes("hover")) {
-      this.leaveTimer = window.setTimeout(() => this.setOpen(false), 100);
+  private handlePointerLeave = (event: PointerEvent) => {
+    if (!this.hasTrigger("hover")) {
+      return;
     }
+
+    const nextTarget = event.relatedTarget as Node | null;
+
+    if (nextTarget && this.elements?.rootElement.contains(nextTarget)) {
+      return;
+    }
+
+    this.leaveTimer = window.setTimeout(() => this.setOpen(false), POPOVER_LEAVE_DELAY_MS);
   };
 
   private handleClick = () => {
-    if (getPopoverTriggers(this).includes("click")) {
+    if (this.hasTrigger("click")) {
       this.setOpen(!this.open);
     }
   };
 
   private handleContextMenu = (event: MouseEvent) => {
-    if (!getPopoverTriggers(this).includes("contextMenu")) {
+    if (!this.hasTrigger("contextMenu")) {
       return;
     }
 
@@ -151,6 +167,7 @@ export class DsPopover extends HTMLElement {
 
   private render() {
     this.applyDefaultOpen();
+    this.triggers = getPopoverTriggers(this);
 
     if (!this.elements) {
       this.initializeStructure();
@@ -161,10 +178,13 @@ export class DsPopover extends HTMLElement {
     }
 
     this.setAttribute("placement", this.placement);
-    this.elements.arrowElement.hidden = !this.arrow;
-    this.elements.contentElement.textContent = this.content;
-    this.elements.popupElement.dataset.open = String(this.open);
-    this.elements.titleElement.textContent = this.title;
+    syncPopoverElements(this.elements, {
+      arrow: this.arrow,
+      content: this.content,
+      open: this.open,
+      title: this.title
+    });
+    this.syncDocumentPointerListener();
   }
 
   private initializeStructure() {
@@ -173,13 +193,12 @@ export class DsPopover extends HTMLElement {
     this.elements = createPopoverElements();
     this.elements.rootElement.addEventListener("pointerenter", this.handlePointerEnter);
     this.elements.rootElement.addEventListener("pointerleave", this.handlePointerLeave);
-    this.elements.triggerElement.addEventListener("focusin", this.handleFocusIn);
-    this.elements.triggerElement.addEventListener("focusout", this.handleFocusOut);
+    this.addEventListener("focusin", this.handleFocusIn);
+    this.addEventListener("focusout", this.handleFocusOut);
     this.elements.triggerElement.addEventListener("click", this.handleClick);
     this.elements.triggerElement.addEventListener("contextmenu", this.handleContextMenu);
     shadowRoot.replaceChildren(this.elements.rootElement);
     applyPopoverStyles(shadowRoot);
-    document.addEventListener("pointerdown", this.handleDocumentPointerDown);
   }
 
   private applyDefaultOpen() {
@@ -212,5 +231,32 @@ export class DsPopover extends HTMLElement {
         })
       );
     }
+  }
+
+  private hasTrigger(trigger: PopoverTrigger) {
+    return this.triggers.includes(trigger);
+  }
+
+  private syncDocumentPointerListener() {
+    const shouldAttach = this.open && this.hasTrigger("click");
+
+    if (shouldAttach && !this.isDocumentPointerListenerAttached) {
+      document.addEventListener("pointerdown", this.handleDocumentPointerDown);
+      this.isDocumentPointerListenerAttached = true;
+      return;
+    }
+
+    if (!shouldAttach && this.isDocumentPointerListenerAttached) {
+      this.detachDocumentPointerListener();
+    }
+  }
+
+  private detachDocumentPointerListener() {
+    if (!this.isDocumentPointerListenerAttached) {
+      return;
+    }
+
+    document.removeEventListener("pointerdown", this.handleDocumentPointerDown);
+    this.isDocumentPointerListenerAttached = false;
   }
 }

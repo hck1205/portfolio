@@ -11,6 +11,13 @@ export type PopoverElements = {
   triggerElement: HTMLSpanElement;
 };
 
+export type PopoverRenderState = {
+  arrow: boolean;
+  content: string;
+  open: boolean;
+  title: string;
+};
+
 let popoverStyleSheet: CSSStyleSheet | undefined;
 
 function canAdoptStyleSheets() {
@@ -84,4 +91,11 @@ export function createPopoverElements() {
     titleSlot,
     triggerElement
   } satisfies PopoverElements;
+}
+
+export function syncPopoverElements(elements: PopoverElements, state: PopoverRenderState) {
+  elements.arrowElement.hidden = !state.arrow;
+  elements.contentElement.textContent = state.content;
+  elements.popupElement.dataset.open = String(state.open);
+  elements.titleElement.textContent = state.title;
 }

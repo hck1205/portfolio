@@ -18,7 +18,9 @@ export const POPOVER_STYLES = `
   }
 
   .ds-popover__popup {
-    background: var(--color-ds-bg-elevated, var(--color-ds-bg-container));
+    --ds-popover-surface: var(--color-ds-bg-elevated, var(--color-background-base, #fff));
+    --ds-popover-border-color: var(--color-ds-border-secondary, var(--color-ds-border));
+    background-color: var(--ds-popover-surface);
     border: 1px solid var(--color-ds-border-secondary, var(--color-ds-border));
     border-radius: var(--radius-ds-2);
     box-shadow: var(--shadow-ds-lg, 0 8px 24px rgba(0, 0, 0, 0.14));
@@ -40,6 +42,7 @@ export const POPOVER_STYLES = `
     width: max-content;
     max-width: min(320px, calc(100vw - 32px));
     z-index: var(--z-index-ds-popover, 1030);
+    --ds-popover-arrow-offset: 18px;
   }
 
   .ds-popover__popup[data-open="true"] {
@@ -66,13 +69,16 @@ export const POPOVER_STYLES = `
   }
 
   .ds-popover__arrow {
-    background: inherit;
-    border: inherit;
+    background-color: var(--ds-popover-surface);
+    border-color: var(--ds-popover-border-color);
+    border-style: solid;
+    border-width: 1px;
     height: 10px;
+    pointer-events: none;
     position: absolute;
     transform: rotate(45deg);
     width: 10px;
-    z-index: -1;
+    z-index: 0;
   }
 
   .ds-popover__arrow[hidden] {
@@ -83,16 +89,32 @@ export const POPOVER_STYLES = `
     bottom: calc(100% + 10px);
   }
 
+  :host([arrow="false"][placement^="top"]) .ds-popover__popup {
+    bottom: calc(100% + 6px);
+  }
+
   :host([placement^="bottom"]) .ds-popover__popup {
     top: calc(100% + 10px);
+  }
+
+  :host([arrow="false"][placement^="bottom"]) .ds-popover__popup {
+    top: calc(100% + 6px);
   }
 
   :host([placement^="left"]) .ds-popover__popup {
     right: calc(100% + 10px);
   }
 
+  :host([arrow="false"][placement^="left"]) .ds-popover__popup {
+    right: calc(100% + 6px);
+  }
+
   :host([placement^="right"]) .ds-popover__popup {
     left: calc(100% + 10px);
+  }
+
+  :host([arrow="false"][placement^="right"]) .ds-popover__popup {
+    left: calc(100% + 6px);
   }
 
   :host([placement="top"]) .ds-popover__popup,
@@ -129,22 +151,52 @@ export const POPOVER_STYLES = `
   }
 
   :host([placement^="top"]) .ds-popover__arrow {
+    border-left: 0;
+    border-top: 0;
     bottom: -6px;
     left: calc(50% - 5px);
   }
 
   :host([placement^="bottom"]) .ds-popover__arrow {
+    border-bottom: 0;
+    border-right: 0;
     left: calc(50% - 5px);
     top: -6px;
   }
 
   :host([placement^="left"]) .ds-popover__arrow {
+    border-bottom: 0;
+    border-left: 0;
     right: -6px;
     top: calc(50% - 5px);
   }
 
   :host([placement^="right"]) .ds-popover__arrow {
+    border-right: 0;
+    border-top: 0;
     left: -6px;
     top: calc(50% - 5px);
+  }
+
+  :host([placement="topLeft"]) .ds-popover__arrow,
+  :host([placement="bottomLeft"]) .ds-popover__arrow {
+    left: var(--ds-popover-arrow-offset);
+  }
+
+  :host([placement="topRight"]) .ds-popover__arrow,
+  :host([placement="bottomRight"]) .ds-popover__arrow {
+    left: auto;
+    right: var(--ds-popover-arrow-offset);
+  }
+
+  :host([placement="leftTop"]) .ds-popover__arrow,
+  :host([placement="rightTop"]) .ds-popover__arrow {
+    top: var(--ds-popover-arrow-offset);
+  }
+
+  :host([placement="leftBottom"]) .ds-popover__arrow,
+  :host([placement="rightBottom"]) .ds-popover__arrow {
+    bottom: var(--ds-popover-arrow-offset);
+    top: auto;
   }
 `;

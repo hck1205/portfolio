@@ -11,3 +11,5 @@ export const POPOVER_OBSERVED_ATTRIBUTES = [
 ] as const;
 
 export const POPOVER_OPEN_CHANGE_EVENT = "ds-popover-open-change";
+
+export const POPOVER_LEAVE_DELAY_MS = 140;
