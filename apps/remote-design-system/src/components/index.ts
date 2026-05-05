@@ -11,6 +11,7 @@ export * from './Cascader';
 export * from './Carousel';
 export * from './Collapse';
 export * from './DatePicker';
+export * from './Descriptions';
 export * from './Divider';
 export * from './Dropdown';
 export * from './Empty';

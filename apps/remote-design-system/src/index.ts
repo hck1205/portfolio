@@ -14,6 +14,7 @@ import {
   defineDsCarousel,
   defineDsCollapse,
   defineDsDatePicker,
+  defineDsDescriptions,
   defineDsDivider,
   defineDsDropdown,
   defineDsEmpty,
@@ -56,6 +57,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsDatePicker(registry);
   defineDsCascader(registry);
   defineDsCarousel(registry);
+  defineDsDescriptions(registry);
   defineDsDivider(registry);
   defineDsDropdown(registry);
   defineDsEmpty(registry);

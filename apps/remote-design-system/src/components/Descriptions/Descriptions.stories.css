@@ -1,0 +1,87 @@
+.ds-descriptions-story-frame {
+  width: min(920px, calc(100vw - 48px));
+  padding: var(--spacing-ds-5, 20px);
+}
+
+.ds-descriptions-story-bordered-frame {
+  width: min(1328px, calc(100vw - 32px));
+}
+
+.ds-descriptions-story-responsive-frame {
+  width: min(1040px, calc(100vw - 32px));
+}
+
+.ds-descriptions-story-stack {
+  display: grid;
+  gap: var(--spacing-ds-6, 24px);
+}
+
+.ds-descriptions-story-actions {
+  align-items: center;
+  display: inline-flex;
+  gap: var(--spacing-ds-2, 8px);
+}
+
+.ds-descriptions-story-link {
+  color: var(--color-ds-primary);
+  font: inherit;
+  text-decoration: none;
+}
+
+.ds-descriptions-story-status {
+  align-items: center;
+  color: var(--color-ds-text);
+  display: inline-flex;
+  gap: var(--spacing-ds-2, 8px);
+  line-height: var(--leading-ds-tight, 1.2);
+  min-height: 24px;
+}
+
+.ds-descriptions-story-status::before {
+  background: var(--color-ds-primary);
+  border-radius: 999px;
+  content: "";
+  flex: none;
+  height: 6px;
+  width: 6px;
+}
+
+.ds-descriptions-story-responsive::part(title) {
+  color: var(--color-ds-text);
+}
+
+.ds-descriptions-story-responsive::part(extra) {
+  color: var(--color-ds-primary);
+  font-weight: var(--font-weight-ds-semibold, 600);
+}
+
+.ds-descriptions-story-responsive ds-descriptions-item::part(content) {
+  line-height: var(--leading-ds-relaxed, 1.6);
+}
+
+.ds-descriptions-story-semantic::part(root) {
+  gap: var(--spacing-ds-5, 20px);
+}
+
+.ds-descriptions-story-semantic::part(title) {
+  color: var(--color-ds-primary);
+}
+
+.ds-descriptions-story-semantic::part(body) {
+  border-color: var(--color-ds-primary);
+}
+
+.ds-descriptions-story-semantic::part(extra) {
+  color: var(--color-ds-primary);
+  font-weight: var(--font-weight-ds-strong, 700);
+}
+
+.ds-descriptions-story-semantic ds-descriptions-item::part(label) {
+  background: var(--color-indigo-alpha-indigo1, rgba(62, 124, 204, 0.06));
+  color: var(--color-ds-primary);
+  font-weight: var(--font-weight-ds-strong, 700);
+}
+
+.ds-descriptions-story-semantic ds-descriptions-item::part(content) {
+  background: var(--color-ds-surface);
+}
