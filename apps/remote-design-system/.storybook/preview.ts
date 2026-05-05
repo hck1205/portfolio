@@ -66,7 +66,14 @@ const preview: Preview = {
     layout: "centered",
     options: {
       storySort: {
-        order: ["Components", "Icons", ["Lucide"], "Foundation", ["Tokens"]]
+        order: [
+          "Components",
+          ["General", "Data Display", "Data Entry", "Navigation", "Layout", "Feedback"],
+          "Icons",
+          ["Lucide"],
+          "Foundation",
+          ["Tokens"]
+        ]
       }
     },
     docs: {
