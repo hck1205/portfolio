@@ -1,5 +1,7 @@
 import { DRAWER_CLOSE_EVENT, DRAWER_OBSERVED_ATTRIBUTES, DRAWER_OPEN_CHANGE_EVENT } from "./constants/Drawer.constants";
 import { getDrawerPlacement, normalizeBooleanAttribute, syncNullableAttribute } from "./dom/Drawer.dom";
+import { DrawerPortalController } from "./dom/Drawer.portal";
+import { lockDrawerDocumentScroll, unlockDrawerDocumentScroll } from "./dom/Drawer.scrollLock";
 import { applyDrawerStyles, createDrawerElements, syncDrawerElements, type DrawerElements } from "./Drawer.render";
 import type { DrawerOpenChangeDetail, DrawerPlacement } from "./types/Drawer.types";
 
@@ -7,6 +9,8 @@ export class DsDrawer extends HTMLElement {
   static observedAttributes = DRAWER_OBSERVED_ATTRIBUTES;
 
   private elements?: DrawerElements;
+  private isScrollLocked = false;
+  private portal = new DrawerPortalController(this);
   private previousFocusedElement?: HTMLElement;
 
   connectedCallback() {
@@ -15,7 +19,13 @@ export class DsDrawer extends HTMLElement {
   }
 
   disconnectedCallback() {
-    document.removeEventListener("keydown", this.handleDocumentKeyDown);
+    this.ownerDocument.removeEventListener("keydown", this.handleDocumentKeyDown);
+
+    if (!this.portal.isMoving) {
+      this.syncScrollLock(false);
+    }
+
+    this.portal.disconnect();
   }
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
@@ -138,6 +148,10 @@ export class DsDrawer extends HTMLElement {
     this.setOpen(false, "escape");
   };
 
+  private handleSlotChange = () => {
+    this.render();
+  };
+
   private render() {
     if (!this.isConnected && !this.elements) {
       return;
@@ -161,6 +175,8 @@ export class DsDrawer extends HTMLElement {
       title: this.title,
       width: this.width
     });
+    this.syncPortal();
+    this.syncScrollLock(this.open);
   }
 
   private initializeStructure() {
@@ -168,6 +184,8 @@ export class DsDrawer extends HTMLElement {
 
     this.elements = createDrawerElements();
     this.elements.closeButtonElement.addEventListener("click", this.handleCloseButtonClick);
+    this.elements.extraSlotElement.addEventListener("slotchange", this.handleSlotChange);
+    this.elements.footerSlotElement.addEventListener("slotchange", this.handleSlotChange);
     this.elements.maskElement.addEventListener("pointerdown", this.handleMaskPointerDown);
     shadowRoot.replaceChildren(this.elements.rootElement);
     applyDrawerStyles(shadowRoot);
@@ -205,10 +223,10 @@ export class DsDrawer extends HTMLElement {
   }
 
   private syncGlobalListeners() {
-    document.removeEventListener("keydown", this.handleDocumentKeyDown);
+    this.ownerDocument.removeEventListener("keydown", this.handleDocumentKeyDown);
 
     if (this.open) {
-      document.addEventListener("keydown", this.handleDocumentKeyDown);
+      this.ownerDocument.addEventListener("keydown", this.handleDocumentKeyDown);
     }
   }
 
@@ -218,12 +236,41 @@ export class DsDrawer extends HTMLElement {
     }
 
     if (this.open) {
-      this.previousFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : undefined;
-      requestAnimationFrame(() => this.elements?.closeButtonElement.focus());
+      this.previousFocusedElement =
+        this.ownerDocument.activeElement instanceof HTMLElement ? this.ownerDocument.activeElement : undefined;
+      requestAnimationFrame(() => {
+        const focusTarget = this.closable ? this.elements?.closeButtonElement : this.elements?.panelElement;
+
+        focusTarget?.focus();
+      });
       return;
     }
 
     this.previousFocusedElement?.focus();
     this.previousFocusedElement = undefined;
+  }
+
+  private syncPortal() {
+    if (this.open) {
+      this.portal.mount();
+      return;
+    }
+
+    this.portal.restore();
+  }
+
+  private syncScrollLock(locked: boolean) {
+    if (this.isScrollLocked === locked) {
+      return;
+    }
+
+    this.isScrollLocked = locked;
+
+    if (locked) {
+      lockDrawerDocumentScroll(this.ownerDocument);
+      return;
+    }
+
+    unlockDrawerDocumentScroll(this.ownerDocument);
   }
 }

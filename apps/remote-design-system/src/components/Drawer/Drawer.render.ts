@@ -6,7 +6,9 @@ import type { DrawerPlacement } from "./types/Drawer.types";
 export type DrawerElements = {
   bodySlotElement: HTMLSlotElement;
   closeButtonElement: HTMLButtonElement;
+  extraElement: HTMLSpanElement;
   extraSlotElement: HTMLSlotElement;
+  footerElement: HTMLElement;
   footerSlotElement: HTMLSlotElement;
   maskElement: HTMLDivElement;
   panelElement: HTMLElement;
@@ -57,10 +59,12 @@ export function createDrawerElements(): DrawerElements {
   const panelElement = document.createElement("section");
   const headerElement = document.createElement("header");
   const titleElement = document.createElement("h2");
+  const extraElement = document.createElement("span");
   const extraSlotElement = document.createElement("slot");
   const closeButtonElement = document.createElement("button");
   const bodyElement = document.createElement("div");
   const bodySlotElement = document.createElement("slot");
+  const footerElement = document.createElement("footer");
   const footerSlotElement = document.createElement("slot");
 
   rootElement.className = "ds-drawer";
@@ -68,22 +72,23 @@ export function createDrawerElements(): DrawerElements {
   panelElement.className = "ds-drawer__panel";
   headerElement.className = "ds-drawer__header";
   titleElement.className = "ds-drawer__title";
-  extraSlotElement.className = "ds-drawer__extra";
+  extraElement.className = "ds-drawer__extra";
   closeButtonElement.className = "ds-drawer__close";
   bodyElement.className = "ds-drawer__body";
-  footerSlotElement.className = "ds-drawer__footer";
+  footerElement.className = "ds-drawer__footer";
   extraSlotElement.name = "extra";
   footerSlotElement.name = "footer";
   closeButtonElement.type = "button";
   rootElement.setAttribute("part", "root");
   maskElement.setAttribute("part", "mask");
   panelElement.setAttribute("part", "panel");
+  panelElement.tabIndex = -1;
   headerElement.setAttribute("part", "header");
   titleElement.setAttribute("part", "title");
-  extraSlotElement.setAttribute("part", "extra");
+  extraElement.setAttribute("part", "extra");
   closeButtonElement.setAttribute("part", "close");
   bodyElement.setAttribute("part", "body");
-  footerSlotElement.setAttribute("part", "footer");
+  footerElement.setAttribute("part", "footer");
   closeButtonElement.append(
     createLucideElement(X, {
       "aria-hidden": "true",
@@ -91,21 +96,35 @@ export function createDrawerElements(): DrawerElements {
       "stroke-width": 2
     })
   );
-  headerElement.append(titleElement, extraSlotElement, closeButtonElement);
+  extraElement.append(extraSlotElement);
+  footerElement.append(footerSlotElement);
+  headerElement.append(titleElement, extraElement, closeButtonElement);
   bodyElement.append(bodySlotElement);
-  panelElement.append(headerElement, bodyElement, footerSlotElement);
+  panelElement.append(headerElement, bodyElement, footerElement);
   rootElement.append(maskElement, panelElement);
 
   return {
     bodySlotElement,
     closeButtonElement,
+    extraElement,
     extraSlotElement,
+    footerElement,
     footerSlotElement,
     maskElement,
     panelElement,
     rootElement,
     titleElement
   };
+}
+
+function hasAssignedContent(slotElement: HTMLSlotElement) {
+  return slotElement.assignedNodes({ flatten: true }).some((node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      return Boolean(node.textContent?.trim());
+    }
+
+    return node.nodeType === Node.ELEMENT_NODE;
+  });
 }
 
 export function syncDrawerElements(
@@ -131,6 +150,8 @@ export function syncDrawerElements(
   elements.panelElement.style.setProperty("--ds-drawer-width", state.width);
   elements.titleElement.id = "ds-drawer-title";
   elements.titleElement.textContent = state.title;
+  elements.extraElement.hidden = !hasAssignedContent(elements.extraSlotElement);
+  elements.footerElement.hidden = !hasAssignedContent(elements.footerSlotElement);
   elements.closeButtonElement.hidden = !state.closable;
   elements.closeButtonElement.setAttribute("aria-label", state.closeLabel);
 }

@@ -39,10 +39,50 @@
   color: var(--color-ds-text);
 }
 
+.ds-drawer-story-extra-actions::part(extra) {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
 .ds-drawer-story-custom::part(panel) {
   border-left: 4px solid var(--color-ds-primary);
 }
 
 .ds-drawer-story-custom::part(title) {
   color: var(--color-ds-primary);
+}
+
+.ds-drawer-story-resizable::part(panel) {
+  max-width: calc(100vw - 48px);
+  min-width: 280px;
+}
+
+.ds-drawer-story-resize-edge {
+  background: transparent;
+  bottom: 0;
+  cursor: ew-resize;
+  pointer-events: auto;
+  position: fixed;
+  top: 0;
+  width: 10px;
+  z-index: calc(var(--z-index-ds-drawer, var(--z-index-ds-modal, 1080)) + 2);
+}
+
+.ds-drawer-story-resize-edge::before {
+  background: var(--color-ds-border);
+  content: "";
+  inset-block: 0;
+  inset-inline-start: 4px;
+  position: absolute;
+  transition:
+    background 120ms ease,
+    width 120ms ease;
+  width: 1px;
+}
+
+.ds-drawer-story-resize-edge:hover::before,
+.ds-drawer-story-resize-edge:focus-visible::before,
+.ds-drawer-story-resize-edge[data-resizing="true"]::before {
+  background: var(--color-ds-primary);
+  width: 2px;
 }

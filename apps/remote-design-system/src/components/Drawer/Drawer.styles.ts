@@ -1,17 +1,22 @@
 export const DRAWER_STYLES = `
   :host {
     color: var(--color-ds-text);
-    display: contents;
+    display: block;
     font-family: var(--font-sans);
     font-size: var(--text-ds-2);
+    inset: 0;
     line-height: var(--leading-ds-readable);
+    overflow: hidden;
+    pointer-events: none;
+    position: fixed;
+    z-index: var(--z-index-ds-drawer, var(--z-index-ds-modal, 1080));
   }
 
   .ds-drawer {
     inset: 0;
+    overflow: hidden;
     pointer-events: none;
-    position: fixed;
-    z-index: var(--z-index-ds-overlay, 1000);
+    position: absolute;
   }
 
   .ds-drawer[data-open="false"] {
@@ -54,11 +59,6 @@ export const DRAWER_STYLES = `
       transform 220ms ease;
   }
 
-  .ds-drawer[data-open="true"] .ds-drawer__panel {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-
   .ds-drawer[data-placement="right"] .ds-drawer__panel {
     bottom: 0;
     height: 100%;
@@ -95,6 +95,11 @@ export const DRAWER_STYLES = `
     width: 100%;
   }
 
+  .ds-drawer[data-open="true"] .ds-drawer__panel {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
   .ds-drawer__header {
     align-items: center;
     border-bottom: 1px solid var(--color-ds-border);
@@ -122,7 +127,7 @@ export const DRAWER_STYLES = `
     margin-inline-start: auto;
   }
 
-  .ds-drawer__extra:empty {
+  .ds-drawer__extra[hidden] {
     display: none;
   }
 
@@ -176,7 +181,7 @@ export const DRAWER_STYLES = `
     padding: var(--spacing-ds-4) var(--spacing-ds-5);
   }
 
-  .ds-drawer__footer:empty {
+  .ds-drawer__footer[hidden] {
     display: none;
   }
 `;

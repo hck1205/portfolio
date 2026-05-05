@@ -2,20 +2,23 @@ import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
 import "./Drawer.stories.css";
 import { defineDsDrawer, type DrawerPlacement } from ".";
-
-type DrawerStoryArgs = {
-  closable: boolean;
-  mask: boolean;
-  placement: DrawerPlacement;
-  title: string;
-};
+import {
+  createDocsDescription,
+  createDrawer,
+  createFrame,
+  createStoryButton,
+  createTrigger,
+  type DrawerStoryArgs
+} from "./stories/Drawer.storyDom";
+import { createResizeEdge } from "./stories/Drawer.storyResize";
 
 const storyDescriptions = {
   customPlacement: "왼쪽, 오른쪽, 위, 아래 가장자리에서 열리는 배치 방식을 한 화면에서 확인합니다.",
   customSemanticDomStyling: "`part`를 통해 패널과 제목 영역의 의미 DOM을 외부 스타일로 조정하는 예시입니다.",
   default: "오른쪽 가장자리에서 열리는 기본 드로어입니다. 보조 작업이나 상세 정보를 현재 화면 위에 보여줍니다.",
   extraActions: "헤더와 푸터 슬롯에 보조 액션을 넣어 드로어 안에서 확인, 취소 같은 흐름을 구성합니다.",
-  noMask: "배경 마스크 없이 패널만 열어 주변 화면을 계속 볼 수 있는 상태를 보여줍니다."
+  noMask: "배경 마스크 없이 패널만 열어 주변 화면을 계속 볼 수 있는 상태를 보여줍니다.",
+  resizable: "오른쪽 가장자리에서 열린 패널의 edge line을 드래그해 너비를 조절하는 상태를 보여줍니다."
 };
 
 const defaultArgs = {
@@ -24,51 +27,6 @@ const defaultArgs = {
   placement: "right",
   title: "상세 정보"
 } satisfies DrawerStoryArgs;
-
-function createDocsDescription(story: string) {
-  return {
-    docs: {
-      description: {
-        story
-      }
-    }
-  };
-}
-
-function createTrigger(label: string, drawer: HTMLElement) {
-  const button = document.createElement("button");
-
-  button.className = "ds-drawer-story-button";
-  button.type = "button";
-  button.textContent = label;
-  button.addEventListener("click", () => drawer.setAttribute("open", "true"));
-
-  return button;
-}
-
-function createDrawer(args: DrawerStoryArgs, content = "선택한 항목의 상세 정보와 다음 작업을 이 영역에서 확인할 수 있습니다.") {
-  const drawer = document.createElement("ds-drawer");
-  const body = document.createElement("div");
-
-  drawer.setAttribute("title", args.title);
-  drawer.setAttribute("placement", args.placement);
-  drawer.toggleAttribute("closable", args.closable);
-  drawer.toggleAttribute("mask", args.mask);
-  body.className = "ds-drawer-story-content";
-  body.innerHTML = `<strong>드로어 콘텐츠</strong><span>${content}</span>`;
-  drawer.append(body);
-
-  return drawer;
-}
-
-function createFrame(children: HTMLElement[]) {
-  const frame = document.createElement("div");
-
-  frame.className = "ds-drawer-story-frame";
-  frame.append(...children);
-
-  return frame;
-}
 
 function renderDefault(args: DrawerStoryArgs) {
   defineDsDrawer();
@@ -96,24 +54,45 @@ function renderExtraActions() {
 
   const drawer = createDrawer({
     ...defaultArgs,
+    closable: false,
     title: "설정 변경"
   });
-  const footerCancel = document.createElement("button");
-  const footerConfirm = document.createElement("button");
-  const extra = document.createElement("button");
+  const extraButtons = ["미리보기", "복제", "초기화", "공유"].map((label) => {
+    const button = createStoryButton(label);
 
-  footerCancel.className = "ds-drawer-story-footer-button";
-  footerConfirm.className = "ds-drawer-story-button";
-  extra.className = "ds-drawer-story-footer-button";
+    button.slot = "extra";
+
+    return button;
+  });
+  const footerCancel = createStoryButton("취소");
+  const footerConfirm = createStoryButton("저장", "primary");
+
+  drawer.className = "ds-drawer-story-extra-actions";
+  drawer.setAttribute("width", "520px");
   footerCancel.slot = "footer";
   footerConfirm.slot = "footer";
-  extra.slot = "extra";
-  footerCancel.textContent = "취소";
-  footerConfirm.textContent = "저장";
-  extra.textContent = "도움말";
-  drawer.append(extra, footerCancel, footerConfirm);
+  drawer.append(...extraButtons, footerCancel, footerConfirm);
 
   return createFrame([createTrigger("설정 열기", drawer), drawer]);
+}
+
+function renderResizable() {
+  defineDsDrawer();
+
+  const drawer = createDrawer(
+    {
+      ...defaultArgs,
+      placement: "right",
+      title: "크기 조절 드로어"
+    },
+    "넓은 상세 정보나 긴 설정 항목을 사용자가 편한 폭으로 확인할 수 있습니다."
+  );
+
+  drawer.className = "ds-drawer-story-resizable";
+  drawer.setAttribute("width", "420px");
+  createResizeEdge(drawer);
+
+  return createFrame([createTrigger("Resizable 열기", drawer), drawer]);
 }
 
 function renderNoMask() {
@@ -171,6 +150,11 @@ export const CustomPlacement: Story = {
 export const ExtraActions: Story = {
   render: renderExtraActions,
   parameters: createDocsDescription(storyDescriptions.extraActions)
+};
+
+export const Resizable: Story = {
+  render: renderResizable,
+  parameters: createDocsDescription(storyDescriptions.resizable)
 };
 
 export const NoMask: Story = {
