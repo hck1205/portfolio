@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
 import "./Modal.stories.css";
+import { defineDsButton } from "../Button";
 import { defineDsModal } from ".";
 import { createSemanticContent } from "./stories/Modal.storyContent";
 import {
@@ -30,6 +31,7 @@ const defaultArgs = {
 
 function renderDefault(args: ModalStoryArgs) {
   defineDsModal();
+  defineDsButton();
 
   const modal = createModal(args, "작업을 계속 진행하려면 내용을 확인한 뒤 확인 버튼을 선택해 주세요.");
 
@@ -43,6 +45,7 @@ function renderDefault(args: ModalStoryArgs) {
 
 function renderCentered() {
   defineDsModal();
+  defineDsButton();
 
   const modal = createModal({ ...defaultArgs, centered: true, title: "중앙 모달" });
 
@@ -51,6 +54,7 @@ function renderCentered() {
 
 function renderCustomFooter() {
   defineDsModal();
+  defineDsButton();
 
   const modal = createModal({ ...defaultArgs, title: "삭제 확인" }, "삭제 후에는 30일 안에만 복원할 수 있습니다.");
 
@@ -64,6 +68,7 @@ function renderCustomFooter() {
 
 function renderNoMask() {
   defineDsModal();
+  defineDsButton();
 
   const modal = createModal({ ...defaultArgs, mask: false, title: "마스크 없는 모달" });
 
@@ -72,6 +77,7 @@ function renderNoMask() {
 
 function renderCustomSemanticDomStyling(args: ModalStoryArgs) {
   defineDsModal();
+  defineDsButton();
 
   const modal = createModal(args, createSemanticContent());
 

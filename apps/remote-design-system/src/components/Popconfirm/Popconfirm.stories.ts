@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
 import "./Popconfirm.stories.css";
+import { defineDsButton } from "../Button";
 import { defineDsPopconfirm, type PopconfirmPlacement } from ".";
 import { createDocsDescription, createFrame, createPopconfirm } from "./stories/Popconfirm.storyDom";
 import type { PopconfirmStoryArgs } from "./stories/Popconfirm.storyTypes";
@@ -20,12 +21,14 @@ const defaultArgs = {
 
 function renderDefault(args: PopconfirmStoryArgs) {
   defineDsPopconfirm();
+  defineDsButton();
 
   return createFrame([createPopconfirm(args)]);
 }
 
 function renderPlacement() {
   defineDsPopconfirm();
+  defineDsButton();
 
   const placements: PopconfirmPlacement[] = ["top", "right", "bottom", "left"];
 
@@ -34,6 +37,7 @@ function renderPlacement() {
 
 function renderText() {
   defineDsPopconfirm();
+  defineDsButton();
 
   const popconfirm = createPopconfirm(defaultArgs);
 
@@ -45,6 +49,7 @@ function renderText() {
 
 function renderCustomSemanticDomStyling() {
   defineDsPopconfirm();
+  defineDsButton();
 
   const popconfirm = createPopconfirm({ ...defaultArgs, title: "스타일이 조정된 확인" }, "확인", false);
 

@@ -202,6 +202,8 @@ export const DROPDOWN_ITEM_STYLES = `
   }
 
   .ds-dropdown-item__label-slot {
+    align-items: center;
+    display: inline-flex;
     flex: 1 1 auto;
     min-width: 0;
   }
@@ -229,6 +231,9 @@ export const DROPDOWN_ITEM_STYLES = `
   }
 
   .ds-dropdown-item__label {
+    align-items: center;
+    display: inline-flex;
+    line-height: var(--leading-ds-tight);
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -236,7 +241,9 @@ export const DROPDOWN_ITEM_STYLES = `
   }
 
   .ds-dropdown-item__shortcut {
+    align-items: center;
     color: var(--color-ds-muted);
+    display: inline-flex;
     flex: none;
     font-size: 11px;
     line-height: var(--leading-ds-tight);

@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
 import "./Tabs.stories.css";
+import { defineDsButton } from "../Button";
+import { createDsButton } from "../shared/stories/storyElements";
 import { defineDsTabs, type TabsPlacement, type TabsSize, type TabsType } from ".";
 
 type TabsStoryArgs = {
@@ -78,6 +80,7 @@ const storyDescriptions = {
 
 function ensureTabsDefined() {
   defineDsTabs();
+  defineDsButton();
 }
 
 function createTabs(args: TabsStoryArgs, tabs: TabStoryData[] = defaultTabs) {
@@ -160,13 +163,11 @@ function createHeaderAddSection() {
   );
   const section = createScenarioSection("Editable Card - 상단 Add 버튼", tabsElement);
   const toolbar = document.createElement("div");
-  const button = document.createElement("button");
+  const button = createDsButton({ label: "Add", type: "primary" });
 
   toolbar.className = "ds-tabs-story-toolbar";
   button.className = "ds-tabs-story-add-button";
-  button.type = "button";
-  button.textContent = "Add";
-  button.addEventListener("click", () => addStoryTab(tabsElement));
+  button.addEventListener("ds-button-click", () => addStoryTab(tabsElement));
   toolbar.append(button);
   section.prepend(toolbar);
 

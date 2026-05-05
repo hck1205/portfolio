@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
 import "./Alert.stories.css";
+import { defineDsButton } from "../Button";
+import { createDsButton } from "../shared/stories/storyElements";
 import { defineDsAlert, type AlertType } from ".";
 
 type AlertStoryArgs = {
@@ -156,6 +158,7 @@ function renderLoopBanner() {
 
 function renderCustomAction() {
   defineDsAlert();
+  defineDsButton();
 
   const alert = createAlert({
     ...defaultArgs,
@@ -164,12 +167,10 @@ function renderCustomAction() {
     title: "항목이 삭제되었습니다.",
     type: "info"
   });
-  const action = document.createElement("button");
+  const action = createDsButton({ label: "되돌리기", type: "primary" });
 
   action.className = "ds-alert-story-action";
   action.slot = "action";
-  action.type = "button";
-  action.textContent = "되돌리기";
   alert.append(action);
 
   return createFrame([alert]);

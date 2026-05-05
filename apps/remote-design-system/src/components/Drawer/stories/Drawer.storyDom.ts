@@ -1,4 +1,5 @@
 import type { DrawerPlacement } from "../types/Drawer.types";
+import { createDsButton } from "../../shared/stories/storyElements";
 
 export type DrawerStoryArgs = {
   closable: boolean;
@@ -20,17 +21,18 @@ export function createDocsDescription(story: string) {
 export function createTrigger(label: string, drawer: HTMLElement) {
   const button = createStoryButton(label, "primary");
 
-  button.addEventListener("click", () => drawer.setAttribute("open", "true"));
+  button.addEventListener("ds-button-click", () => drawer.setAttribute("open", "true"));
 
   return button;
 }
 
 export function createStoryButton(label: string, variant: "primary" | "secondary" = "secondary") {
-  const button = document.createElement("button");
+  const button = createDsButton({
+    label,
+    type: variant === "primary" ? "primary" : "default"
+  });
 
   button.className = variant === "primary" ? "ds-drawer-story-button" : "ds-drawer-story-footer-button";
-  button.type = "button";
-  button.textContent = label;
 
   return button;
 }

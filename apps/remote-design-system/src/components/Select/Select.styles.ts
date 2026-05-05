@@ -40,11 +40,12 @@ export const SELECT_STYLES = `
     border: var(--ds-border-width-default) solid var(--color-ds-border);
     border-radius: var(--radius-ds-sm);
     box-sizing: border-box;
+    caret-color: transparent;
     color: var(--color-ds-text);
     cursor: pointer;
-    display: grid;
+    display: flex;
     gap: var(--spacing-ds-2);
-    grid-template-columns: minmax(0, 1fr) auto auto;
+    justify-content: space-between;
     min-height: var(--ds-select-height);
     padding: 0 var(--spacing-ds-2);
     text-align: start;
@@ -54,6 +55,7 @@ export const SELECT_STYLES = `
       box-shadow 150ms ease-in-out,
       color 150ms ease-in-out,
       opacity 150ms ease-in-out;
+    user-select: none;
   }
 
   :host([variant="filled"]) .ds-select__selector {
@@ -90,6 +92,7 @@ export const SELECT_STYLES = `
   .ds-select__value {
     align-items: center;
     display: flex;
+    flex: 1 1 auto;
     flex-wrap: wrap;
     gap: var(--spacing-ds-1);
     min-width: 0;
@@ -126,7 +129,14 @@ export const SELECT_STYLES = `
     align-items: center;
     color: var(--color-ds-muted);
     display: inline-flex;
+    flex: none;
     justify-content: center;
+    transition: transform 150ms ease-in-out;
+    transform-origin: center;
+  }
+
+  .ds-select__selector[aria-expanded="true"] .ds-select__chevron {
+    transform: rotate(180deg);
   }
 
   .ds-select__popup {
@@ -178,6 +188,7 @@ export const SELECT_STYLES = `
   ${createThinScrollbarStyles(".ds-select__list")}
 
   .ds-select__option {
+    align-items: center;
     appearance: none;
     background: transparent;
     border: 0;

@@ -15,25 +15,6 @@
   gap: var(--spacing-ds-3, 12px);
 }
 
-.ds-alert-story-action {
-  align-items: center;
-  background: var(--color-ds-surface);
-  border: 1px solid var(--color-ds-border);
-  border-radius: var(--radius-ds-sm);
-  color: var(--color-ds-primary);
-  cursor: pointer;
-  display: inline-flex;
-  font: inherit;
-  font-weight: var(--font-weight-ds-strong);
-  height: 28px;
-  padding: 0 var(--spacing-ds-3, 12px);
-}
-
-.ds-alert-story-action:focus-visible {
-  outline: var(--ds-focus-ring-width) solid var(--color-ds-primary);
-  outline-offset: var(--ds-focus-ring-offset);
-}
-
 .ds-alert-story-loop-text {
   animation: ds-alert-story-marquee 8s linear infinite;
   color: var(--color-ds-muted);

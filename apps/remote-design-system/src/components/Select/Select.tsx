@@ -169,6 +169,14 @@ export class DsSelect extends HTMLElement {
     this.setAttribute("show-search", String(value));
   }
 
+  get showSelectedIcon() {
+    return normalizeBooleanAttribute(this, "show-selected-icon", true);
+  }
+
+  set showSelectedIcon(value: boolean) {
+    this.setAttribute("show-selected-icon", String(value));
+  }
+
   get size(): SelectSize {
     return getSelectSize(this);
   }
@@ -405,6 +413,7 @@ export class DsSelect extends HTMLElement {
       searchValue: this.searchValue,
       selectedOptions,
       selectedValues,
+      showSelectedIcon: this.showSelectedIcon,
       showSearch: this.showSearch,
       value: this.currentValue
     });

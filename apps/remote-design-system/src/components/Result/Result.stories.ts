@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
 import "./Result.stories.css";
+import { defineDsButton } from "../Button";
+import { createDsButton } from "../shared/stories/storyElements";
 import { defineDsResult, type ResultStatus } from ".";
 
 type ResultStoryArgs = {
@@ -70,12 +72,10 @@ function createResultRow(items: ResultStoryOverrides[]) {
 }
 
 function createExtraButton(label: string) {
-  const button = document.createElement("button");
+  const button = createDsButton({ label, type: "primary" });
 
   button.className = "ds-result-story-button";
   button.slot = "extra";
-  button.type = "button";
-  button.textContent = label;
 
   return button;
 }
@@ -102,6 +102,7 @@ function renderStatus() {
 
 function renderExtra() {
   defineDsResult();
+  defineDsButton();
 
   const result = createResult(defaultArgs);
 

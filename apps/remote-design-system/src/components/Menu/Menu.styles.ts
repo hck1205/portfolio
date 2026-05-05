@@ -29,12 +29,12 @@ export const MENU_STYLES = `
     list-style: none;
     margin: 0;
     min-width: 0;
-    padding: var(--spacing-ds-1);
+    padding: var(--ds-menu-padding, var(--spacing-ds-1));
   }
 
   .ds-menu[data-mode="horizontal"] {
     align-items: center;
-    border-bottom: var(--ds-border-width-default, 1px) solid var(--color-ds-border);
+    border-bottom: var(--ds-menu-horizontal-border, var(--ds-border-width-default, 1px) solid var(--color-ds-border));
     flex-direction: row;
     overflow: visible;
     scrollbar-width: none;

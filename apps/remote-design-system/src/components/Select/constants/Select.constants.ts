@@ -19,6 +19,7 @@ export const SELECT_OBSERVED_ATTRIBUTES = [
   "options",
   "placeholder",
   "placement",
+  "show-selected-icon",
   "show-search",
   "size",
   "status",

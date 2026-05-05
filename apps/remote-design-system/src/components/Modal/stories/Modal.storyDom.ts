@@ -1,3 +1,4 @@
+import { createDsButton } from "../../shared/stories/storyElements";
 import type { ModalFooterActionOptions, ModalStoryArgs } from "./Modal.storyTypes";
 
 const DEFAULT_CONTENT = "진행하기 전에 변경 내용을 확인해 주세요.";
@@ -13,12 +14,9 @@ export function createDocsDescription(story: string) {
 }
 
 export function createTrigger(label: string, modal: HTMLElement) {
-  const button = document.createElement("button");
+  const button = createDsButton({ label, type: "primary" });
 
-  button.className = "ds-modal-story-button";
-  button.type = "button";
-  button.textContent = label;
-  button.addEventListener("click", () => modal.setAttribute("open", "true"));
+  button.addEventListener("ds-button-click", () => modal.setAttribute("open", "true"));
 
   return button;
 }
@@ -77,13 +75,14 @@ function createBasicContent(content: string) {
 }
 
 function createFooterButton(label: string, className: string, modal: HTMLElement) {
-  const button = document.createElement("button");
+  const button = createDsButton({
+    label,
+    type: className.includes("footer") ? "default" : "primary"
+  });
 
   button.className = className;
   button.slot = "footer";
-  button.type = "button";
-  button.textContent = label;
-  button.addEventListener("click", () => modal.setAttribute("open", "false"));
+  button.addEventListener("ds-button-click", () => modal.setAttribute("open", "false"));
 
   return button;
 }

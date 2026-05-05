@@ -124,6 +124,7 @@ function createSelect({
   select.setAttribute("aria-label", ariaLabel);
   select.setAttribute("options", JSON.stringify(options));
   select.setAttribute("placement", "bottomRight");
+  select.setAttribute("show-selected-icon", "false");
   select.setAttribute("size", "small");
   select.setAttribute("value", value);
 

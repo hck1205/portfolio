@@ -1,4 +1,5 @@
 import { DsNotification } from "..";
+import { createDsButton } from "../../shared/stories/storyElements";
 import type { NotificationPlacement } from "../types/Notification.types";
 import type { NotificationStoryArgs } from "./Notification.storyTypes";
 
@@ -35,12 +36,10 @@ export function createFrame(children: HTMLElement[]) {
 }
 
 export function createButton(label: string, options: Parameters<typeof DsNotification.show>[0]) {
-  const button = document.createElement("button");
+  const button = createDsButton({ label });
 
   button.className = "ds-notification-story-button";
-  button.type = "button";
-  button.textContent = label;
-  button.addEventListener("click", () => DsNotification.show(options));
+  button.addEventListener("ds-button-click", () => DsNotification.show(options));
 
   return button;
 }

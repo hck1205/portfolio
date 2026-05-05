@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
 import "./Drawer.stories.css";
+import { defineDsButton } from "../Button";
 import { defineDsDrawer, type DrawerPlacement } from ".";
 import {
   createDocsDescription,
@@ -30,6 +31,7 @@ const defaultArgs = {
 
 function renderDefault(args: DrawerStoryArgs) {
   defineDsDrawer();
+  defineDsButton();
 
   const drawer = createDrawer(args);
 
@@ -38,6 +40,7 @@ function renderDefault(args: DrawerStoryArgs) {
 
 function renderPlacements() {
   defineDsDrawer();
+  defineDsButton();
 
   const placements: DrawerPlacement[] = ["left", "right", "top", "bottom"];
   const children = placements.flatMap((placement) => {
@@ -51,6 +54,7 @@ function renderPlacements() {
 
 function renderExtraActions() {
   defineDsDrawer();
+  defineDsButton();
 
   const drawer = createDrawer({
     ...defaultArgs,
@@ -78,6 +82,7 @@ function renderExtraActions() {
 
 function renderResizable() {
   defineDsDrawer();
+  defineDsButton();
 
   const drawer = createDrawer(
     {
@@ -97,6 +102,7 @@ function renderResizable() {
 
 function renderNoMask() {
   defineDsDrawer();
+  defineDsButton();
 
   const drawer = createDrawer({ ...defaultArgs, mask: false, title: "마스크 없는 드로어" });
 
@@ -105,6 +111,7 @@ function renderNoMask() {
 
 function renderCustomSemanticDomStyling() {
   defineDsDrawer();
+  defineDsButton();
 
   const drawer = createDrawer({ ...defaultArgs, title: "스타일이 조정된 드로어" });
 

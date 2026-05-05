@@ -24,13 +24,6 @@
     @apply m-0 text-ds-1 font-ds-strong leading-ds-tight text-ds-muted;
   }
 
-  .ds-dropdown-story-trigger {
-    @apply inline-flex min-h-[30px] items-center justify-center rounded-ds-sm border border-ds-border bg-ds-surface px-ds-2 py-ds-1 text-ds-1 font-ds-strong leading-ds-tight text-ds-text;
-    box-sizing: border-box;
-    cursor: pointer;
-    gap: var(--spacing-ds-2, var(--spacing-xs1));
-  }
-
   .ds-dropdown-story-trigger-label,
   .ds-dropdown-story-item-label {
     @apply min-w-0 truncate;

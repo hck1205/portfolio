@@ -36,6 +36,7 @@ type SyncSelectElementsOptions = {
   searchValue: string;
   selectedOptions: SelectOption[];
   selectedValues: Set<string>;
+  showSelectedIcon: boolean;
   showSearch: boolean;
   value: string | string[];
 };
@@ -145,6 +146,7 @@ export function syncSelectElements({
   searchValue,
   selectedOptions,
   selectedValues,
+  showSelectedIcon,
   showSearch,
   value
 }: SyncSelectElementsOptions) {
@@ -161,7 +163,7 @@ export function syncSelectElements({
   elements.searchElement.value = searchValue;
   elements.listElement.setAttribute("aria-multiselectable", String(mode !== "single"));
   syncValueElement({ elements, mode, placeholder, selectedOptions, value });
-  syncOptions({ activeIndex, elements, emptyText, getOptionId, options, selectedValues });
+  syncOptions({ activeIndex, elements, emptyText, getOptionId, options, selectedValues, showSelectedIcon });
 
   if (activeOptionId) {
     elements.selectorElement.setAttribute("aria-activedescendant", activeOptionId);
@@ -222,7 +224,8 @@ function syncOptions({
   emptyText,
   getOptionId,
   options,
-  selectedValues
+  selectedValues,
+  showSelectedIcon
 }: {
   activeIndex: number;
   elements: SelectElements;
@@ -230,6 +233,7 @@ function syncOptions({
   getOptionId: (index: number) => string;
   options: SelectOption[];
   selectedValues: Set<string>;
+  showSelectedIcon: boolean;
 }) {
   if (options.length === 0) {
     const emptyElement = document.createElement("span");
@@ -254,7 +258,7 @@ function syncOptions({
       optionElement.setAttribute("role", "option");
       optionElement.textContent = option.label;
 
-      if (selectedValues.has(option.value)) {
+      if (showSelectedIcon && selectedValues.has(option.value)) {
         optionElement.append(createIcon(Check, 14));
       }
 

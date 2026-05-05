@@ -14,20 +14,6 @@
   justify-content: center;
 }
 
-.ds-message-story-button {
-  align-items: center;
-  background: var(--color-ds-primary);
-  border: 1px solid var(--color-ds-primary);
-  border-radius: var(--radius-ds-sm);
-  color: var(--color-ds-surface);
-  cursor: pointer;
-  display: inline-flex;
-  font: inherit;
-  font-weight: var(--font-weight-ds-strong);
-  height: 34px;
-  padding: 0 var(--spacing-ds-4, 16px);
-}
-
 .ds-message-story-custom::part(root) {
   border-color: var(--color-ds-primary);
 }

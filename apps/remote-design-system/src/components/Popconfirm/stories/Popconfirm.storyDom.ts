@@ -1,3 +1,4 @@
+import { createDsButton } from "../../shared/stories/storyElements";
 import type { PopconfirmStoryArgs } from "./Popconfirm.storyTypes";
 
 export function createDocsDescription(story: string) {
@@ -11,11 +12,13 @@ export function createDocsDescription(story: string) {
 }
 
 export function createButton(label: string, danger = false) {
-  const button = document.createElement("button");
+  const button = createDsButton({
+    danger,
+    label,
+    type: danger ? "primary" : "default"
+  });
 
   button.className = `ds-popconfirm-story-button${danger ? " ds-popconfirm-story-danger" : ""}`;
-  button.type = "button";
-  button.textContent = label;
 
   return button;
 }

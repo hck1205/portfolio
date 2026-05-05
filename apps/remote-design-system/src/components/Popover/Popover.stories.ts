@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
 import "./Popover.stories.css";
+import { defineDsButton } from "../Button";
+import { createDsButton } from "../shared/stories/storyElements";
 import { defineDsPopover, type PopoverPlacement } from ".";
 
 type PopoverStoryArgs = {
@@ -65,11 +67,12 @@ const argDescriptions = {
 
 function ensurePopoverDefined() {
   defineDsPopover();
+  defineDsButton();
 }
 
 function createPopover(args: PopoverStoryArgs, label = "마우스를 올려보세요") {
   const element = document.createElement("ds-popover");
-  const button = document.createElement("button");
+  const button = createDsButton({ label });
 
   element.setAttribute("arrow", String(args.arrow));
   element.setAttribute("content", args.content);
@@ -77,9 +80,6 @@ function createPopover(args: PopoverStoryArgs, label = "마우스를 올려보�
   element.setAttribute("title", args.title);
   element.setAttribute("trigger", args.trigger);
   element.toggleAttribute("default-open", args.defaultOpen);
-  button.className = "ds-popover-story-button";
-  button.type = "button";
-  button.textContent = label;
   element.append(button);
 
   return element;

@@ -6,34 +6,6 @@
   justify-content: center;
 }
 
-.ds-modal-story-button,
-.ds-modal-story-footer-button,
-.ds-modal-story-custom-primary,
-.ds-modal-story-custom-secondary {
-  align-items: center;
-  border: 1px solid var(--color-ds-border);
-  border-radius: var(--radius-ds-sm);
-  cursor: pointer;
-  display: inline-flex;
-  font: inherit;
-  font-weight: var(--font-weight-ds-strong);
-  height: 34px;
-  padding: 0 var(--spacing-ds-4, 16px);
-}
-
-.ds-modal-story-button,
-.ds-modal-story-custom-primary {
-  background: var(--color-ds-primary);
-  border-color: var(--color-ds-primary);
-  color: var(--color-ds-surface);
-}
-
-.ds-modal-story-footer-button,
-.ds-modal-story-custom-secondary {
-  background: var(--color-ds-surface);
-  color: var(--color-ds-text);
-}
-
 .ds-modal-story-content {
   color: var(--color-ds-muted);
   display: grid;

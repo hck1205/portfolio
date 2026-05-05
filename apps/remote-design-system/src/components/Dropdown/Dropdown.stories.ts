@@ -11,6 +11,8 @@ import {
 } from "lucide";
 
 import "./Dropdown.stories.css";
+import { defineDsButton } from "../Button";
+import { createDsButton } from "../shared/stories/storyElements";
 import { defineDsDropdown, type DropdownPlacement, type DropdownTrigger } from ".";
 
 type DropdownStoryArgs = {
@@ -39,15 +41,14 @@ const storyDescriptions = {
 
 function ensureDropdownElementsDefined() {
   defineDsDropdown();
+  defineDsButton();
 }
 
 function createTrigger(label: string) {
-  const trigger = document.createElement("button");
+  const trigger = createDsButton({ label });
 
   trigger.className = "ds-dropdown-story-trigger";
   trigger.slot = "trigger";
-  trigger.type = "button";
-  trigger.textContent = label;
 
   return trigger;
 }
@@ -68,6 +69,7 @@ function createIconTrigger(label: string, options: { prefix?: boolean; suffix?: 
 
   if (options.suffix) {
     children.push(createStoryTriggerIcon(ChevronDown, "ds-dropdown-story-trigger-icon--arrow"));
+    trigger.setAttribute("icon-placement", "end");
   }
 
   trigger.replaceChildren(...children);
@@ -123,6 +125,7 @@ function createStoryTriggerIcon(icon: Parameters<typeof createLucideElement>[0],
   const wrapperElement = document.createElement("span");
 
   wrapperElement.className = ["ds-dropdown-story-trigger-icon", className].filter(Boolean).join(" ");
+  wrapperElement.slot = "icon";
   wrapperElement.append(createStoryIcon(icon));
 
   return wrapperElement;

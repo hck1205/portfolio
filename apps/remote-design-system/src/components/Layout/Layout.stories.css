@@ -27,17 +27,14 @@
   }
 
   .ds-layout-story-topnav {
-    @apply flex min-w-0 flex-wrap items-center justify-center gap-ds-2;
-  }
-
-  .ds-layout-story-topnav button {
-    @apply rounded-ds-sm border-0 bg-transparent px-ds-3 py-ds-2 text-ds-2 font-ds-strong leading-ds-tight text-[rgba(255,255,255,0.72)];
-    cursor: pointer;
-  }
-
-  .ds-layout-story-topnav button:hover,
-  .ds-layout-story-topnav button[data-active="true"] {
-    @apply bg-[rgba(255,255,255,0.16)] text-[var(--color-neutral-static-light)];
+    --ds-menu-bg: transparent;
+    --ds-menu-color: rgba(255, 255, 255, 0.72);
+    --ds-menu-horizontal-border: 0;
+    --ds-menu-hover-bg: rgba(255, 255, 255, 0.16);
+    --ds-menu-padding: 0;
+    --ds-menu-selected-bg: rgba(255, 255, 255, 0.16);
+    --ds-menu-selected-color: var(--color-neutral-static-light);
+    @apply min-w-0;
   }
 
   .ds-layout-story-header-actions {
@@ -45,16 +42,15 @@
   }
 
   .ds-layout-story-header-action {
-    @apply relative grid h-[36px] w-[36px] place-items-center rounded-ds-sm border border-[rgba(255,255,255,0.16)] bg-[rgba(255,255,255,0.06)] text-[rgba(255,255,255,0.78)];
+    @apply relative grid h-[36px] w-[36px] place-items-center rounded-ds-sm border-0 bg-transparent text-[rgba(255,255,255,0.78)];
     cursor: pointer;
     transition:
       background-color 150ms ease-in-out,
-      border-color 150ms ease-in-out,
       color 150ms ease-in-out;
   }
 
   .ds-layout-story-header-action:hover {
-    @apply border-[rgba(255,255,255,0.28)] bg-[rgba(255,255,255,0.14)] text-[var(--color-neutral-static-light)];
+    @apply bg-[rgba(255,255,255,0.14)] text-[var(--color-neutral-static-light)];
   }
 
   .ds-layout-story-header-action:focus-visible {
@@ -88,11 +84,6 @@
 
     .ds-layout-story-preview .ds-layout-story-header-center {
       justify-content: flex-start;
-    }
-
-    .ds-layout-story-preview .ds-layout-story-topnav button {
-      font-size: var(--text-ds-1);
-      padding: var(--spacing-ds-2);
     }
 
     .ds-layout-story-preview .ds-layout-story-header-actions {
@@ -134,11 +125,6 @@
       display: none;
     }
 
-    .ds-layout-story-preview .ds-layout-story-topnav button {
-      flex: 0 0 auto;
-      padding-inline: var(--spacing-ds-2);
-    }
-
     .ds-layout-story-preview .ds-layout-story-header-actions {
       gap: var(--spacing-ds-1);
       padding-left: var(--spacing-ds-2);
@@ -156,64 +142,9 @@
   }
 
   .ds-layout-story-side-menu {
-    @apply grid gap-ds-1 p-ds-3;
-  }
-
-  .ds-layout-story-menu-item,
-  .ds-layout-story-menu-group summary {
-    @apply flex h-[40px] w-full min-w-0 items-center gap-ds-3 rounded-ds-sm border-0 bg-transparent px-ds-3 text-left text-ds-2 font-ds-strong leading-ds-tight text-inherit;
-    cursor: pointer;
-  }
-
-  .ds-layout-story-menu-item svg,
-  .ds-layout-story-menu-group summary svg {
-    @apply shrink-0;
-  }
-
-  .ds-layout-story-menu-label {
-    @apply min-w-0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .ds-layout-story-menu-item:hover,
-  .ds-layout-story-menu-group summary:hover,
-  .ds-layout-story-menu-item[data-active="true"] {
-    @apply bg-[rgba(255,255,255,0.16)];
-  }
-
-  ds-layout-sider[theme="light"] .ds-layout-story-menu-item:hover,
-  ds-layout-sider[theme="light"] .ds-layout-story-menu-group summary:hover {
-    @apply bg-ds-subtle-surface;
-  }
-
-  ds-layout-sider[theme="light"] .ds-layout-story-menu-item[data-active="true"] {
-    @apply bg-ds-primary text-[var(--color-neutral-static-light)];
-  }
-
-  .ds-layout-story-menu-group {
-    @apply grid gap-ds-1;
-  }
-
-  .ds-layout-story-menu-group summary {
-    list-style: none;
-  }
-
-  .ds-layout-story-menu-group summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .ds-layout-story-menu-group summary svg:last-child {
-    @apply ml-auto transition-transform;
-  }
-
-  .ds-layout-story-menu-group[open] summary svg:last-child {
-    transform: rotate(180deg);
-  }
-
-  .ds-layout-story-menu-group-list {
-    @apply grid gap-ds-1 pl-ds-5;
+    --ds-menu-bg: transparent;
+    --ds-menu-padding: var(--spacing-ds-3);
+    @apply w-full;
   }
 
   .ds-layout-story-content {
@@ -274,19 +205,8 @@
     @apply block;
   }
 
-  ds-layout-sider[collapsed] .ds-layout-story-menu-label,
-  ds-layout-sider[collapsed] .ds-layout-story-menu-group summary svg:last-child,
-  ds-layout-sider[collapsed] .ds-layout-story-menu-group-list {
-    @apply hidden;
-  }
-
   ds-layout-sider[collapsed] .ds-layout-story-side-menu {
-    @apply px-ds-2;
-  }
-
-  ds-layout-sider[collapsed] .ds-layout-story-menu-item,
-  ds-layout-sider[collapsed] .ds-layout-story-menu-group summary {
-    @apply justify-center px-0;
+    --ds-menu-padding: var(--spacing-ds-2);
   }
 
   .ds-layout-story-preview--responsive {

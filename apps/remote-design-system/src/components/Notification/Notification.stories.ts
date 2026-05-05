@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
 import "./Notification.stories.css";
+import { defineDsButton } from "../Button";
 import { defineDsNotification, type NotificationPlacement } from ".";
 import {
   createButton,
@@ -47,6 +48,7 @@ function renderTypes() {
 
 function renderPlacement() {
   defineDsNotification();
+  defineDsButton();
 
   const placements: NotificationPlacement[] = ["topLeft", "topRight", "bottomLeft", "bottomRight"];
 
@@ -55,6 +57,7 @@ function renderPlacement() {
 
 function renderProgress() {
   defineDsNotification();
+  defineDsButton();
 
   return createFrame([
     createButton("진행 알림 표시", {

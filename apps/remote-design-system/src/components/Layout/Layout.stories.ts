@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
 import "./Layout.stories.css";
 import { defineDsButton } from "../Button";
+import { defineDsMenu } from "../Menu";
 import { defineDsLayout } from ".";
 import { defaultLayoutArgs, storyDescriptions } from "./stories/Layout.storyData";
 import {
@@ -20,6 +21,7 @@ import type { LayoutStoryArgs } from "./stories/Layout.storyTypes";
 function ensureLayoutDefined() {
   defineDsButton();
   defineDsLayout();
+  defineDsMenu();
 }
 
 function renderWithDefinitions(renderer: (args: LayoutStoryArgs) => HTMLElement) {

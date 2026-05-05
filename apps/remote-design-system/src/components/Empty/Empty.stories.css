@@ -103,18 +103,6 @@
   padding: 0;
 }
 
-.ds-empty-story-button {
-  appearance: none;
-  background: var(--color-ds-primary);
-  border: 1px solid var(--color-ds-primary);
-  border-radius: var(--radius-ds-1, 4px);
-  color: var(--color-ds-on-primary, #fff);
-  cursor: pointer;
-  font: inherit;
-  min-height: 32px;
-  padding: 0 var(--spacing-ds-3, 12px);
-}
-
 @media (max-width: 900px) {
   .ds-empty-story-frame--wide .ds-empty-story-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));

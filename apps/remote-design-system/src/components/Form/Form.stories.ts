@@ -1,6 +1,19 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
 import "./Form.stories.css";
+import { defineDsButton } from "../Button";
+import { defineDsInput } from "../Input";
+import { defineDsSelect } from "../Select";
+import {
+  createDocsDescription,
+  createDsButton,
+  createDsInput,
+  createDsSelect,
+  createStoryFrame,
+  createStorySection,
+  createStoryStack,
+  setAttributes
+} from "../shared/stories/storyElements";
 import {
   defineDsForm,
   type FormLabelAlign,
@@ -35,6 +48,12 @@ type FieldOptions = {
   value?: string;
 };
 
+const roleOptions = [
+  { label: "Designer", value: "designer" },
+  { label: "Engineer", value: "engineer" },
+  { label: "Product Manager", value: "product-manager" }
+];
+
 const defaultArgs = {
   colon: true,
   disabled: false,
@@ -63,12 +82,15 @@ const storyDescriptions = {
 
 function ensureFormDefined() {
   defineDsForm();
+  defineDsInput();
+  defineDsSelect();
+  defineDsButton();
 }
 
 function createForm(args: FormStoryArgs, children: HTMLElement[]) {
   const form = document.createElement("ds-form");
 
-  setStringAttributes(form, {
+  setAttributes(form, {
     colon: String(args.colon),
     "label-align": args.labelAlign,
     layout: args.layout,
@@ -86,7 +108,7 @@ function createForm(args: FormStoryArgs, children: HTMLElement[]) {
 function createFormItem({ extra, help, label, layout, name, placeholder, required, type = "input", validateStatus, value }: FieldOptions) {
   const item = document.createElement("ds-form-item");
 
-  setStringAttributes(item, {
+  setAttributes(item, {
     label,
     name
   });
@@ -114,61 +136,37 @@ function createFormItem({ extra, help, label, layout, name, placeholder, require
 }
 
 function createControl({ name, placeholder, type, value }: Pick<FieldOptions, "name" | "placeholder" | "type" | "value">) {
-  if (type === "textarea") {
-    const textarea = document.createElement("textarea");
-
-    textarea.name = name;
-    textarea.placeholder = placeholder ?? "";
-    textarea.value = value ?? "";
-
-    return textarea;
-  }
-
   if (type === "select") {
-    const select = document.createElement("select");
-
-    select.name = name;
-    for (const optionLabel of ["Designer", "Engineer", "Product Manager"]) {
-      const option = document.createElement("option");
-
-      option.value = optionLabel.toLowerCase().replaceAll(" ", "-");
-      option.textContent = optionLabel;
-      select.append(option);
-    }
-
-    return select;
+    return createDsSelect({
+      name,
+      options: roleOptions,
+      placeholder: placeholder ?? "역할 선택",
+      value
+    });
   }
 
-  const input = document.createElement("input");
-
-  input.name = name;
-  input.placeholder = placeholder ?? "";
-  input.type = type === "password" ? "password" : "text";
-  input.value = value ?? "";
-
-  return input;
+  return createDsInput({
+    mode: type === "password" || type === "textarea" ? type : "input",
+    name,
+    placeholder,
+    value
+  });
 }
 
 function createActions() {
   const item = document.createElement("ds-form-item");
   const actions = document.createElement("div");
+  const submitButton = createDsButton({ htmlType: "submit", label: "Submit", type: "primary" });
+  const resetButton = createDsButton({ htmlType: "reset", label: "Reset" });
 
   item.setAttribute("no-style", "");
   actions.className = "ds-form-story-actions";
-  actions.append(createButton("Submit", "submit", "primary"), createButton("Reset", "reset", "secondary"));
+  submitButton.addEventListener("ds-button-click", () => (submitButton.closest("ds-form") as HTMLElement & { submit: () => void } | null)?.submit());
+  resetButton.addEventListener("ds-button-click", () => (resetButton.closest("ds-form") as HTMLElement & { reset: () => void } | null)?.reset());
+  actions.append(submitButton, resetButton);
   item.append(actions);
 
   return item;
-}
-
-function createButton(label: string, type: "button" | "reset" | "submit", variant: "primary" | "secondary") {
-  const button = document.createElement("button");
-
-  button.className = `ds-form-story-button ds-form-story-button--${variant}`;
-  button.type = type;
-  button.textContent = label;
-
-  return button;
 }
 
 function createOutput(text = "Submit 결과가 여기에 표시됩니다.") {
@@ -181,43 +179,15 @@ function createOutput(text = "Submit 결과가 여기에 표시됩니다.") {
 }
 
 function createFrame(children: HTMLElement[]) {
-  const frame = document.createElement("div");
-
-  frame.className = "ds-form-story-frame";
-  frame.append(...children);
-
-  return frame;
+  return createStoryFrame("ds-form-story-frame", ...children);
 }
 
 function createStack(children: HTMLElement[]) {
-  const stack = document.createElement("div");
-
-  stack.className = "ds-form-story-stack";
-  stack.append(...children);
-
-  return stack;
+  return createStoryStack("ds-form-story-stack", ...children);
 }
 
 function createSection(title: string, child: HTMLElement) {
-  const section = document.createElement("section");
-  const heading = document.createElement("h3");
-
-  section.className = "ds-form-story-section";
-  heading.className = "ds-form-story-section__title";
-  heading.textContent = title;
-  section.append(heading, child);
-
-  return section;
-}
-
-function createDocsDescription(story: string) {
-  return {
-    docs: {
-      description: {
-        story
-      }
-    }
-  };
+  return createStorySection("ds-form-story-section", "ds-form-story-section__title", title, child);
 }
 
 function createBasicFields() {
@@ -269,12 +239,12 @@ function renderMethodsStory(args: FormStoryArgs) {
   const form = createForm(args, createBasicFields());
   const output = createOutput();
   const controls = document.createElement("div");
-  const submitButton = createButton("form.submit()", "button", "primary");
-  const resetButton = createButton("form.reset()", "button", "secondary");
+  const submitButton = createDsButton({ label: "form.submit()", type: "primary" });
+  const resetButton = createDsButton({ label: "form.reset()" });
 
   controls.className = "ds-form-story-actions";
-  submitButton.addEventListener("click", () => (form as HTMLElement & { submit: () => void }).submit());
-  resetButton.addEventListener("click", () => (form as HTMLElement & { reset: () => void }).reset());
+  submitButton.addEventListener("ds-button-click", () => (form as HTMLElement & { submit: () => void }).submit());
+  resetButton.addEventListener("ds-button-click", () => (form as HTMLElement & { reset: () => void }).reset());
   controls.append(submitButton, resetButton);
   bindFormOutput(form, output);
 
@@ -422,12 +392,6 @@ function renderRegistrationStory(args: FormStoryArgs) {
       createActions()
     ])
   ]);
-}
-
-function setStringAttributes(element: HTMLElement, attributes: Record<string, string>) {
-  for (const [name, value] of Object.entries(attributes)) {
-    element.setAttribute(name, value);
-  }
 }
 
 const meta: Meta<FormStoryArgs> = {

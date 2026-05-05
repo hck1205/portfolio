@@ -1,17 +1,16 @@
 import {
   Bell,
   Boxes,
-  ChevronDown,
   ChevronsLeft,
   ChevronsRight,
-  Home,
   LayoutDashboard,
   Search,
   createElement as createLucideElement
 } from "lucide";
 
+import { createDsButton, setAttributes } from "../../shared/stories/storyElements";
 import { contentCopy, headerItems, sideItems } from "./Layout.storyData";
-import type { HeaderKey, LayoutStoryArgs, MenuKey, SideKey, StoryIcon } from "./Layout.storyTypes";
+import type { HeaderKey, LayoutStoryArgs, MenuKey, SideItem, SideKey, StoryIcon } from "./Layout.storyTypes";
 
 export function createIcon(icon: StoryIcon) {
   return createLucideElement(icon, {
@@ -80,7 +79,7 @@ export function createSider(
     sider.append(createCustomTrigger());
   }
 
-  sider.append(options.menu ?? createSiderMenu(activeKey, onSideSelect, options.long));
+  sider.append(options.menu ?? createSiderMenu(args, activeKey, onSideSelect, options.long));
 
   if (args.breakpoint) {
     sider.setAttribute("breakpoint", args.breakpoint);
@@ -143,23 +142,36 @@ export function createContent(activeHeader: HeaderKey, activeSide: SideKey, long
   return content;
 }
 
-export function createSiderMenu(activeKey: MenuKey, onSelect: (key: MenuKey) => void, long = false) {
-  const menu = document.createElement("nav");
+export function createSiderMenu(args: LayoutStoryArgs, activeKey: MenuKey, onSelect: (key: MenuKey) => void, long = false) {
+  const menu = document.createElement("ds-menu");
 
   menu.className = "ds-layout-story-side-menu";
-  menu.setAttribute("aria-label", "Side menu");
+  setAttributes(menu, {
+    "aria-label": "Side menu",
+    "default-open-keys": getOpenGroupKeys(activeKey).join(","),
+    "inline-collapsed": args.collapsed,
+    mode: "inline",
+    selectable: true,
+    "selected-keys": activeKey,
+    theme: args.theme
+  });
   menu.append(
-    createMenuButton(sideItems[0], activeKey, onSelect),
-    createMenuButton(sideItems[1], activeKey, onSelect),
-    createMenuGroup("Workspace", sideItems.slice(2, 5), activeKey, onSelect),
-    createMenuGroup("Operations", sideItems.slice(5), activeKey, onSelect)
+    createMenuItemElement(sideItems[0]),
+    createMenuItemElement(sideItems[1]),
+    createMenuGroupElement("workspace-group", "Workspace", sideItems.slice(2, 5)),
+    createMenuGroupElement("operations-group", "Operations", sideItems.slice(5))
   );
 
   if (long) {
     for (let index = 1; index <= 10; index += 1) {
-      menu.append(createMenuButton({ icon: Boxes, key: `archive-${index}`, label: `Archive ${index}` }, activeKey, onSelect));
+      menu.append(createMenuItemElement({ icon: Boxes, key: `archive-${index}`, label: `Archive ${index}` }));
     }
   }
+
+  menu.addEventListener("ds-menu-select", (event) => {
+    const { key } = (event as CustomEvent<{ key: MenuKey }>).detail;
+    onSelect(key);
+  });
 
   return menu;
 }
@@ -174,35 +186,38 @@ function createLogo() {
 }
 
 function createHeaderNav(activeHeader: HeaderKey, onSelect: (key: HeaderKey) => void) {
-  const nav = document.createElement("nav");
+  const nav = document.createElement("ds-menu");
 
   nav.className = "ds-layout-story-topnav";
-  nav.setAttribute("aria-label", "Primary sections");
+  setAttributes(nav, {
+    "aria-label": "Primary sections",
+    mode: "horizontal",
+    selectable: true,
+    "selected-keys": activeHeader
+  });
 
   for (const item of headerItems) {
-    const button = document.createElement("button");
-    const isActive = item.key === activeHeader;
-
-    button.type = "button";
-    button.textContent = item.label;
-    button.setAttribute("aria-pressed", String(isActive));
-    button.dataset.active = String(isActive);
-    button.addEventListener("click", () => {
-      onSelect(item.key);
-    });
-    nav.append(button);
+    nav.append(createMenuItemElement(item));
   }
+
+  nav.addEventListener("ds-menu-select", (event) => {
+    const { key } = (event as CustomEvent<{ key: HeaderKey }>).detail;
+    onSelect(key);
+  });
 
   return nav;
 }
 
 function createHeaderAction(label: string, icon: StoryIcon, hasIndicator = false) {
-  const button = document.createElement("button");
+  const button = createDsButton({ label: "", type: "text" });
+  const iconElement = createIcon(icon);
 
-  button.type = "button";
   button.className = "ds-layout-story-header-action";
+  button.setAttribute("ghost", "");
+  button.setAttribute("shape", "circle");
   button.setAttribute("aria-label", label);
-  button.append(createIcon(icon));
+  iconElement.slot = "icon";
+  button.append(iconElement);
 
   if (hasIndicator) {
     const indicator = document.createElement("span");
@@ -215,56 +230,48 @@ function createHeaderAction(label: string, icon: StoryIcon, hasIndicator = false
   return button;
 }
 
-function createMenuButton(
-  item: { icon: StoryIcon; key: MenuKey; label: string },
-  activeKey: MenuKey,
-  onSelect: (key: MenuKey) => void
-) {
-  const button = document.createElement("button");
+function createMenuGroupElement(key: string, label: string, items: SideItem[]) {
+  const group = createMenuItemElement({ icon: LayoutDashboard, key, label }, "submenu");
 
-  button.type = "button";
-  button.className = "ds-layout-story-menu-item";
-  button.dataset.active = String(item.key === activeKey);
-  button.setAttribute("aria-pressed", String(item.key === activeKey));
-  button.append(createIcon(item.icon), createMenuLabel(item.label));
-  button.addEventListener("click", () => {
-    onSelect(item.key);
+  group.append(...items.map((item) => createMenuItemElement(item)));
+
+  return group;
+}
+
+function createMenuItemElement(
+  item: { icon?: StoryIcon; key: HeaderKey | MenuKey | string; label: string },
+  type: "item" | "submenu" = "item"
+) {
+  const element = document.createElement("ds-menu-item");
+
+  setAttributes(element, {
+    "item-key": item.key,
+    label: item.label,
+    type
   });
 
-  return button;
-}
+  if (item.icon) {
+    const icon = createIcon(item.icon);
 
-function createMenuLabel(label: string) {
-  const span = document.createElement("span");
-
-  span.className = "ds-layout-story-menu-label";
-  span.textContent = label;
-
-  return span;
-}
-
-function createMenuGroup(
-  label: string,
-  items: Array<{ icon: StoryIcon; key: MenuKey; label: string }>,
-  activeKey: MenuKey,
-  onSelect: (key: MenuKey) => void
-) {
-  const details = document.createElement("details");
-  const summary = document.createElement("summary");
-  const list = document.createElement("div");
-
-  details.className = "ds-layout-story-menu-group";
-  details.open = items.some((item) => item.key === activeKey);
-  summary.append(createIcon(LayoutDashboard), createMenuLabel(label), createIcon(ChevronDown));
-  list.className = "ds-layout-story-menu-group-list";
-
-  for (const item of items) {
-    list.append(createMenuButton(item, activeKey, onSelect));
+    icon.slot = "icon";
+    element.append(icon);
   }
 
-  details.append(summary, list);
+  return element;
+}
 
-  return details;
+function getOpenGroupKeys(activeKey: MenuKey) {
+  const openKeys: string[] = [];
+
+  if (sideItems.slice(2, 5).some((item) => item.key === activeKey)) {
+    openKeys.push("workspace-group");
+  }
+
+  if (sideItems.slice(5).some((item) => item.key === activeKey) || activeKey.startsWith("archive-")) {
+    openKeys.push("operations-group");
+  }
+
+  return openKeys;
 }
 
 function createContentCard(title: string, body: string) {

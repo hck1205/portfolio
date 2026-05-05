@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
 import "./Message.stories.css";
+import { defineDsButton } from "../Button";
 import { DsMessage, defineDsMessage, type MessageType } from ".";
 import {
   createDocsDescription,
@@ -42,6 +43,7 @@ function renderDefault(args: MessageStoryArgs) {
 
 function renderOtherTypesOfMessage() {
   defineDsMessage();
+  defineDsButton();
 
   return createFrame([
     createRow(
@@ -66,6 +68,7 @@ function renderClosable() {
 
 function renderDuration() {
   defineDsMessage();
+  defineDsButton();
 
   const button = createMessageButton("메시지 표시", () =>
     DsMessage.show({

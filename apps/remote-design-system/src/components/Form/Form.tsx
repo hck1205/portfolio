@@ -32,6 +32,13 @@ import type {
 } from "./types/Form.types";
 
 const INTERNAL_ATTRIBUTE = "data-ds-form-internal";
+const FORM_VALUE_CHANGE_EVENTS = [
+  "ds-input-input",
+  "ds-input-change",
+  "ds-input-number-change",
+  "ds-mentions-change",
+  "ds-select-change"
+] as const;
 
 export class DsForm extends HTMLElement {
   static observedAttributes = FORM_OBSERVED_ATTRIBUTES;
@@ -52,6 +59,9 @@ export class DsForm extends HTMLElement {
     this.formElement?.removeEventListener("reset", this.handleReset);
     this.formElement?.removeEventListener("input", this.handleValuesChange);
     this.formElement?.removeEventListener("change", this.handleValuesChange);
+    for (const eventName of FORM_VALUE_CHANGE_EVENTS) {
+      this.formElement?.removeEventListener(eventName, this.handleValuesChange);
+    }
   }
 
   attributeChangedCallback() {
@@ -162,6 +172,9 @@ export class DsForm extends HTMLElement {
     this.formElement.addEventListener("reset", this.handleReset);
     this.formElement.addEventListener("input", this.handleValuesChange);
     this.formElement.addEventListener("change", this.handleValuesChange);
+    for (const eventName of FORM_VALUE_CHANGE_EVENTS) {
+      this.formElement.addEventListener(eventName, this.handleValuesChange);
+    }
     this.moveChildrenIntoForm();
     this.append(this.formElement);
     this.previousValues = this.getValues();

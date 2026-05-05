@@ -1,3 +1,4 @@
+import { createDsButton } from "../../shared/stories/storyElements";
 import { defaultEmptyStoryArgs } from "./Empty.storyData";
 import type { EmptyStoryArgs } from "./Empty.storyTypes";
 
@@ -72,11 +73,9 @@ export function createDocsDescription(story: string) {
 }
 
 function createStoryButton(text: string) {
-  const button = document.createElement("button");
+  const button = createDsButton({ label: text, type: "primary" });
 
   button.className = "ds-empty-story-button";
-  button.type = "button";
-  button.textContent = text;
 
   return button;
 }

@@ -121,7 +121,7 @@ function createAppShell(
   const rootLayout = document.createElement("ds-layout");
   const bodyLayout = document.createElement("ds-layout");
   const contentLayout = document.createElement("ds-layout");
-  let siderMenu = createSiderMenu(activeMenu, updateSide, options.longMenu);
+  let siderMenu = createSiderMenu(args, activeMenu, updateSide, options.longMenu);
   const sider = createSider(args, activeMenu, updateSide, {
     customTrigger: options.customTrigger,
     long: options.longMenu,
@@ -141,7 +141,7 @@ function createAppShell(
   function updateSide(key: MenuKey) {
     activeMenu = key;
     activeSide = resolveSideKey(key);
-    const nextSiderMenu = createSiderMenu(activeMenu, updateSide, options.longMenu);
+    const nextSiderMenu = createSiderMenu(args, activeMenu, updateSide, options.longMenu);
 
     siderMenu.replaceWith(nextSiderMenu);
     siderMenu = nextSiderMenu;

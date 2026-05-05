@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
 import "./Mentions.stories.css";
+import { defineDsButton } from "../Button";
+import { createDsButton } from "../shared/stories/storyElements";
 import {
   defineDsMentions,
   type MentionsPlacement,
@@ -95,6 +97,7 @@ const storyDescriptions = {
 
 function ensureMentionsDefined() {
   defineDsMentions();
+  defineDsButton();
 }
 
 function createMentions(args: MentionsStoryArgs, options: MentionOptionStoryData[] = defaultOptions) {
@@ -246,7 +249,10 @@ function renderFormStory() {
     event.preventDefault();
     validate();
   });
-  resetButton.addEventListener("click", () => {
+  submitButton.addEventListener("ds-button-click", () => {
+    validate();
+  });
+  resetButton.addEventListener("ds-button-click", () => {
     setMentionsValue(codersMentions, "@afc163");
     setMentionsValue(bioMentions, "");
     clearFormValidation(codersField, codersMentions);
@@ -376,7 +382,7 @@ function createFormField(labelText: string): FormFieldElements {
   };
 }
 
-function createFormActions(buttons: HTMLButtonElement[]) {
+function createFormActions(buttons: HTMLElement[]) {
   const row = document.createElement("div");
   const spacer = document.createElement("div");
   const actions = document.createElement("div");
@@ -391,11 +397,13 @@ function createFormActions(buttons: HTMLButtonElement[]) {
 }
 
 function createFormButton(label: string, variant: "submit" | "reset") {
-  const button = document.createElement("button");
+  const button = createDsButton({
+    htmlType: variant === "submit" ? "submit" : "button",
+    label,
+    type: variant === "submit" ? "primary" : "default"
+  });
 
   button.className = `ds-mentions-story-form__${variant}`;
-  button.type = variant === "submit" ? "submit" : "button";
-  button.textContent = label;
 
   return button;
 }

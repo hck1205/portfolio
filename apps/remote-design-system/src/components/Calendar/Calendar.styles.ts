@@ -54,7 +54,7 @@ export const CALENDAR_STYLES = `
 
   .ds-calendar__mode {
     border: var(--ds-border-width-default) solid var(--color-ds-border);
-    border-radius: var(--radius-level1);
+    border-radius: var(--radius-ds-sm);
     gap: 0;
     overflow: hidden;
   }

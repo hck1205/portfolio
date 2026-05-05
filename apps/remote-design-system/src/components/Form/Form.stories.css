@@ -1,6 +1,6 @@
 .ds-form-story-frame {
   display: grid;
-  gap: 20px;
+  gap: var(--spacing-ds-5, 20px);
   max-width: min(720px, calc(100vw - 48px));
   min-width: min(420px, calc(100vw - 48px));
   width: 100%;
@@ -8,15 +8,15 @@
 
 .ds-form-story-stack {
   display: grid;
-  gap: 24px;
+  gap: var(--spacing-ds-6, 24px);
 }
 
 .ds-form-story-section {
   border: var(--ds-border-width-default) solid var(--color-ds-border);
   border-radius: var(--radius-ds-sm);
   display: grid;
-  gap: 16px;
-  padding: 16px;
+  gap: var(--spacing-ds-4, 16px);
+  padding: var(--spacing-ds-4, 16px);
 }
 
 .ds-form-story-section__title {
@@ -28,37 +28,8 @@
 .ds-form-story-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--spacing-ds-2, 8px);
   justify-content: flex-end;
-}
-
-.ds-form-story-button {
-  appearance: none;
-  border-radius: var(--radius-ds-sm);
-  cursor: pointer;
-  font: 600 var(--text-ds-2) / var(--leading-ds-normal) var(--font-sans);
-  min-height: 32px;
-  padding: 0 14px;
-}
-
-.ds-form-story-button--primary {
-  background: var(--color-ds-primary);
-  border: 0;
-  color: var(--color-ds-surface);
-}
-
-.ds-form-story-button--secondary {
-  background: var(--color-ds-surface);
-  border: var(--ds-border-width-default) solid var(--color-ds-border);
-  color: var(--color-ds-text);
-}
-
-.ds-form-story-button:hover {
-  border-color: var(--color-ds-primary-hover);
-}
-
-.ds-form-story-button--primary:hover {
-  background: var(--color-ds-primary-hover);
 }
 
 .ds-form-story-output {
@@ -68,7 +39,7 @@
   font: var(--text-ds-1) / var(--leading-ds-normal) var(--font-sans);
   margin: 0;
   min-height: 34px;
-  padding: 8px 10px;
+  padding: var(--spacing-ds-2, 8px) var(--spacing-ds-3, 12px);
   white-space: pre-wrap;
 }
 

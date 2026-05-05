@@ -9,8 +9,8 @@ import type {
 } from "../types/Form.types";
 
 const FORM_CONTROLS_SELECTOR =
-  "input, textarea, select, button, ds-input, ds-input-number, ds-mentions";
-const FORM_VALUE_SELECTOR = "input, textarea, select, ds-input, ds-input-number, ds-mentions";
+  "input, textarea, select, button, ds-button, ds-input, ds-input-number, ds-mentions, ds-select";
+const FORM_VALUE_SELECTOR = "input, textarea, select, ds-input, ds-input-number, ds-mentions, ds-select";
 const LAYOUTS = ["horizontal", "vertical", "inline"] as const;
 const LABEL_ALIGNS = ["left", "right"] as const;
 const REQUIRED_MARKS = ["true", "false", "optional"] as const;
@@ -89,9 +89,13 @@ export function syncControlsDisabled(container: HTMLElement, disabled: boolean) 
 export function syncControlsSizeAndVariant(container: HTMLElement, size: FormSize, variant: FormVariant) {
   for (const control of container.querySelectorAll<HTMLElement>(FORM_VALUE_SELECTOR)) {
     if (control.localName.startsWith("ds-")) {
-      control.setAttribute("size", size);
+      control.setAttribute("size", getControlSize(control, size));
       control.setAttribute("variant", variant);
     }
+  }
+
+  for (const control of container.querySelectorAll<HTMLElement>("ds-button")) {
+    control.setAttribute("size", getControlSize(control, size));
   }
 }
 
@@ -127,7 +131,7 @@ export function getFormValues(formElement: HTMLFormElement): FormValues {
     values[key] = value;
   }
 
-  for (const control of formElement.querySelectorAll<HTMLElement>("ds-input, ds-input-number, ds-mentions")) {
+  for (const control of formElement.querySelectorAll<HTMLElement>("ds-input, ds-input-number, ds-mentions, ds-select")) {
     const name = control.getAttribute("name");
 
     if (name) {
@@ -136,6 +140,12 @@ export function getFormValues(formElement: HTMLFormElement): FormValues {
   }
 
   return values;
+}
+
+function getControlSize(control: HTMLElement, size: FormSize) {
+  const usesMiddleSize = ["ds-button", "ds-select"].includes(control.localName);
+
+  return usesMiddleSize && size === "medium" ? "middle" : size;
 }
 
 function isOneOf<T extends readonly string[]>(value: string | null, options: T): value is T[number] {

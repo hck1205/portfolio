@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
 import "./Empty.stories.css";
+import { defineDsButton } from "../Button";
 import { defineDsEmpty } from ".";
 import { renderComponentEmptyStates } from "./stories/Empty.componentStates";
 import {
@@ -31,6 +32,7 @@ function renderSimple() {
 
 function renderCustomize() {
   defineDsEmpty();
+  defineDsButton();
 
   return createFrame([
     createEmpty(

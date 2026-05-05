@@ -1,3 +1,4 @@
+import { createDsButton } from "../../shared/stories/storyElements";
 import type { MessageType } from "../types/Message.types";
 
 export type MessageStoryArgs = {
@@ -47,12 +48,10 @@ export function createRow(children: HTMLElement[]) {
 }
 
 export function createMessageButton(label: string, onClick: () => void) {
-  const button = document.createElement("button");
+  const button = createDsButton({ label });
 
   button.className = "ds-message-story-button";
-  button.type = "button";
-  button.textContent = label;
-  button.addEventListener("click", onClick);
+  button.addEventListener("ds-button-click", onClick);
 
   return button;
 }

@@ -20,9 +20,9 @@ export const BUTTON_STYLES = `
     --ds-button-hover-bg: var(--color-ds-surface);
     --ds-button-hover-border: var(--color-ds-primary);
     --ds-button-hover-color: var(--color-ds-primary);
-    --ds-button-height: var(--spacing-m3);
+    --ds-button-height: 32px;
     --ds-button-icon-size: var(--ds-icon-size-md);
-    --ds-button-padding-inline: var(--spacing-ds-5);
+    --ds-button-padding-inline: 15px;
     align-items: center;
     appearance: none;
     background: var(--ds-button-bg);
@@ -82,14 +82,15 @@ export const BUTTON_STYLES = `
   }
 
   :host([size="small"]) .ds-button {
-    --ds-button-height: var(--spacing-m1);
-    --ds-button-padding-inline: var(--spacing-ds-3);
+    --ds-button-height: 24px;
+    --ds-button-icon-size: 14px;
+    --ds-button-padding-inline: 7px;
     font-size: var(--text-ds-1);
   }
 
   :host([size="large"]) .ds-button {
-    --ds-button-height: var(--spacing-m4);
-    --ds-button-padding-inline: var(--spacing-ds-6);
+    --ds-button-height: 40px;
+    --ds-button-padding-inline: 15px;
     font-size: var(--text-ds-3);
   }
 

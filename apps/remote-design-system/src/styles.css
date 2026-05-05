@@ -230,8 +230,8 @@
   --color-semantic-text-primary: var(--color-neutral-solid-n10);
   --color-semantic-text-muted: var(--color-neutral-solid-n7);
   --color-semantic-stroke-default: var(--color-neutral-solid-n3);
-  --color-semantic-intent-primary-base: var(--color-indigo-solid-indigo7);
-  --color-semantic-intent-primary-hover: var(--color-indigo-solid-indigo8);
+  --color-semantic-intent-primary-base: var(--color-indigo-solid-indigo6);
+  --color-semantic-intent-primary-hover: var(--color-indigo-solid-indigo7);
   --color-semantic-intent-neutral-base: var(--color-neutral-solid-n8);
   --color-semantic-intent-neutral-hover: var(--color-neutral-solid-n10);
   --color-semantic-intent-danger-base: var(--color-coral-solid-coral7);
@@ -378,8 +378,8 @@
   --color-semantic-text-primary: var(--color-neutral-solid-n10);
   --color-semantic-text-muted: var(--color-neutral-solid-n7);
   --color-semantic-stroke-default: var(--color-neutral-solid-n3);
-  --color-semantic-intent-primary-base: var(--color-indigo-solid-indigo7);
-  --color-semantic-intent-primary-hover: var(--color-indigo-solid-indigo8);
+  --color-semantic-intent-primary-base: var(--color-indigo-solid-indigo6);
+  --color-semantic-intent-primary-hover: var(--color-indigo-solid-indigo7);
   --color-semantic-intent-neutral-base: var(--color-neutral-solid-n8);
   --color-semantic-intent-neutral-hover: var(--color-neutral-solid-n10);
   --color-semantic-intent-danger-base: var(--color-coral-solid-coral7);
