@@ -1,18 +1,12 @@
 import { SKELETON_OBSERVED_ATTRIBUTES } from "./constants/Skeleton.constants";
 import { getRowCount, normalizeBooleanAttribute } from "./dom/Skeleton.dom";
-import { SKELETON_STYLES } from "./Skeleton.styles";
-
-let skeletonStyleSheet: CSSStyleSheet | undefined;
+import { createSkeletonElements, createSkeletonLine, type SkeletonElements } from "./dom/Skeleton.structure";
+import { applySkeletonStyles } from "./styles/Skeleton.stylesheet";
 
 export class DsSkeleton extends HTMLElement {
   static observedAttributes = SKELETON_OBSERVED_ATTRIBUTES;
 
-  private avatarElement?: HTMLDivElement;
-  private contentSlotElement?: HTMLSlotElement;
-  private paragraphElement?: HTMLDivElement;
-  private placeholderElement?: HTMLDivElement;
-  private rootElement?: HTMLDivElement;
-  private titleElement?: HTMLDivElement;
+  private elements?: SkeletonElements;
 
   connectedCallback() {
     this.render();
@@ -71,108 +65,41 @@ export class DsSkeleton extends HTMLElement {
   }
 
   private render() {
-    if (!this.isConnected && !this.rootElement) {
+    if (!this.isConnected && !this.elements) {
       return;
     }
 
-    if (!this.rootElement) {
-      this.initializeStructure();
-    }
+    const elements = this.elements ?? this.initializeStructure();
+    const active = this.active;
+    const avatar = this.avatar;
+    const loading = this.loading;
 
-    if (this.rootElement) {
-      this.rootElement.dataset.active = String(this.active);
-      this.rootElement.dataset.round = String(this.round);
-    }
-    if (this.placeholderElement) {
-      this.placeholderElement.hidden = !this.loading;
-    }
-    if (this.contentSlotElement) {
-      this.contentSlotElement.hidden = this.loading;
-    }
-    if (this.avatarElement) {
-      this.avatarElement.hidden = !this.avatar;
-    }
-    if (this.titleElement) {
-      this.titleElement.hidden = !this.titleVisible;
-    }
-    this.syncRows();
+    elements.rootElement.dataset.active = String(active);
+    elements.rootElement.dataset.avatar = String(avatar);
+    elements.rootElement.dataset.round = String(this.round);
+    elements.placeholderElement.hidden = !loading;
+    elements.contentSlotElement.hidden = loading;
+    elements.avatarElement.hidden = !avatar;
+    elements.titleElement.hidden = !this.titleVisible;
+    this.syncRows(elements);
   }
 
   private initializeStructure() {
     const shadowRoot = this.shadowRoot ?? this.attachShadow({ mode: "open" });
-    const rootElement = document.createElement("div");
-    const placeholderElement = document.createElement("div");
-    const avatarElement = document.createElement("div");
-    const bodyElement = document.createElement("div");
-    const titleElement = document.createElement("div");
-    const paragraphElement = document.createElement("div");
-    const contentSlotElement = document.createElement("slot");
+    const elements = createSkeletonElements();
 
-    rootElement.className = "ds-skeleton";
-    placeholderElement.className = "ds-skeleton__placeholder";
-    avatarElement.className = "ds-skeleton__avatar";
-    bodyElement.className = "ds-skeleton__body";
-    titleElement.className = "ds-skeleton__title";
-    paragraphElement.className = "ds-skeleton__paragraph";
-    contentSlotElement.className = "ds-skeleton__content";
-    rootElement.setAttribute("part", "root");
-    placeholderElement.setAttribute("part", "placeholder");
-    avatarElement.setAttribute("part", "avatar");
-    titleElement.setAttribute("part", "title");
-    paragraphElement.setAttribute("part", "paragraph");
-    contentSlotElement.setAttribute("part", "content");
-    placeholderElement.setAttribute("aria-hidden", "true");
-    bodyElement.append(titleElement, paragraphElement);
-    placeholderElement.append(avatarElement, bodyElement);
-    rootElement.append(placeholderElement, contentSlotElement);
-    shadowRoot.replaceChildren(rootElement);
+    shadowRoot.replaceChildren(elements.rootElement);
     applySkeletonStyles(shadowRoot);
-    this.rootElement = rootElement;
-    this.placeholderElement = placeholderElement;
-    this.avatarElement = avatarElement;
-    this.titleElement = titleElement;
-    this.paragraphElement = paragraphElement;
-    this.contentSlotElement = contentSlotElement;
+    this.elements = elements;
+
+    return elements;
   }
 
-  private syncRows() {
-    if (!this.paragraphElement) {
-      return;
-    }
+  private syncRows({ paragraphElement }: SkeletonElements) {
+    const paragraphRows = this.paragraphRows;
 
-    if (this.paragraphElement.children.length !== this.paragraphRows) {
-      this.paragraphElement.replaceChildren(
-        ...Array.from({ length: this.paragraphRows }, () => {
-          const row = document.createElement("span");
-
-          row.className = "ds-skeleton__line";
-          return row;
-        })
-      );
+    if (paragraphElement.childElementCount !== paragraphRows) {
+      paragraphElement.replaceChildren(...Array.from({ length: paragraphRows }, createSkeletonLine));
     }
   }
-}
-
-function canAdoptStyleSheets() {
-  return "adoptedStyleSheets" in Document.prototype && "replaceSync" in CSSStyleSheet.prototype;
-}
-
-function applySkeletonStyles(shadowRoot: ShadowRoot) {
-  if (canAdoptStyleSheets()) {
-    if (!skeletonStyleSheet) {
-      skeletonStyleSheet = new CSSStyleSheet();
-      skeletonStyleSheet.replaceSync(SKELETON_STYLES);
-    }
-
-    if (!shadowRoot.adoptedStyleSheets.includes(skeletonStyleSheet)) {
-      shadowRoot.adoptedStyleSheets = [...shadowRoot.adoptedStyleSheets, skeletonStyleSheet];
-    }
-
-    return;
-  }
-
-  const styleElement = document.createElement("style");
-
-  styleElement.textContent = SKELETON_STYLES;
-  shadowRoot.prepend(styleElement);
 }

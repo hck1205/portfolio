@@ -22,6 +22,10 @@ export const SKELETON_STYLES = `
     grid-template-columns: auto minmax(0, 1fr);
   }
 
+  .ds-skeleton[data-avatar="false"] .ds-skeleton__placeholder {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .ds-skeleton__placeholder[hidden],
   .ds-skeleton__content[hidden],
   .ds-skeleton__avatar[hidden],
