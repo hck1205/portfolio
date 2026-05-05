@@ -13,6 +13,8 @@ import type { AlertType } from "./types/Alert.types";
 export type AlertElements = {
   actionSlotElement: HTMLSlotElement;
   closeButtonElement: HTMLButtonElement;
+  closeIconElement: SVGElement;
+  closeTextElement: HTMLSpanElement;
   descriptionElement: HTMLParagraphElement;
   iconSlotElement: HTMLSlotElement;
   rootElement: HTMLDivElement;
@@ -64,6 +66,12 @@ export function createAlertElements(): AlertElements {
   const descriptionElement = document.createElement("p");
   const actionSlotElement = document.createElement("slot");
   const closeButtonElement = document.createElement("button");
+  const closeTextElement = document.createElement("span");
+  const closeIconElement = createLucideElement(X, {
+    "aria-hidden": "true",
+    focusable: "false",
+    "stroke-width": 2
+  });
 
   rootElement.className = "ds-alert";
   iconSlotElement.className = "ds-alert__icon";
@@ -72,6 +80,7 @@ export function createAlertElements(): AlertElements {
   descriptionElement.className = "ds-alert__description";
   actionSlotElement.className = "ds-alert__actions";
   closeButtonElement.className = "ds-alert__close";
+  closeTextElement.className = "ds-alert__close-text";
   iconSlotElement.name = "icon";
   actionSlotElement.name = "action";
   closeButtonElement.type = "button";
@@ -82,19 +91,16 @@ export function createAlertElements(): AlertElements {
   descriptionElement.setAttribute("part", "description");
   actionSlotElement.setAttribute("part", "actions");
   closeButtonElement.setAttribute("part", "close");
+  closeTextElement.setAttribute("part", "close-text");
   sectionElement.append(titleElement, descriptionElement);
-  closeButtonElement.append(
-    createLucideElement(X, {
-      "aria-hidden": "true",
-      focusable: "false",
-      "stroke-width": 2
-    })
-  );
+  closeButtonElement.append(closeTextElement, closeIconElement);
   rootElement.append(iconSlotElement, sectionElement, actionSlotElement, closeButtonElement);
 
   return {
     actionSlotElement,
     closeButtonElement,
+    closeIconElement,
+    closeTextElement,
     descriptionElement,
     iconSlotElement,
     rootElement,
@@ -108,6 +114,7 @@ export function syncAlertElements(
     banner: boolean;
     closable: boolean;
     closeLabel: string;
+    closeText: string;
     description: string;
     showIcon: boolean;
     title: string;
@@ -124,6 +131,10 @@ export function syncAlertElements(
   elements.descriptionElement.textContent = state.description;
   elements.closeButtonElement.hidden = !state.closable;
   elements.closeButtonElement.setAttribute("aria-label", state.closeLabel);
+  elements.closeButtonElement.dataset.text = String(state.closeText.length > 0);
+  elements.closeTextElement.hidden = state.closeText.length === 0;
+  elements.closeTextElement.textContent = state.closeText;
+  elements.closeIconElement.setAttribute("aria-hidden", "true");
 }
 
 function createAlertIcon(type: AlertType) {

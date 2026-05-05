@@ -6,6 +6,7 @@ import { defineDsAlert, type AlertType } from ".";
 type AlertStoryArgs = {
   banner: boolean;
   closable: boolean;
+  closeText: string;
   description: string;
   showIcon: boolean;
   title: string;
@@ -13,18 +14,21 @@ type AlertStoryArgs = {
 };
 
 const storyDescriptions = {
-  banner: "페이지나 영역 상단에서 긴급하게 알려야 하는 내용을 배너 형태로 표시합니다.",
-  closable: "사용자가 직접 닫을 수 있는 알림을 보여주며, 닫힘 동작은 `ds-alert-close` 이벤트로 전달됩니다.",
-  customAction: "알림 안에 보조 액션을 배치해 사용자가 바로 후속 작업을 실행할 수 있습니다.",
-  customSemanticDomStyling: "`part`를 사용해 루트, 제목처럼 의미가 분리된 DOM 영역을 외부 스타일로 조정하는 예시입니다.",
+  banner: "페이지나 영역 상단에서 사용자가 바로 알아야 하는 공지나 경고를 배너 형태로 표시합니다.",
+  closable: "사용자가 직접 닫을 수 있는 알림입니다. 닫힘 동작은 `ds-alert-close` 이벤트로 전달됩니다.",
+  customAction: "알림 안에 보조 액션을 배치해 사용자가 후속 작업을 바로 실행할 수 있습니다.",
+  customSemanticDomStyling: "`part`를 사용해 루트, 제목처럼 의미가 분리된 DOM 영역을 외부 스타일로 조정합니다.",
+  customizedCloseText: "닫기 아이콘 옆에 제품 문맥에 맞는 닫기 텍스트를 함께 표시합니다.",
   default: "가장 기본적인 정보 알림입니다. 짧은 상태 메시지를 명확하게 전달할 때 사용합니다.",
   description: "제목 아래에 설명 문장을 함께 배치해 사용자가 판단에 필요한 맥락을 바로 읽을 수 있습니다.",
+  loopBanner: "반복 노출이 필요한 운영 공지를 배너 영역 안에서 흐르는 형태로 표시합니다.",
   types: "성공, 정보, 경고, 오류 상태를 각각 다른 색상과 아이콘으로 구분합니다."
 };
 
 const defaultArgs = {
   banner: false,
   closable: false,
+  closeText: "",
   description: "",
   showIcon: false,
   title: "작업이 정상적으로 저장되었습니다.",
@@ -50,6 +54,10 @@ function createAlert(args: AlertStoryArgs) {
   alert.toggleAttribute("closable", args.closable);
   alert.toggleAttribute("show-icon", args.showIcon);
 
+  if (args.closeText) {
+    alert.setAttribute("close-text", args.closeText);
+  }
+
   if (args.description) {
     alert.setAttribute("description", args.description);
   }
@@ -57,10 +65,10 @@ function createAlert(args: AlertStoryArgs) {
   return alert;
 }
 
-function createFrame(children: HTMLElement[]) {
+function createFrame(children: HTMLElement[], className = "") {
   const frame = document.createElement("div");
 
-  frame.className = "ds-alert-story-frame";
+  frame.className = ["ds-alert-story-frame", className].filter(Boolean).join(" ");
   frame.append(...children);
 
   return frame;
@@ -126,6 +134,26 @@ function renderBanner() {
   ]);
 }
 
+function renderLoopBanner() {
+  defineDsAlert();
+
+  const alert = createAlert({
+    ...defaultArgs,
+    banner: true,
+    showIcon: true,
+    title: "정기 점검 안내",
+    type: "warning"
+  });
+  const loopText = document.createElement("span");
+
+  loopText.className = "ds-alert-story-loop-text";
+  loopText.slot = "action";
+  loopText.textContent = "오늘 23:00부터 30분 동안 일부 기능 이용이 제한됩니다.";
+  alert.append(loopText);
+
+  return createFrame([alert], "ds-alert-story-frame--compact");
+}
+
 function renderCustomAction() {
   defineDsAlert();
 
@@ -136,14 +164,31 @@ function renderCustomAction() {
     title: "항목이 삭제되었습니다.",
     type: "info"
   });
-  const action = document.createElement("span");
+  const action = document.createElement("button");
 
   action.className = "ds-alert-story-action";
   action.slot = "action";
+  action.type = "button";
   action.textContent = "되돌리기";
   alert.append(action);
 
   return createFrame([alert]);
+}
+
+function renderCustomizedCloseText() {
+  defineDsAlert();
+
+  return createFrame([
+    createAlert({
+      ...defaultArgs,
+      closeText: "닫기",
+      closable: true,
+      description: "텍스트가 함께 표시되어 닫기 액션의 의미를 더 분명하게 전달합니다.",
+      showIcon: true,
+      title: "닫기 텍스트가 있는 알림",
+      type: "info"
+    })
+  ]);
 }
 
 function renderCustomSemanticDomStyling() {
@@ -169,7 +214,8 @@ const meta: Meta<AlertStoryArgs> = {
     layout: "centered",
     docs: {
       description: {
-        component: "Alert는 사용자가 놓치면 안 되는 상태, 경고, 결과 메시지를 화면 안에 고정된 영역으로 전달하는 피드백 컴포넌트입니다."
+        component:
+          "Alert는 사용자가 놓치면 안 되는 상태, 경고, 결과 메시지를 화면 안에 고정된 영역으로 전달하는 피드백 컴포넌트입니다."
       }
     }
   },
@@ -211,9 +257,22 @@ export const Banner: Story = {
   parameters: createDocsDescription(storyDescriptions.banner)
 };
 
+export const LoopBanner: Story = {
+  name: "Loop Banner",
+  render: renderLoopBanner,
+  parameters: createDocsDescription(storyDescriptions.loopBanner)
+};
+
 export const CustomAction: Story = {
+  name: "Custom action",
   render: renderCustomAction,
   parameters: createDocsDescription(storyDescriptions.customAction)
+};
+
+export const CustomizedCloseText: Story = {
+  name: "Customized Close Text",
+  render: renderCustomizedCloseText,
+  parameters: createDocsDescription(storyDescriptions.customizedCloseText)
 };
 
 export const CustomSemanticDomStyling: Story = {

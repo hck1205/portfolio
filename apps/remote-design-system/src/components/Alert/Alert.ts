@@ -44,6 +44,14 @@ export class DsAlert extends HTMLElement {
     syncNullableAttribute(this, "close-label", value);
   }
 
+  get closeText() {
+    return this.getAttribute("close-text") ?? "";
+  }
+
+  set closeText(value: string) {
+    syncNullableAttribute(this, "close-text", value);
+  }
+
   get description() {
     return this.getAttribute("description") ?? "";
   }
@@ -113,6 +121,7 @@ export class DsAlert extends HTMLElement {
       banner: this.banner,
       closable: this.closable,
       closeLabel: this.closeLabel,
+      closeText: this.closeText,
       description: this.description,
       showIcon: this.showIcon,
       title: this.title || this.textContent?.trim() || "알림",

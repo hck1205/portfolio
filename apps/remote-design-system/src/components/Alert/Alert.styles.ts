@@ -123,11 +123,18 @@ export const ALERT_STYLES = `
     cursor: pointer;
     display: inline-flex;
     grid-column: 4;
+    gap: var(--spacing-ds-1);
     height: 28px;
     justify-content: center;
     margin: -4px;
     padding: 0;
     width: 28px;
+  }
+
+  .ds-alert__close[data-text="true"] {
+    height: 30px;
+    padding: 0 var(--spacing-ds-2);
+    width: auto;
   }
 
   .ds-alert__close:hover {
@@ -147,5 +154,15 @@ export const ALERT_STYLES = `
   .ds-alert__close svg {
     height: var(--size-ds-icon-md);
     width: var(--size-ds-icon-md);
+  }
+
+  .ds-alert__close-text {
+    font-size: var(--text-ds-1);
+    font-weight: var(--font-weight-ds-strong);
+    white-space: nowrap;
+  }
+
+  .ds-alert__close-text[hidden] {
+    display: none;
   }
 `;

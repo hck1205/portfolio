@@ -6,6 +6,7 @@ export const ALERT_OBSERVED_ATTRIBUTES = [
   "banner",
   "closable",
   "close-label",
+  "close-text",
   "description",
   "show-icon",
   "title",
