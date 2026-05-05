@@ -27,6 +27,7 @@ export * from './Pagination';
 export * from './Popover';
 export * from './Radio';
 export * from './Rate';
+export * from './Result';
 export * from './Select';
 export * from './Segmented';
 export * from './Slider';
