@@ -4,7 +4,7 @@ import {
   POPCONFIRM_OBSERVED_ATTRIBUTES,
   POPCONFIRM_OPEN_CHANGE_EVENT
 } from "./constants/Popconfirm.constants";
-import { getPlacement, normalizeBooleanAttribute, syncNullableAttribute } from "./dom/Popconfirm.dom";
+import { getPlacement, normalizeBooleanAttribute, syncBooleanAttribute, syncNullableAttribute } from "./dom/Popconfirm.dom";
 import {
   applyPopconfirmStyles,
   createPopconfirmElements,
@@ -28,7 +28,11 @@ export class DsPopconfirm extends HTMLElement {
     this.detachDocumentPointerListener();
   }
 
-  attributeChangedCallback() {
+  attributeChangedCallback(_name: string, oldValue: string | null, newValue: string | null) {
+    if (oldValue === newValue) {
+      return;
+    }
+
     this.render();
   }
 
@@ -53,7 +57,7 @@ export class DsPopconfirm extends HTMLElement {
   }
 
   set disabled(value: boolean) {
-    this.setBooleanAttribute("disabled", value);
+    syncBooleanAttribute(this, "disabled", value);
   }
 
   get okText() {
@@ -125,7 +129,7 @@ export class DsPopconfirm extends HTMLElement {
       return;
     }
 
-    this.setAttribute("placement", this.placement);
+    this.syncPlacementAttribute();
     syncPopconfirmElements(this.elements, {
       cancelText: this.cancelText,
       description: this.description,
@@ -147,16 +151,25 @@ export class DsPopconfirm extends HTMLElement {
     applyPopconfirmStyles(shadowRoot);
   }
 
+  private syncPlacementAttribute() {
+    const placement = this.placement;
+
+    if (this.getAttribute("placement") !== placement) {
+      this.setAttribute("placement", placement);
+    }
+  }
+
   private setOpen(open: boolean) {
     const previousOpen = this.open;
+    const isControlled = this.hasAttribute("open");
 
     this.internalOpen = open;
 
-    if (this.hasAttribute("open")) {
-      this.setBooleanAttribute("open", open);
+    if (isControlled) {
+      syncBooleanAttribute(this, "open", open);
+    } else {
+      this.render();
     }
-
-    this.render();
 
     if (previousOpen !== open) {
       this.dispatchEvent(
@@ -168,18 +181,9 @@ export class DsPopconfirm extends HTMLElement {
     }
   }
 
-  private setBooleanAttribute(name: string, value: boolean) {
-    if (value) {
-      this.setAttribute(name, "true");
-      return;
-    }
-
-    this.setAttribute(name, "false");
-  }
-
   private syncDocumentPointerListener() {
     if (this.open && !this.isDocumentPointerListenerAttached) {
-      document.addEventListener("pointerdown", this.handleDocumentPointerDown);
+      this.ownerDocument.addEventListener("pointerdown", this.handleDocumentPointerDown);
       this.isDocumentPointerListenerAttached = true;
       return;
     }
@@ -194,7 +198,7 @@ export class DsPopconfirm extends HTMLElement {
       return;
     }
 
-    document.removeEventListener("pointerdown", this.handleDocumentPointerDown);
+    this.ownerDocument.removeEventListener("pointerdown", this.handleDocumentPointerDown);
     this.isDocumentPointerListenerAttached = false;
   }
 }

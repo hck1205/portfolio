@@ -1,8 +1,10 @@
 .ds-popconfirm-story-frame {
+  align-items: center;
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-ds-5, 20px);
   justify-content: center;
+  min-height: 320px;
   min-width: min(640px, calc(100vw - 48px));
   padding: var(--spacing-ds-10, 40px);
 }

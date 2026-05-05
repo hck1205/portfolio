@@ -2,12 +2,8 @@ import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
 import "./Popconfirm.stories.css";
 import { defineDsPopconfirm, type PopconfirmPlacement } from ".";
-
-type PopconfirmStoryArgs = {
-  description: string;
-  placement: PopconfirmPlacement;
-  title: string;
-};
+import { createDocsDescription, createFrame, createPopconfirm } from "./stories/Popconfirm.storyDom";
+import type { PopconfirmStoryArgs } from "./stories/Popconfirm.storyTypes";
 
 const storyDescriptions = {
   customSemanticDomStyling: "`part`로 팝업, 제목, 액션 버튼의 의미 DOM 스타일을 조정합니다.",
@@ -21,40 +17,6 @@ const defaultArgs = {
   placement: "top",
   title: "이 항목을 삭제할까요?"
 } satisfies PopconfirmStoryArgs;
-
-function createDocsDescription(story: string) {
-  return { docs: { description: { story } } };
-}
-
-function createButton(label: string, danger = false) {
-  const button = document.createElement("button");
-
-  button.className = `ds-popconfirm-story-button${danger ? " ds-popconfirm-story-danger" : ""}`;
-  button.type = "button";
-  button.textContent = label;
-
-  return button;
-}
-
-function createPopconfirm(args: PopconfirmStoryArgs, label = "삭제", danger = true) {
-  const popconfirm = document.createElement("ds-popconfirm");
-
-  popconfirm.setAttribute("title", args.title);
-  popconfirm.setAttribute("description", args.description);
-  popconfirm.setAttribute("placement", args.placement);
-  popconfirm.append(createButton(label, danger));
-
-  return popconfirm;
-}
-
-function createFrame(children: HTMLElement[]) {
-  const frame = document.createElement("div");
-
-  frame.className = "ds-popconfirm-story-frame";
-  frame.append(...children);
-
-  return frame;
-}
 
 function renderDefault(args: PopconfirmStoryArgs) {
   defineDsPopconfirm();
@@ -116,9 +78,20 @@ export default meta;
 
 type Story = StoryObj<PopconfirmStoryArgs>;
 
-export const Default: Story = { parameters: createDocsDescription(storyDescriptions.default) };
-export const Placement: Story = { render: renderPlacement, parameters: createDocsDescription(storyDescriptions.placement) };
-export const Text: Story = { render: renderText, parameters: createDocsDescription(storyDescriptions.text) };
+export const Default: Story = {
+  parameters: createDocsDescription(storyDescriptions.default)
+};
+
+export const Placement: Story = {
+  render: renderPlacement,
+  parameters: createDocsDescription(storyDescriptions.placement)
+};
+
+export const Text: Story = {
+  render: renderText,
+  parameters: createDocsDescription(storyDescriptions.text)
+};
+
 export const CustomSemanticDomStyling: Story = {
   render: renderCustomSemanticDomStyling,
   parameters: createDocsDescription(storyDescriptions.customSemanticDomStyling)
