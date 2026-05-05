@@ -41,6 +41,7 @@ export * from './Skeleton';
 export * from './Slider';
 export * from './Steps';
 export * from './Splitter';
+export * from './Spin';
 export * from './Tabs';
 export * from './TreeSelect';
 export * from './Switch';
