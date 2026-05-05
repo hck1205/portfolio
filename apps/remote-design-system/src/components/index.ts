@@ -28,6 +28,7 @@ export * from './Popover';
 export * from './Radio';
 export * from './Rate';
 export * from './Select';
+export * from './Segmented';
 export * from './Slider';
 export * from './Steps';
 export * from './Splitter';
