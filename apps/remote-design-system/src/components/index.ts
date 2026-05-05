@@ -26,6 +26,7 @@ export * from './Layout';
 export * from './Menu';
 export * from './Message';
 export * from './Mentions';
+export * from './Modal';
 export * from './Pagination';
 export * from './Popover';
 export * from './Radio';

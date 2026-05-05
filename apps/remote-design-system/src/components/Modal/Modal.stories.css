@@ -1,0 +1,132 @@
+.ds-modal-story-frame {
+  align-items: center;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-ds-3, 12px);
+  justify-content: center;
+}
+
+.ds-modal-story-button,
+.ds-modal-story-footer-button,
+.ds-modal-story-custom-primary,
+.ds-modal-story-custom-secondary {
+  align-items: center;
+  border: 1px solid var(--color-ds-border);
+  border-radius: var(--radius-ds-sm);
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-weight: var(--font-weight-ds-strong);
+  height: 34px;
+  padding: 0 var(--spacing-ds-4, 16px);
+}
+
+.ds-modal-story-button,
+.ds-modal-story-custom-primary {
+  background: var(--color-ds-primary);
+  border-color: var(--color-ds-primary);
+  color: var(--color-ds-surface);
+}
+
+.ds-modal-story-footer-button,
+.ds-modal-story-custom-secondary {
+  background: var(--color-ds-surface);
+  color: var(--color-ds-text);
+}
+
+.ds-modal-story-content {
+  color: var(--color-ds-muted);
+  display: grid;
+  gap: var(--spacing-ds-2, 8px);
+}
+
+.ds-modal-story-content strong {
+  color: var(--color-ds-text);
+}
+
+.ds-modal-story-custom::part(dialog) {
+  border: 1px solid color-mix(in srgb, var(--color-ds-primary) 28%, var(--color-ds-border));
+  border-radius: var(--radius-ds-md);
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.24);
+  overflow: hidden;
+}
+
+.ds-modal-story-custom::part(mask) {
+  backdrop-filter: blur(2px);
+  background: rgba(15, 23, 42, 0.38);
+}
+
+.ds-modal-story-custom::part(header) {
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--color-ds-primary) 10%, transparent), transparent 68%),
+    var(--color-ds-surface);
+}
+
+.ds-modal-story-custom::part(title) {
+  color: var(--color-ds-primary);
+  font-size: var(--text-ds-5);
+}
+
+.ds-modal-story-custom::part(body) {
+  background: color-mix(in srgb, var(--color-ds-primary) 3%, var(--color-ds-surface));
+}
+
+.ds-modal-story-custom::part(footer) {
+  background: var(--color-ds-surface);
+}
+
+.ds-modal-story-custom-content {
+  display: grid;
+  gap: var(--spacing-ds-4, 16px);
+}
+
+.ds-modal-story-custom-kicker {
+  align-items: center;
+  background: color-mix(in srgb, var(--color-ds-primary) 9%, var(--color-ds-surface));
+  border: 1px solid color-mix(in srgb, var(--color-ds-primary) 18%, var(--color-ds-border));
+  border-radius: var(--radius-ds-sm);
+  color: var(--color-ds-primary);
+  display: inline-flex;
+  font-size: var(--text-ds-1);
+  font-weight: var(--font-weight-ds-strong);
+  height: 26px;
+  justify-self: start;
+  padding: 0 var(--spacing-ds-3, 12px);
+}
+
+.ds-modal-story-custom-copy {
+  color: var(--color-ds-text);
+  font-size: var(--text-ds-3);
+  line-height: var(--leading-ds-readable);
+  margin: 0;
+}
+
+.ds-modal-story-custom-list {
+  border: 1px solid var(--color-ds-border);
+  border-radius: var(--radius-ds-md);
+  display: grid;
+  margin: 0;
+  overflow: hidden;
+}
+
+.ds-modal-story-custom-list div {
+  display: grid;
+  gap: var(--spacing-ds-1, 4px);
+  padding: var(--spacing-ds-3, 12px) var(--spacing-ds-4, 16px);
+}
+
+.ds-modal-story-custom-list div + div {
+  border-top: 1px solid var(--color-ds-border);
+}
+
+.ds-modal-story-custom-list dt {
+  color: var(--color-ds-muted);
+  font-size: var(--text-ds-1);
+  font-weight: var(--font-weight-ds-strong);
+  margin: 0;
+}
+
+.ds-modal-story-custom-list dd {
+  color: var(--color-ds-text);
+  margin: 0;
+}
