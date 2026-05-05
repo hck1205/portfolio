@@ -23,6 +23,7 @@ export * from './InputNumber';
 export * from './Layout';
 export * from './Menu';
 export * from './Mentions';
+export * from './Notification';
 export * from './Pagination';
 export * from './Popover';
 export * from './Radio';
