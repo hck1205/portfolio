@@ -1,13 +1,13 @@
 .ds-alert-story-frame {
   display: grid;
   gap: var(--spacing-ds-4, 16px);
-  max-width: 560px;
-  min-width: min(560px, calc(100vw - 48px));
+  max-width: 440px;
+  min-width: min(440px, calc(100vw - 48px));
 }
 
 .ds-alert-story-frame--compact {
-  max-width: 480px;
-  min-width: min(480px, calc(100vw - 48px));
+  max-width: 360px;
+  min-width: min(360px, calc(100vw - 48px));
 }
 
 .ds-alert-story-row {
