@@ -1,0 +1,32 @@
+.ds-popconfirm-story-frame {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-ds-5, 20px);
+  justify-content: center;
+  min-width: min(640px, calc(100vw - 48px));
+  padding: var(--spacing-ds-10, 40px);
+}
+
+.ds-popconfirm-story-button {
+  border: 1px solid var(--color-ds-border);
+  border-radius: var(--radius-ds-sm);
+  cursor: pointer;
+  font: inherit;
+  font-weight: var(--font-weight-ds-strong);
+  height: 34px;
+  padding: 0 var(--spacing-ds-4, 16px);
+}
+
+.ds-popconfirm-story-danger {
+  background: var(--color-ds-danger);
+  border-color: var(--color-ds-danger);
+  color: var(--color-ds-surface);
+}
+
+.ds-popconfirm-story-custom::part(popup) {
+  border-color: var(--color-ds-primary);
+}
+
+.ds-popconfirm-story-custom::part(title) {
+  color: var(--color-ds-primary);
+}

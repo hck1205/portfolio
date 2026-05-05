@@ -27,6 +27,7 @@ import {
   defineDsMenu,
   defineDsMentions,
   defineDsPagination,
+  defineDsPopconfirm,
   defineDsPopover,
   defineDsRadio,
   defineDsRate,
@@ -75,6 +76,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsMenu(registry);
   defineDsMentions(registry);
   defineDsPagination(registry);
+  defineDsPopconfirm(registry);
   defineDsPopover(registry);
   defineDsRadio(registry);
   defineDsRate(registry);

@@ -24,6 +24,7 @@ export * from './Layout';
 export * from './Menu';
 export * from './Mentions';
 export * from './Pagination';
+export * from './Popconfirm';
 export * from './Popover';
 export * from './Radio';
 export * from './Rate';
