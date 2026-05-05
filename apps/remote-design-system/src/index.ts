@@ -34,6 +34,7 @@ import {
   defineDsPagination,
   defineDsPopconfirm,
   defineDsPopover,
+  defineDsProgress,
   defineDsRadio,
   defineDsRate,
   defineDsSelect,
@@ -88,6 +89,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsPagination(registry);
   defineDsPopconfirm(registry);
   defineDsPopover(registry);
+  defineDsProgress(registry);
   defineDsRadio(registry);
   defineDsRate(registry);
   defineDsSelect(registry);

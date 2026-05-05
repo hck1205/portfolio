@@ -1,0 +1,77 @@
+.ds-progress-story-frame {
+  display: grid;
+  gap: var(--spacing-ds-5, 20px);
+  min-width: min(520px, calc(100vw - 48px));
+}
+
+.ds-progress-story-row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-ds-5, 20px);
+}
+
+.ds-progress-story-controls {
+  gap: var(--spacing-ds-2, 8px);
+  justify-content: center;
+}
+
+.ds-progress-story-gradient::part(root) {
+  --ds-progress-track: rgba(17, 19, 22, 0.08);
+}
+
+.ds-progress-story-gradient::part(track) {
+  box-shadow: inset 0 0 0 1px rgba(17, 19, 22, 0.06);
+}
+
+.ds-progress-story-gradient::part(bar) {
+  background: var(--ds-progress-story-gradient);
+}
+
+.ds-progress-story-gradient--cool {
+  --ds-progress-story-gradient: linear-gradient(90deg, #2563eb 0%, #06b6d4 48%, #10b981 100%);
+}
+
+.ds-progress-story-gradient--warm {
+  --ds-progress-story-gradient: linear-gradient(90deg, #7c3aed 0%, #db2777 52%, #f97316 100%);
+}
+
+.ds-progress-story-custom::part(root) {
+  --ds-progress-color: #0f766e;
+  --ds-progress-track: rgba(15, 118, 110, 0.14);
+  gap: var(--spacing-ds-3, 12px);
+}
+
+.ds-progress-story-custom::part(track) {
+  background: linear-gradient(90deg, rgba(15, 118, 110, 0.16), rgba(59, 130, 246, 0.12));
+  box-shadow: inset 0 0 0 1px rgba(15, 118, 110, 0.14);
+}
+
+.ds-progress-story-custom::part(bar) {
+  background: linear-gradient(90deg, #0f766e, #2563eb);
+}
+
+.ds-progress-story-custom::part(circle) {
+  filter: drop-shadow(0 10px 18px rgba(15, 118, 110, 0.18));
+}
+
+.ds-progress-story-custom::part(circle-track) {
+  stroke: rgba(15, 118, 110, 0.14);
+}
+
+.ds-progress-story-custom::part(circle-bar) {
+  stroke: #0f766e;
+  stroke-width: 10;
+}
+
+.ds-progress-story-custom::part(step) {
+  border-radius: 999px;
+  height: 10px;
+  width: 18px;
+}
+
+.ds-progress-story-custom::part(info) {
+  color: #0f766e;
+  font-weight: var(--font-weight-ds-strong);
+  min-width: max-content;
+}
