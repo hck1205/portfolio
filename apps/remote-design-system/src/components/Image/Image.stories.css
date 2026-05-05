@@ -25,6 +25,26 @@
   padding: var(--spacing-ds-4, 16px);
 }
 
+ds-image.ds-image-story-semantic::part(figure) {
+  border: 2px solid var(--color-ds-primary);
+  border-radius: var(--radius-ds-4, 16px);
+  box-shadow: var(--shadow-ds-3, 0 12px 32px rgba(0, 0, 0, 0.16));
+}
+
+ds-image.ds-image-story-semantic::part(image) {
+  object-fit: cover;
+}
+
+ds-image.ds-image-story-semantic::part(mask) {
+  background: rgba(22, 119, 255, 0.62);
+  font-weight: 600;
+}
+
+ds-image.ds-image-story-semantic::part(toolbar) {
+  background: rgba(22, 22, 22, 0.78);
+  border-radius: var(--radius-ds-3, 12px);
+}
+
 @media (max-width: 720px) {
   .ds-image-story-grid {
     grid-template-columns: 1fr;

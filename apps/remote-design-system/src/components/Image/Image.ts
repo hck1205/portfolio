@@ -4,14 +4,30 @@ import {
   IMAGE_PREVIEW_OPEN_CHANGE_EVENT,
   IMAGE_TRANSFORM_EVENT
 } from "./constants/Image.constants";
-import { getDimensionValue, normalizeBooleanAttribute, syncNullableAttribute } from "./dom/Image.dom";
+import {
+  getDimensionValue,
+  normalizeBooleanAttribute,
+  syncImageElementSource,
+  syncNullableAttribute,
+  syncPreviewPortal
+} from "./dom/Image.dom";
 import { applyImageStyles, createImageElements, type ImageElements } from "./Image.render";
+import {
+  getDisplayImageSource,
+  getNextTransformState,
+  getPreviewImageSource,
+  shouldDisablePreview,
+  shouldShowFallbackElement,
+  shouldShowPlaceholder
+} from "./logic/Image.logic";
 import type { ImagePreviewOpenChangeDetail, ImageTransformAction, ImageTransformDetail } from "./types/Image.types";
 
 export class DsImage extends HTMLElement {
   static observedAttributes = IMAGE_OBSERVED_ATTRIBUTES;
 
   private elements?: ImageElements;
+  private fallbackAttempted = false;
+  private fallbackFailed = false;
   private hasError = false;
   private isLoaded = false;
   private previewOpen = false;
@@ -24,8 +40,23 @@ export class DsImage extends HTMLElement {
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
     if (name === "src" && oldValue !== newValue) {
+      this.fallbackAttempted = false;
+      this.fallbackFailed = false;
       this.hasError = false;
       this.isLoaded = false;
+    }
+
+    if (name === "fallback" && oldValue !== newValue) {
+      this.fallbackFailed = false;
+
+      if (this.hasError && newValue && !this.fallbackAttempted) {
+        this.fallbackAttempted = true;
+        this.isLoaded = false;
+      }
+
+      if (!newValue) {
+        this.fallbackAttempted = false;
+      }
     }
 
     this.render();
@@ -71,6 +102,14 @@ export class DsImage extends HTMLElement {
     this.setAttribute("placeholder", String(value));
   }
 
+  get placeholderSrc() {
+    return this.getAttribute("placeholder-src") ?? "";
+  }
+
+  set placeholderSrc(value: string) {
+    syncNullableAttribute(this, "placeholder-src", value);
+  }
+
   get preview() {
     return normalizeBooleanAttribute(this, "preview", true);
   }
@@ -108,23 +147,29 @@ export class DsImage extends HTMLElement {
   }
 
   openPreview() {
-    if (this.preview && !this.hasError) {
+    if (this.preview && !this.isPreviewDisabled()) {
       this.setPreviewOpen(true);
     }
   }
 
   private handleImageLoad = () => {
     this.isLoaded = true;
+    this.fallbackFailed = false;
     this.hasError = false;
     this.render();
   };
 
   private handleImageError = (event: Event) => {
-    const imageElement = this.elements?.imageElement;
-
-    if (this.fallback && imageElement && imageElement.src !== this.fallback) {
-      imageElement.src = this.fallback;
+    if (this.fallback && !this.fallbackAttempted) {
+      this.fallbackAttempted = true;
+      this.fallbackFailed = false;
+      this.isLoaded = false;
+      this.render();
       return;
+    }
+
+    if (this.fallbackAttempted && this.fallback) {
+      this.fallbackFailed = true;
     }
 
     this.isLoaded = true;
@@ -141,26 +186,10 @@ export class DsImage extends HTMLElement {
   };
 
   private handleTransform = (action: ImageTransformAction) => {
-    if (action === "zoomIn") {
-      this.scale = Math.min(4, this.scale + 0.5);
-    }
+    const nextTransform = getNextTransformState(action, { rotate: this.rotate, scale: this.scale });
 
-    if (action === "zoomOut") {
-      this.scale = Math.max(1, this.scale - 0.5);
-    }
-
-    if (action === "rotateLeft") {
-      this.rotate -= 90;
-    }
-
-    if (action === "rotateRight") {
-      this.rotate += 90;
-    }
-
-    if (action === "reset") {
-      this.scale = 1;
-      this.rotate = 0;
-    }
+    this.rotate = nextTransform.rotate;
+    this.scale = nextTransform.scale;
 
     this.syncPreviewTransform();
     this.dispatchEvent(
@@ -190,22 +219,58 @@ export class DsImage extends HTMLElement {
 
     const width = getDimensionValue(this.width);
     const height = getDimensionValue(this.height);
-    const imageSource = this.hasError && this.fallback ? this.fallback : this.src;
+    const imageSource = getDisplayImageSource({
+      fallback: this.fallback,
+      fallbackAttempted: this.fallbackAttempted,
+      src: this.src
+    });
+    const previewSource = getPreviewImageSource({ imageSource, previewSrc: this.getAttribute("preview-src") ?? "" });
+    const placeholderVisible = shouldShowPlaceholder({
+      isLoaded: this.isLoaded,
+      placeholder: this.placeholder,
+      placeholderSrc: this.placeholderSrc
+    });
 
     this.style.setProperty("--ds-image-width", width || "auto");
     this.style.setProperty("--ds-image-height", height || "auto");
     this.elements.imageElement.alt = this.alt;
     this.elements.imageElement.decoding = "async";
-    this.elements.imageElement.src = imageSource;
-    this.elements.imageElement.dataset.loading = String(this.placeholder && !this.isLoaded);
-    this.elements.placeholderElement.dataset.visible = String(this.placeholder && !this.isLoaded);
-    this.elements.fallbackElement.dataset.visible = String(this.hasError && !this.fallback);
-    this.elements.maskButton.hidden = !this.preview || !this.mask || this.hasError;
+    syncImageElementSource(this.elements.imageElement, imageSource);
+    this.elements.imageElement.dataset.loading = String(placeholderVisible);
+    this.elements.placeholderElement.dataset.visible = String(placeholderVisible);
+    this.elements.placeholderElement.dataset.kind = this.placeholderSrc ? "image" : "shimmer";
+    this.elements.placeholderImageElement.alt = "";
+    this.elements.placeholderImageElement.decoding = "async";
+    syncImageElementSource(this.elements.placeholderImageElement, this.placeholderSrc);
+    this.elements.fallbackElement.dataset.visible = String(this.isFallbackElementVisible());
+    this.elements.maskButton.hidden = !this.preview || !this.mask || this.isPreviewDisabled();
     this.elements.previewImageElement.alt = this.alt;
-    this.elements.previewImageElement.src = this.previewSrc;
+    syncImageElementSource(this.elements.previewImageElement, previewSource);
+    syncPreviewPortal({
+      open: this.previewOpen,
+      previewElement: this.elements.previewElement,
+      rootElement: this.elements.rootElement
+    });
     this.elements.previewElement.dataset.open = String(this.previewOpen);
     this.elements.previewElement.tabIndex = this.previewOpen ? 0 : -1;
     this.syncPreviewTransform();
+  }
+
+  private isFallbackElementVisible() {
+    return shouldShowFallbackElement({
+      fallback: this.fallback,
+      fallbackFailed: this.fallbackFailed,
+      hasError: this.hasError
+    });
+  }
+
+  private isPreviewDisabled() {
+    return shouldDisablePreview({
+      fallback: this.fallback,
+      fallbackAttempted: this.fallbackAttempted,
+      fallbackFailed: this.fallbackFailed,
+      hasError: this.hasError
+    });
   }
 
   private initializeStructure() {

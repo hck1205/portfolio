@@ -1,6 +1,6 @@
-import { Eye, RotateCcw, RotateCw, X, ZoomIn, ZoomOut, createElement as createLucideElement } from "lucide";
+import { Eye, ImageOff, RotateCcw, RotateCw, ZoomIn, ZoomOut, createElement as createLucideElement } from "lucide";
 
-import { IMAGE_STYLES } from "./Image.styles";
+import { IMAGE_PREVIEW_GLOBAL_STYLES, IMAGE_STYLES } from "./Image.styles";
 import type { ImageTransformAction } from "./types/Image.types";
 
 export type ImageElements = {
@@ -9,6 +9,8 @@ export type ImageElements = {
   imageElement: HTMLImageElement;
   maskButton: HTMLButtonElement;
   placeholderElement: HTMLDivElement;
+  placeholderImageElement: HTMLImageElement;
+  previewContentElement: HTMLDivElement;
   previewElement: HTMLDivElement;
   previewImageElement: HTMLImageElement;
   rootElement: HTMLDivElement;
@@ -22,6 +24,7 @@ type CreateImageElementsOptions = {
   onTransform: (action: ImageTransformAction) => void;
 };
 
+const IMAGE_GLOBAL_STYLE_ID = "ds-image-preview-styles";
 let imageStyleSheet: CSSStyleSheet | undefined;
 
 function canAdoptStyleSheets() {
@@ -38,6 +41,8 @@ function getImageStyleSheet() {
 }
 
 export function applyImageStyles(shadowRoot: ShadowRoot) {
+  applyGlobalPreviewStyles();
+
   if (canAdoptStyleSheets()) {
     const styleSheet = getImageStyleSheet();
 
@@ -58,6 +63,18 @@ export function applyImageStyles(shadowRoot: ShadowRoot) {
   shadowRoot.prepend(styleElement);
 }
 
+function applyGlobalPreviewStyles() {
+  if (typeof document === "undefined" || document.getElementById(IMAGE_GLOBAL_STYLE_ID)) {
+    return;
+  }
+
+  const styleElement = document.createElement("style");
+
+  styleElement.id = IMAGE_GLOBAL_STYLE_ID;
+  styleElement.textContent = IMAGE_PREVIEW_GLOBAL_STYLES;
+  document.head.append(styleElement);
+}
+
 export function createImageElements({
   onClosePreview,
   onImageError,
@@ -69,28 +86,46 @@ export function createImageElements({
   const figureElement = document.createElement("figure");
   const imageElement = document.createElement("img");
   const placeholderElement = document.createElement("div");
+  const placeholderImageElement = document.createElement("img");
   const fallbackElement = document.createElement("div");
+  const fallbackIconElement = createIcon(ImageOff, 24);
+  const fallbackTextElement = document.createElement("span");
   const maskButton = document.createElement("button");
   const previewElement = document.createElement("div");
+  const previewContentElement = document.createElement("div");
   const previewImageElement = document.createElement("img");
-  const closeButton = createIconButton("Close preview", "close", X);
   const toolbarElement = document.createElement("div");
 
   rootElement.className = "ds-image";
   figureElement.className = "ds-image__figure";
   imageElement.className = "ds-image__img";
   placeholderElement.className = "ds-image__placeholder";
+  placeholderImageElement.className = "ds-image__placeholder-img";
   fallbackElement.className = "ds-image__fallback";
-  fallbackElement.textContent = "Image failed to load";
+  fallbackIconElement.classList.add("ds-image__fallback-icon");
+  fallbackIconElement.setAttribute("part", "fallback-icon");
+  fallbackTextElement.className = "ds-image__fallback-text";
+  fallbackTextElement.textContent = "Image failed to load";
   maskButton.className = "ds-image__mask";
   maskButton.type = "button";
   maskButton.append(createIcon(Eye), document.createTextNode("Preview"));
   previewElement.className = "ds-image__preview";
   previewElement.setAttribute("role", "dialog");
   previewElement.setAttribute("aria-modal", "true");
+  previewContentElement.className = "ds-image__preview-content";
   previewImageElement.className = "ds-image__preview-img";
-  closeButton.classList.add("ds-image__close");
   toolbarElement.className = "ds-image__toolbar";
+  rootElement.setAttribute("part", "root");
+  figureElement.setAttribute("part", "figure");
+  imageElement.setAttribute("part", "image");
+  placeholderElement.setAttribute("part", "placeholder");
+  placeholderImageElement.setAttribute("part", "placeholder-image");
+  fallbackElement.setAttribute("part", "fallback");
+  maskButton.setAttribute("part", "mask");
+  previewElement.setAttribute("part", "preview");
+  previewContentElement.setAttribute("part", "preview-content");
+  previewImageElement.setAttribute("part", "preview-image");
+  toolbarElement.setAttribute("part", "toolbar");
 
   for (const [label, action, icon] of [
     ["Zoom out", "zoomOut", ZoomOut],
@@ -103,10 +138,13 @@ export function createImageElements({
 
   imageElement.addEventListener("load", onImageLoad);
   imageElement.addEventListener("error", onImageError);
+  imageElement.addEventListener("click", onOpenPreview);
   maskButton.addEventListener("click", onOpenPreview);
-  closeButton.addEventListener("click", onClosePreview);
-  previewElement.addEventListener("click", (event) => {
-    if (event.target === previewElement) {
+  previewElement.addEventListener("pointerdown", (event) => {
+    const target = event.target as Element | null;
+    const clickedPreviewContent = Boolean(target?.closest(".ds-image__preview-content, .ds-image__toolbar"));
+
+    if (!clickedPreviewContent) {
       onClosePreview();
     }
   });
@@ -123,8 +161,11 @@ export function createImageElements({
     }
   });
 
+  placeholderElement.append(placeholderImageElement);
+  fallbackElement.append(fallbackIconElement, fallbackTextElement);
   figureElement.append(imageElement, placeholderElement, fallbackElement, maskButton);
-  previewElement.append(closeButton, previewImageElement, toolbarElement);
+  previewContentElement.append(previewImageElement);
+  previewElement.append(previewContentElement, toolbarElement);
   rootElement.append(figureElement, previewElement);
 
   return {
@@ -133,31 +174,38 @@ export function createImageElements({
     imageElement,
     maskButton,
     placeholderElement,
+    placeholderImageElement,
+    previewContentElement,
     previewElement,
     previewImageElement,
     rootElement
   };
 }
 
-function createIconButton(label: string, action: string, icon: Parameters<typeof createLucideElement>[0]) {
+function createIconButton(label: string, action: ImageTransformAction | undefined, icon: Parameters<typeof createLucideElement>[0]) {
   const button = document.createElement("button");
 
   button.className = "ds-image__tool";
   button.type = "button";
-  button.dataset.action = action;
+  button.setAttribute("part", "tool");
   button.setAttribute("aria-label", label);
   button.title = label;
+
+  if (action) {
+    button.dataset.action = action;
+  }
+
   button.append(createIcon(icon));
 
   return button;
 }
 
-function createIcon(icon: Parameters<typeof createLucideElement>[0]) {
+function createIcon(icon: Parameters<typeof createLucideElement>[0], size = 18) {
   const iconElement = createLucideElement(icon);
 
   iconElement.setAttribute("aria-hidden", "true");
-  iconElement.setAttribute("width", "18");
-  iconElement.setAttribute("height", "18");
+  iconElement.setAttribute("width", String(size));
+  iconElement.setAttribute("height", String(size));
 
   return iconElement;
 }

@@ -24,3 +24,42 @@ export function getDimensionValue(value: string | null) {
 
   return /^\d+(\.\d+)?$/.test(value) ? `${value}px` : value;
 }
+
+export function syncImageElementSource(imageElement: HTMLImageElement, source: string) {
+  if (!source) {
+    imageElement.removeAttribute("src");
+    return;
+  }
+
+  if (imageElement.getAttribute("src") === source) {
+    return;
+  }
+
+  imageElement.src = source;
+}
+
+export function syncPreviewPortal({
+  open,
+  previewElement,
+  rootElement
+}: {
+  open: boolean;
+  previewElement: HTMLDivElement;
+  rootElement: HTMLDivElement;
+}) {
+  if (typeof document === "undefined") {
+    return;
+  }
+
+  if (open) {
+    if (previewElement.parentElement !== document.body) {
+      document.body.append(previewElement);
+    }
+
+    return;
+  }
+
+  if (previewElement.parentElement !== rootElement) {
+    rootElement.append(previewElement);
+  }
+}

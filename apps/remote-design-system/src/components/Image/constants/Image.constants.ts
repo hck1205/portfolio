@@ -6,6 +6,7 @@ export const IMAGE_OBSERVED_ATTRIBUTES = [
   "height",
   "mask",
   "placeholder",
+  "placeholder-src",
   "preview",
   "preview-src",
   "src",

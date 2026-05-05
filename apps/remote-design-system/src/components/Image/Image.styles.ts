@@ -60,6 +60,24 @@ export const IMAGE_STYLES = `
     display: flex;
   }
 
+  .ds-image__placeholder[data-kind="image"] {
+    animation: none;
+    background: var(--color-neutral-alpha-n2);
+  }
+
+  .ds-image__placeholder-img {
+    display: none;
+    filter: blur(10px);
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.04);
+    width: 100%;
+  }
+
+  .ds-image__placeholder[data-kind="image"] .ds-image__placeholder-img {
+    display: block;
+  }
+
   .ds-image__mask {
     align-items: center;
     background: rgba(0, 0, 0, 0.46);
@@ -96,8 +114,11 @@ export const IMAGE_STYLES = `
     background: var(--color-neutral-alpha-n2);
     color: var(--color-ds-text-secondary);
     display: none;
+    flex-direction: column;
+    gap: var(--spacing-ds-2);
     inset: 0;
     justify-content: center;
+    line-height: var(--leading-ds-3);
     padding: var(--spacing-ds-4);
     position: absolute;
     text-align: center;
@@ -107,14 +128,20 @@ export const IMAGE_STYLES = `
     display: flex;
   }
 
+  .ds-image__fallback-icon {
+    color: var(--color-ds-text-tertiary, currentColor);
+  }
+
   .ds-image__preview {
     align-items: center;
     background: rgba(0, 0, 0, 0.86);
     display: none;
+    height: 100vh;
     inset: 0;
     justify-content: center;
     padding: 72px var(--spacing-ds-6);
     position: fixed;
+    width: 100vw;
     z-index: var(--z-index-ds-modal, 1080);
   }
 
@@ -122,9 +149,17 @@ export const IMAGE_STYLES = `
     display: flex;
   }
 
-  .ds-image__preview-img {
+  .ds-image__preview-content {
+    line-height: 0;
     max-height: calc(100vh - 160px);
     max-width: calc(100vw - 64px);
+    position: relative;
+  }
+
+  .ds-image__preview-img {
+    display: block;
+    max-height: inherit;
+    max-width: inherit;
     object-fit: contain;
     transform: scale(var(--ds-image-preview-scale, 1)) rotate(var(--ds-image-preview-rotate, 0deg));
     transition: transform 160ms ease-in-out;
@@ -145,14 +180,7 @@ export const IMAGE_STYLES = `
     transform: translateX(-50%);
   }
 
-  .ds-image__close {
-    position: fixed;
-    right: var(--spacing-ds-5);
-    top: var(--spacing-ds-5);
-  }
-
-  .ds-image__tool,
-  .ds-image__close {
+  .ds-image__tool {
     align-items: center;
     appearance: none;
     background: transparent;
@@ -171,9 +199,7 @@ export const IMAGE_STYLES = `
   }
 
   .ds-image__tool:hover,
-  .ds-image__close:hover,
-  .ds-image__tool:focus-visible,
-  .ds-image__close:focus-visible {
+  .ds-image__tool:focus-visible {
     background: rgba(255, 255, 255, 0.14);
     color: #fff;
     outline: 0;
@@ -187,5 +213,80 @@ export const IMAGE_STYLES = `
     to {
       background-position: -180% 0;
     }
+  }
+`;
+
+export const IMAGE_PREVIEW_GLOBAL_STYLES = `
+  .ds-image__preview {
+    align-items: center;
+    background: rgba(0, 0, 0, 0.86);
+    display: none;
+    height: 100vh;
+    inset: 0;
+    justify-content: center;
+    padding: 72px var(--spacing-ds-6);
+    position: fixed;
+    width: 100vw;
+    z-index: var(--z-index-ds-modal, 1080);
+  }
+
+  .ds-image__preview[data-open="true"] {
+    display: flex;
+  }
+
+  .ds-image__preview-content {
+    line-height: 0;
+    max-height: calc(100vh - 160px);
+    max-width: calc(100vw - 64px);
+    position: relative;
+  }
+
+  .ds-image__preview-img {
+    display: block;
+    max-height: inherit;
+    max-width: inherit;
+    object-fit: contain;
+    transform: scale(var(--ds-image-preview-scale, 1)) rotate(var(--ds-image-preview-rotate, 0deg));
+    transition: transform 160ms ease-in-out;
+    user-select: none;
+  }
+
+  .ds-image__toolbar {
+    align-items: center;
+    background: rgba(0, 0, 0, 0.42);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 999px;
+    bottom: var(--spacing-ds-6);
+    display: inline-flex;
+    gap: var(--spacing-ds-1);
+    left: 50%;
+    padding: var(--spacing-ds-1);
+    position: fixed;
+    transform: translateX(-50%);
+  }
+
+  .ds-image__tool {
+    align-items: center;
+    appearance: none;
+    background: transparent;
+    border: 0;
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.72);
+    cursor: pointer;
+    display: inline-flex;
+    height: 36px;
+    justify-content: center;
+    padding: 0;
+    transition:
+      background 140ms ease-in-out,
+      color 140ms ease-in-out;
+    width: 36px;
+  }
+
+  .ds-image__tool:hover,
+  .ds-image__tool:focus-visible {
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+    outline: 0;
   }
 `;
