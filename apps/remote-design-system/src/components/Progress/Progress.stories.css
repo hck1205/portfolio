@@ -1,0 +1,21 @@
+.ds-progress-story-frame {
+  display: grid;
+  gap: var(--spacing-ds-5, 20px);
+  min-width: min(520px, calc(100vw - 48px));
+}
+
+.ds-progress-story-row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-ds-5, 20px);
+}
+
+.ds-progress-story-custom::part(bar) {
+  background: var(--color-ds-danger);
+}
+
+.ds-progress-story-custom::part(info) {
+  color: var(--color-ds-danger);
+  font-weight: var(--font-weight-ds-strong);
+}
