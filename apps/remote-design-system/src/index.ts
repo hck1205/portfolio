@@ -1,6 +1,7 @@
 import './styles.css';
 
 import {
+  defineDsAlert,
   defineDsAnchor,
   defineDsAutoComplete,
   defineDsAvatar,
@@ -48,6 +49,7 @@ export * from './components';
 export * from './foundation';
 
 export function defineDesignSystemElements(registry?: CustomElementRegistry) {
+  defineDsAlert(registry);
   defineDsAnchor(registry);
   defineDsAutoComplete(registry);
   defineDsAvatar(registry);
