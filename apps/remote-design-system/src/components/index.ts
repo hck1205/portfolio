@@ -29,6 +29,7 @@ export * from './Mentions';
 export * from './Modal';
 export * from './Notification';
 export * from './Pagination';
+export * from './Popconfirm';
 export * from './Popover';
 export * from './Radio';
 export * from './Rate';
