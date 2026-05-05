@@ -1,0 +1,23 @@
+.ds-card-story-frame {
+  display: grid;
+  gap: var(--spacing-ds-5, 20px);
+  min-width: 360px;
+  padding: var(--spacing-ds-5, 20px);
+  width: min(720px, 90vw);
+}
+
+.ds-card-story-row {
+  display: grid;
+  gap: var(--spacing-ds-4, 16px);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.ds-card-story-text {
+  color: var(--color-ds-muted);
+  line-height: var(--leading-ds-normal, 1.5);
+}
+
+.ds-card-story-action {
+  cursor: pointer;
+  padding: var(--spacing-ds-2, 8px);
+}
