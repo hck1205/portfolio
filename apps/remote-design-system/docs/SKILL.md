@@ -295,6 +295,7 @@ Story rules:
 - render actual custom elements, not approximations
 - map controls to public API only
 - write component and story Docs descriptions in Korean
+- write every user-facing Storybook description string in Korean, including `storyDescriptions`, `docs.description.component`, and `docs.description.story`
 - do not mention upstream reference libraries in Storybook Docs descriptions;
   describe the DS behavior and variant directly instead
 - every story from `Default` through edge-case stories must explain what is different from the other stories

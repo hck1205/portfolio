@@ -17,6 +17,7 @@ export * from './Dropdown';
 export * from './Empty';
 export * from './FloatButton';
 export * from './Form';
+export * from './Image';
 export * from './Input';
 export * from './InputNumber';
 export * from './Layout';

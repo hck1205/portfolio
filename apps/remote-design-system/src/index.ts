@@ -20,6 +20,7 @@ import {
   defineDsEmpty,
   defineDsFloatButton,
   defineDsForm,
+  defineDsImage,
   defineDsInput,
   defineDsInputNumber,
   defineDsLayout,
@@ -64,6 +65,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsTypography(registry);
   defineDsFloatButton(registry);
   defineDsForm(registry);
+  defineDsImage(registry);
   defineDsInput(registry);
   defineDsInputNumber(registry);
   defineDsCollapse(registry);
