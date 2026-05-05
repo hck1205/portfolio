@@ -202,6 +202,12 @@ export const SELECT_STYLES = `
     opacity: 0.48;
   }
 
+  .ds-select__empty {
+    color: var(--color-ds-muted);
+    padding: var(--spacing-ds-4);
+    text-align: center;
+  }
+
   :host([disabled]) .ds-select {
     opacity: 0.6;
   }

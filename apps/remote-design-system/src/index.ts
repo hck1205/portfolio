@@ -3,6 +3,8 @@ import './styles.css';
 import {
   defineDsAnchor,
   defineDsAutoComplete,
+  defineDsAvatar,
+  defineDsBadge,
   defineDsButton,
   defineDsCheckbox,
   defineDsColorPicker,
@@ -11,6 +13,7 @@ import {
   defineDsDatePicker,
   defineDsDivider,
   defineDsDropdown,
+  defineDsEmpty,
   defineDsFloatButton,
   defineDsForm,
   defineDsImage,
@@ -41,6 +44,8 @@ export * from './foundation';
 export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsAnchor(registry);
   defineDsAutoComplete(registry);
+  defineDsAvatar(registry);
+  defineDsBadge(registry);
   defineDsButton(registry);
   defineDsCheckbox(registry);
   defineDsColorPicker(registry);
@@ -48,6 +53,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsCascader(registry);
   defineDsDivider(registry);
   defineDsDropdown(registry);
+  defineDsEmpty(registry);
   defineDsTypography(registry);
   defineDsFloatButton(registry);
   defineDsForm(registry);

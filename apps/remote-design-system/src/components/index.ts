@@ -1,5 +1,7 @@
 export * from './AutoComplete';
 export * from './Anchor';
+export * from './Avatar';
+export * from './Badge';
 export * from './Button';
 export * from './Checkbox';
 export * from './ColorPicker';
@@ -8,6 +10,7 @@ export * from './Collapse';
 export * from './DatePicker';
 export * from './Divider';
 export * from './Dropdown';
+export * from './Empty';
 export * from './FloatButton';
 export * from './Form';
 export * from './Image';

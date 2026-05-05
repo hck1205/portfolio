@@ -271,8 +271,7 @@ export const CASCADER_STYLES = `
     border-inline-end: 0;
   }
 
-  .ds-cascader__option,
-  .ds-cascader__empty {
+  .ds-cascader__option {
     align-items: center;
     border-radius: var(--radius-ds-sm);
     box-sizing: border-box;
@@ -344,6 +343,8 @@ export const CASCADER_STYLES = `
   .ds-cascader__empty {
     color: var(--color-ds-muted);
     min-width: var(--ds-cascader-column-width);
+    padding: var(--spacing-ds-4);
+    text-align: center;
   }
 
   .ds-cascader__search-results {

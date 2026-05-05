@@ -66,9 +66,10 @@ export function createIconSvg(icon: IconNode) {
 export function createIconTile(icon: IconEntry) {
   const tile = createElement("article", { className: "ds-icon-tile" });
 
+  tile.title = icon.name;
   tile.append(
     createIconSvg(icon.node),
-    createElement("span", { textContent: icon.name })
+    createElement("span", { textContent: icon.label })
   );
 
   return tile;

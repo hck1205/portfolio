@@ -232,7 +232,7 @@ function syncOptions({
   if (options.length === 0) {
     const emptyElement = document.createElement("span");
 
-    emptyElement.className = "ds-select__option";
+    emptyElement.className = "ds-select__empty";
     emptyElement.textContent = emptyText;
     elements.listElement.replaceChildren(emptyElement);
     return;

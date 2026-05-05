@@ -477,6 +477,27 @@
     @apply text-ds-2 font-ds-strong text-ds-primary;
   }
 
+  .ds-icon-catalog__search {
+    @apply mt-ds-4 grid max-w-[360px] gap-ds-2;
+  }
+
+  .ds-icon-catalog__search span {
+    @apply text-ds-1 font-ds-strong text-ds-muted;
+  }
+
+  .ds-icon-catalog__search input {
+    @apply h-10 rounded-ds-sm border border-ds-border bg-ds-surface px-ds-3 text-ds-2 text-ds-text outline-none;
+  }
+
+  .ds-icon-catalog__search input:focus {
+    @apply border-ds-primary;
+    box-shadow: 0 0 0 2px var(--color-ds-primary-bg, rgba(22, 119, 255, 0.12));
+  }
+
+  .ds-icon-catalog__empty {
+    @apply m-0 rounded-ds-sm border border-ds-border bg-ds-surface p-ds-6 text-ds-2 text-ds-muted;
+  }
+
   .ds-icon-sections {
     @apply mt-ds-10 grid gap-ds-10;
   }

@@ -1,5 +1,7 @@
 import { allIconEntries, iconGroups } from "./iconCatalog.data";
 import { createElement, createIconSection } from "./iconCatalog.dom";
+import { filterIconEntries, getVisibleIconEntries, getVisibleIconGroups, groupIconEntries } from "./iconCatalog.filter";
+import { createIconCatalogHeader } from "./iconCatalog.header";
 import { mountLazyIconSections } from "./iconCatalog.lazy";
 import type { IconCatalogArgs, IconEntry } from "./iconCatalog.types";
 
@@ -13,51 +15,71 @@ import type { IconCatalogArgs, IconEntry } from "./iconCatalog.types";
  * @param args Storybook controls that select the visible icon group.
  * @returns Icon catalog root element for the Storybook canvas.
  */
-export function renderIconCatalog({ group }: IconCatalogArgs = {}) {
+export function renderIconCatalog({ group, search = "" }: IconCatalogArgs = {}) {
   const container = createElement("div", { className: "ds-icon-catalog" });
-  const header = createElement("header", { className: "ds-icon-catalog__header" });
   const sections = createElement("div", { className: "ds-icon-sections" });
-  const entriesByGroup = new Map<string, IconEntry[]>();
-  const sectionElementsByGroup = new Map<string, HTMLElement>();
-  const gridsByGroup = new Map<string, HTMLElement>();
-  const sentinelsByGroup = new Map<string, HTMLElement>();
-  const statusElement = createElement("span", { className: "ds-icon-catalog__status" });
-  const visibleGroups = group ? [group] : iconGroups;
-  const visibleIcons = group
-    ? allIconEntries.filter((icon) => icon.group === group)
-    : allIconEntries;
+  const emptyElement = createElement("p", {
+    className: "ds-icon-catalog__empty",
+    textContent: "No icons found."
+  });
+  let cleanupLazySections: (() => void) | undefined;
+  let searchFrame = 0;
+  const visibleGroups = getVisibleIconGroups(group, iconGroups);
+  const baseIcons = getVisibleIconEntries(group, allIconEntries);
+  const { header, searchInput, statusElement } = createIconCatalogHeader({
+    group,
+    iconCount: baseIcons.length,
+    search
+  });
 
-  header.append(
-    createElement("p", { textContent: "Icons" }),
-    createElement("h1", {
-      textContent: group ? `Lucide icons: ${group}` : "Lucide icons"
-    }),
-    createElement("span", {
-      textContent: `${visibleIcons.length} Lucide icons from the package icon registry`
-    }),
-    statusElement
-  );
+  const renderSections = (query: string) => {
+    cleanupLazySections?.();
+    sections.replaceChildren();
 
-  for (const iconGroup of visibleGroups) {
-    const entries = allIconEntries.filter((icon) => icon.group === iconGroup);
-    const { grid, section, sentinel } = createIconSection(iconGroup, entries.length);
+    const groupedEntries = groupIconEntries(
+      filterIconEntries(baseIcons, query),
+      visibleGroups
+    );
+    const entriesByGroup = new Map<string, IconEntry[]>();
+    const sectionElementsByGroup = new Map<string, HTMLElement>();
+    const gridsByGroup = new Map<string, HTMLElement>();
+    const sentinelsByGroup = new Map<string, HTMLElement>();
 
-    entriesByGroup.set(iconGroup, entries);
-    sectionElementsByGroup.set(iconGroup, section);
-    gridsByGroup.set(iconGroup, grid);
-    sentinelsByGroup.set(iconGroup, sentinel);
-    sections.append(section);
-  }
+    if (groupedEntries.length === 0) {
+      statusElement.textContent = `0 of ${baseIcons.length} icons matched`;
+      sections.append(emptyElement);
+      return;
+    }
+
+    for (const [iconGroup, entries] of groupedEntries) {
+      const { grid, section, sentinel } = createIconSection(iconGroup, entries.length);
+
+      entriesByGroup.set(iconGroup, entries);
+      sectionElementsByGroup.set(iconGroup, section);
+      gridsByGroup.set(iconGroup, grid);
+      sentinelsByGroup.set(iconGroup, sentinel);
+      sections.append(section);
+    }
+
+    cleanupLazySections = mountLazyIconSections(
+      container,
+      entriesByGroup,
+      sectionElementsByGroup,
+      gridsByGroup,
+      sentinelsByGroup,
+      statusElement
+    );
+  };
+
+  searchInput.addEventListener("input", () => {
+    window.cancelAnimationFrame(searchFrame);
+    searchFrame = window.requestAnimationFrame(() => {
+      renderSections(searchInput.value);
+    });
+  });
 
   container.append(header, sections);
-  mountLazyIconSections(
-    container,
-    entriesByGroup,
-    sectionElementsByGroup,
-    gridsByGroup,
-    sentinelsByGroup,
-    statusElement
-  );
+  renderSections(search);
 
   return container;
 }
