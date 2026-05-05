@@ -1,0 +1,32 @@
+.ds-spin-story-frame {
+  align-items: center;
+  display: grid;
+  gap: var(--spacing-ds-5, 20px);
+  justify-items: center;
+  min-width: min(420px, calc(100vw - 48px));
+}
+
+.ds-spin-story-row {
+  align-items: center;
+  display: flex;
+  gap: var(--spacing-ds-5, 20px);
+  justify-content: center;
+}
+
+.ds-spin-story-panel {
+  border: 1px solid var(--color-ds-border);
+  border-radius: var(--radius-ds-sm);
+  color: var(--color-ds-muted);
+  min-height: 120px;
+  padding: var(--spacing-ds-5, 20px);
+  position: relative;
+}
+
+.ds-spin-story-custom::part(indicator) {
+  border-top-color: var(--color-ds-danger);
+}
+
+.ds-spin-story-custom::part(tip) {
+  color: var(--color-ds-danger);
+  font-weight: var(--font-weight-ds-strong);
+}
