@@ -40,6 +40,7 @@ import {
   defineDsResult,
   defineDsSelect,
   defineDsSegmented,
+  defineDsSkeleton,
   defineDsSlider,
   defineDsSteps,
   defineDsSplitter,
@@ -96,6 +97,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsResult(registry);
   defineDsSelect(registry);
   defineDsSegmented(registry);
+  defineDsSkeleton(registry);
   defineDsSlider(registry);
   defineDsSteps(registry);
   defineDsSplitter(registry);

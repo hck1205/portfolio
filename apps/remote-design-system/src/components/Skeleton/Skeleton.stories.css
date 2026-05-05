@@ -1,0 +1,32 @@
+.ds-skeleton-story-frame {
+  display: grid;
+  gap: var(--spacing-ds-5, 20px);
+  min-width: min(520px, calc(100vw - 48px));
+}
+
+.ds-skeleton-story-row {
+  display: grid;
+  gap: var(--spacing-ds-5, 20px);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.ds-skeleton-story-card {
+  border: 1px solid var(--color-ds-border);
+  border-radius: var(--radius-ds-sm);
+  display: grid;
+  gap: var(--spacing-ds-3, 12px);
+  padding: var(--spacing-ds-4, 16px);
+}
+
+.ds-skeleton-story-card strong {
+  color: var(--color-ds-text);
+}
+
+.ds-skeleton-story-card span {
+  color: var(--color-ds-muted);
+}
+
+.ds-skeleton-story-custom::part(title),
+.ds-skeleton-story-custom::part(paragraph) {
+  opacity: 0.86;
+}
