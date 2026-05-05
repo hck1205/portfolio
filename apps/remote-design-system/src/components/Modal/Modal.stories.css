@@ -1,0 +1,49 @@
+.ds-modal-story-frame {
+  align-items: center;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-ds-3, 12px);
+  justify-content: center;
+}
+
+.ds-modal-story-button,
+.ds-modal-story-footer-button {
+  align-items: center;
+  border: 1px solid var(--color-ds-border);
+  border-radius: var(--radius-ds-sm);
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-weight: var(--font-weight-ds-strong);
+  height: 34px;
+  padding: 0 var(--spacing-ds-4, 16px);
+}
+
+.ds-modal-story-button {
+  background: var(--color-ds-primary);
+  border-color: var(--color-ds-primary);
+  color: var(--color-ds-surface);
+}
+
+.ds-modal-story-footer-button {
+  background: var(--color-ds-surface);
+  color: var(--color-ds-text);
+}
+
+.ds-modal-story-content {
+  color: var(--color-ds-muted);
+  display: grid;
+  gap: var(--spacing-ds-2, 8px);
+}
+
+.ds-modal-story-content strong {
+  color: var(--color-ds-text);
+}
+
+.ds-modal-story-custom::part(dialog) {
+  border-top: 4px solid var(--color-ds-primary);
+}
+
+.ds-modal-story-custom::part(title) {
+  color: var(--color-ds-primary);
+}

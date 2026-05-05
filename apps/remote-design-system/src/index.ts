@@ -26,6 +26,7 @@ import {
   defineDsLayout,
   defineDsMenu,
   defineDsMentions,
+  defineDsModal,
   defineDsPagination,
   defineDsPopover,
   defineDsRadio,
@@ -74,6 +75,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsLayout(registry);
   defineDsMenu(registry);
   defineDsMentions(registry);
+  defineDsModal(registry);
   defineDsPagination(registry);
   defineDsPopover(registry);
   defineDsRadio(registry);
