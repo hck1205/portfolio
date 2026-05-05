@@ -9,6 +9,17 @@ type ResultStoryArgs = {
   title: string;
 };
 
+type ResultStoryOverrides = Partial<ResultStoryArgs>;
+
+const RESULT_STATUS_EXAMPLES = [
+  "success",
+  "info",
+  "warning",
+  "error",
+  "404",
+  "500"
+] satisfies ResultStatus[];
+
 const storyDescriptions = {
   customSemanticDomStyling: "`part`를 사용해 결과 아이콘과 제목 스타일을 외부에서 조정합니다.",
   default: "작업이 끝난 뒤 사용자가 다음 상태를 이해할 수 있도록 결과를 명확하게 보여줍니다.",
@@ -19,7 +30,7 @@ const storyDescriptions = {
 const defaultArgs = {
   status: "success",
   subTitle: "변경 사항이 저장되었으며 언제든지 다시 수정할 수 있습니다.",
-  title: "작업이 완료되었습니다."
+  title: "작업이 완료되었습니다"
 } satisfies ResultStoryArgs;
 
 function createDocsDescription(story: string) {
@@ -36,7 +47,11 @@ function createResult(args: ResultStoryArgs) {
   return result;
 }
 
-function createFrame(children: HTMLElement[]) {
+function createResults(items: ResultStoryOverrides[]) {
+  return items.map((item) => createResult({ ...defaultArgs, ...item }));
+}
+
+function createFrame(...children: HTMLElement[]) {
   const frame = document.createElement("div");
 
   frame.className = "ds-result-story-frame";
@@ -45,45 +60,54 @@ function createFrame(children: HTMLElement[]) {
   return frame;
 }
 
+function createResultRow(items: ResultStoryOverrides[]) {
+  const row = document.createElement("div");
+
+  row.className = "ds-result-story-row";
+  row.append(...createResults(items));
+
+  return row;
+}
+
+function createExtraButton(label: string) {
+  const button = document.createElement("button");
+
+  button.className = "ds-result-story-button";
+  button.slot = "extra";
+  button.type = "button";
+  button.textContent = label;
+
+  return button;
+}
+
 function renderDefault(args: ResultStoryArgs) {
   defineDsResult();
 
-  return createFrame([createResult(args)]);
+  return createFrame(createResult(args));
 }
 
 function renderStatus() {
   defineDsResult();
 
-  const row = document.createElement("div");
-  const statuses: ResultStatus[] = ["success", "info", "warning", "error", "404", "500"];
-
-  row.className = "ds-result-story-row";
-  row.append(
-    ...statuses.map((status) =>
-      createResult({
+  return createFrame(
+    createResultRow(
+      RESULT_STATUS_EXAMPLES.map((status) => ({
         status,
         subTitle: "상태에 맞는 결과 메시지를 표시합니다.",
         title: `${status} 결과`
-      })
+      }))
     )
   );
-
-  return createFrame([row]);
 }
 
 function renderExtra() {
   defineDsResult();
 
   const result = createResult(defaultArgs);
-  const button = document.createElement("button");
 
-  button.className = "ds-result-story-button";
-  button.slot = "extra";
-  button.type = "button";
-  button.textContent = "대시보드로 이동";
-  result.append(button);
+  result.append(createExtraButton("대시보드로 이동"));
 
-  return createFrame([result]);
+  return createFrame(result);
 }
 
 function renderCustomSemanticDomStyling() {
@@ -93,7 +117,7 @@ function renderCustomSemanticDomStyling() {
 
   result.className = "ds-result-story-custom";
 
-  return createFrame([result]);
+  return createFrame(result);
 }
 
 const meta: Meta<ResultStoryArgs> = {

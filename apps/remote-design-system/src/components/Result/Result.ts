@@ -1,26 +1,15 @@
-import {
-  BadgeAlert,
-  CircleAlert,
-  CircleCheck,
-  CircleX,
-  Info,
-  createElement as createLucideElement
-} from "lucide";
-
 import { RESULT_OBSERVED_ATTRIBUTES } from "./constants/Result.constants";
 import { getResultStatus, syncNullableAttribute } from "./dom/Result.dom";
-import { RESULT_STYLES } from "./Result.styles";
+import { createResultElements, type ResultElements } from "./dom/Result.structure";
+import { createResultIcon } from "./icons/Result.icons";
+import { applyResultStyles } from "./styles/Result.stylesheet";
 import type { ResultStatus } from "./types/Result.types";
-
-let resultStyleSheet: CSSStyleSheet | undefined;
 
 export class DsResult extends HTMLElement {
   static observedAttributes = RESULT_OBSERVED_ATTRIBUTES;
 
-  private iconElement?: HTMLDivElement;
-  private rootElement?: HTMLElement;
-  private subTitleElement?: HTMLParagraphElement;
-  private titleElement?: HTMLHeadingElement;
+  private elements?: ResultElements;
+  private renderedStatus?: ResultStatus;
 
   connectedCallback() {
     this.render();
@@ -55,105 +44,36 @@ export class DsResult extends HTMLElement {
   }
 
   private render() {
-    if (!this.isConnected && !this.rootElement) {
+    if (!this.isConnected && !this.elements) {
       return;
     }
 
-    if (!this.rootElement) {
-      this.initializeStructure();
-    }
+    const elements = this.elements ?? this.initializeStructure();
+    const status = this.status;
+    const subTitle = this.subTitle;
 
-    if (this.rootElement) {
-      this.rootElement.dataset.status = this.status;
-    }
-    this.iconElement?.replaceChildren(createResultIcon(this.status));
-
-    if (this.titleElement) {
-      this.titleElement.textContent = this.title;
-    }
-
-    if (this.subTitleElement) {
-      this.subTitleElement.hidden = this.subTitle.length === 0;
-      this.subTitleElement.textContent = this.subTitle;
-    }
+    elements.rootElement.dataset.status = status;
+    elements.titleElement.textContent = this.title;
+    elements.subTitleElement.hidden = subTitle.length === 0;
+    elements.subTitleElement.textContent = subTitle;
+    this.syncIcon(elements, status);
   }
 
   private initializeStructure() {
     const shadowRoot = this.shadowRoot ?? this.attachShadow({ mode: "open" });
-    const rootElement = document.createElement("section");
-    const iconElement = document.createElement("div");
-    const copyElement = document.createElement("div");
-    const titleElement = document.createElement("h2");
-    const subTitleElement = document.createElement("p");
-    const extraElement = document.createElement("slot");
+    const elements = createResultElements();
 
-    rootElement.className = "ds-result";
-    iconElement.className = "ds-result__icon";
-    copyElement.className = "ds-result__copy";
-    titleElement.className = "ds-result__title";
-    subTitleElement.className = "ds-result__subtitle";
-    extraElement.className = "ds-result__extra";
-    extraElement.name = "extra";
-    rootElement.setAttribute("part", "root");
-    iconElement.setAttribute("part", "icon");
-    titleElement.setAttribute("part", "title");
-    subTitleElement.setAttribute("part", "sub-title");
-    extraElement.setAttribute("part", "extra");
-    copyElement.append(titleElement, subTitleElement);
-    rootElement.append(iconElement, copyElement, extraElement);
-    shadowRoot.replaceChildren(rootElement);
+    shadowRoot.replaceChildren(elements.rootElement);
     applyResultStyles(shadowRoot);
-    this.rootElement = rootElement;
-    this.iconElement = iconElement;
-    this.titleElement = titleElement;
-    this.subTitleElement = subTitleElement;
-  }
-}
+    this.elements = elements;
 
-function createResultIcon(status: ResultStatus) {
-  if (status === "403" || status === "404" || status === "500") {
-    const code = document.createElement("span");
-
-    code.className = "ds-result__status-code";
-    code.textContent = status;
-
-    return code;
+    return elements;
   }
 
-  const iconMap = {
-    error: CircleX,
-    info: Info,
-    success: CircleCheck,
-    warning: CircleAlert
-  };
-
-  return createLucideElement(iconMap[status] ?? BadgeAlert, {
-    "aria-hidden": "true",
-    focusable: "false",
-    "stroke-width": 2
-  });
-}
-
-function canAdoptStyleSheets() {
-  return "adoptedStyleSheets" in Document.prototype && "replaceSync" in CSSStyleSheet.prototype;
-}
-
-function applyResultStyles(shadowRoot: ShadowRoot) {
-  if (canAdoptStyleSheets()) {
-    if (!resultStyleSheet) {
-      resultStyleSheet = new CSSStyleSheet();
-      resultStyleSheet.replaceSync(RESULT_STYLES);
+  private syncIcon({ iconElement }: ResultElements, status: ResultStatus) {
+    if (this.renderedStatus !== status) {
+      iconElement.replaceChildren(createResultIcon(status));
+      this.renderedStatus = status;
     }
-
-    if (!shadowRoot.adoptedStyleSheets.includes(resultStyleSheet)) {
-      shadowRoot.adoptedStyleSheets = [...shadowRoot.adoptedStyleSheets, resultStyleSheet];
-    }
-
-    return;
   }
-
-  const styleElement = document.createElement("style");
-
-  styleElement.textContent = RESULT_STYLES;
-  shadowRoot.prepend(styleElement);
 }
