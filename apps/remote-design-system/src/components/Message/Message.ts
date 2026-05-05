@@ -1,4 +1,5 @@
 import { MESSAGE_CLOSE_EVENT, MESSAGE_OBSERVED_ATTRIBUTES } from "./constants/Message.constants";
+import { appendFloatingMessage, removeFloatingMessage } from "./dom/Message.container";
 import { getMessageDuration, getMessageType, normalizeBooleanAttribute, syncNullableAttribute } from "./dom/Message.dom";
 import { applyMessageStyles, createMessageElements, syncMessageElements, type MessageElements } from "./Message.render";
 import type { MessageCloseDetail, MessageShowOptions, MessageType } from "./types/Message.types";
@@ -17,7 +18,7 @@ export class DsMessage extends HTMLElement {
     message.duration = options.duration ?? 3;
     message.closable = options.closable ?? false;
     message.floating = true;
-    document.body.append(message);
+    appendFloatingMessage(message, document);
 
     return message;
   }
@@ -93,7 +94,7 @@ export class DsMessage extends HTMLElement {
     );
 
     if (this.floating) {
-      this.remove();
+      removeFloatingMessage(this);
     }
   }
 

@@ -12,11 +12,7 @@ export const MESSAGE_STYLES = `
   }
 
   :host([floating]) {
-    left: 50%;
-    position: fixed;
-    top: var(--spacing-ds-6);
-    transform: translateX(-50%);
-    z-index: var(--z-index-ds-toast, 1100);
+    display: block;
   }
 
   .ds-message {
