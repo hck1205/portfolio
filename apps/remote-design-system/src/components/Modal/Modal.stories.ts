@@ -2,19 +2,22 @@ import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
 import "./Modal.stories.css";
 import { defineDsModal } from ".";
-
-type ModalStoryArgs = {
-  centered: boolean;
-  closable: boolean;
-  mask: boolean;
-  title: string;
-};
+import { createSemanticContent } from "./stories/Modal.storyContent";
+import {
+  appendFooterActions,
+  createDocsDescription,
+  createFrame,
+  createModal,
+  createTrigger
+} from "./stories/Modal.storyDom";
+import type { ModalStoryArgs } from "./stories/Modal.storyTypes";
 
 const storyDescriptions = {
   centered: "모달을 화면 중앙에 배치해 사용자의 확인이 필요한 흐름을 더 강하게 강조합니다.",
   customFooter: "푸터 슬롯에 확인과 취소 액션을 배치해 결정이 필요한 작업 흐름을 구성합니다.",
-  customSemanticDomStyling: "`part`를 사용해 대화상자와 제목 영역의 의미 DOM 스타일을 외부에서 조정합니다.",
-  default: "기본 모달은 현재 화면 위에 중요한 정보나 확인 흐름을 대화상자로 표시합니다.",
+  customSemanticDomStyling:
+    "`part`를 사용해 mask, dialog, header, body, footer를 꾸미고 centered 옵션으로 배치 위치를 전환합니다.",
+  default: "기본 모달은 header, content, footer를 갖고 footer에 주요 액션 버튼을 배치합니다.",
   noMask: "마스크 없이 모달을 표시해 주변 화면과 함께 대화상자를 확인할 수 있습니다."
 };
 
@@ -25,55 +28,15 @@ const defaultArgs = {
   title: "작업 확인"
 } satisfies ModalStoryArgs;
 
-function createDocsDescription(story: string) {
-  return {
-    docs: {
-      description: {
-        story
-      }
-    }
-  };
-}
-
-function createTrigger(label: string, modal: HTMLElement) {
-  const button = document.createElement("button");
-
-  button.className = "ds-modal-story-button";
-  button.type = "button";
-  button.textContent = label;
-  button.addEventListener("click", () => modal.setAttribute("open", "true"));
-
-  return button;
-}
-
-function createModal(args: ModalStoryArgs, content = "진행하기 전에 변경 내용을 확인해 주세요.") {
-  const modal = document.createElement("ds-modal");
-  const body = document.createElement("div");
-
-  modal.setAttribute("title", args.title);
-  modal.toggleAttribute("centered", args.centered);
-  modal.toggleAttribute("closable", args.closable);
-  modal.toggleAttribute("mask", args.mask);
-  body.className = "ds-modal-story-content";
-  body.innerHTML = `<strong>확인 내용</strong><span>${content}</span>`;
-  modal.append(body);
-
-  return modal;
-}
-
-function createFrame(children: HTMLElement[]) {
-  const frame = document.createElement("div");
-
-  frame.className = "ds-modal-story-frame";
-  frame.append(...children);
-
-  return frame;
-}
-
 function renderDefault(args: ModalStoryArgs) {
   defineDsModal();
 
-  const modal = createModal(args);
+  const modal = createModal(args, "작업을 계속 진행하려면 내용을 확인한 뒤 확인 버튼을 선택해 주세요.");
+
+  appendFooterActions(modal, {
+    primaryLabel: "확인",
+    secondaryLabel: "취소"
+  });
 
   return createFrame([createTrigger("모달 열기", modal), modal]);
 }
@@ -90,16 +53,11 @@ function renderCustomFooter() {
   defineDsModal();
 
   const modal = createModal({ ...defaultArgs, title: "삭제 확인" }, "삭제 후에는 30일 안에만 복원할 수 있습니다.");
-  const cancel = document.createElement("button");
-  const confirm = document.createElement("button");
 
-  cancel.className = "ds-modal-story-footer-button";
-  confirm.className = "ds-modal-story-button";
-  cancel.slot = "footer";
-  confirm.slot = "footer";
-  cancel.textContent = "취소";
-  confirm.textContent = "삭제";
-  modal.append(cancel, confirm);
+  appendFooterActions(modal, {
+    primaryLabel: "삭제",
+    secondaryLabel: "취소"
+  });
 
   return createFrame([createTrigger("삭제 모달 열기", modal), modal]);
 }
@@ -112,14 +70,20 @@ function renderNoMask() {
   return createFrame([createTrigger("마스크 없이 열기", modal), modal]);
 }
 
-function renderCustomSemanticDomStyling() {
+function renderCustomSemanticDomStyling(args: ModalStoryArgs) {
   defineDsModal();
 
-  const modal = createModal({ ...defaultArgs, title: "스타일이 조정된 모달" });
+  const modal = createModal(args, createSemanticContent());
 
   modal.className = "ds-modal-story-custom";
+  appendFooterActions(modal, {
+    primaryClassName: "ds-modal-story-custom-primary",
+    primaryLabel: "변경 적용",
+    secondaryClassName: "ds-modal-story-custom-secondary",
+    secondaryLabel: "나중에"
+  });
 
-  return createFrame([createTrigger("스타일 예시 열기", modal), modal]);
+  return createFrame([createTrigger("스타일 모달 열기", modal), modal]);
 }
 
 const meta: Meta<ModalStoryArgs> = {
@@ -162,5 +126,10 @@ export const NoMask: Story = {
 
 export const CustomSemanticDomStyling: Story = {
   render: renderCustomSemanticDomStyling,
+  args: {
+    ...defaultArgs,
+    centered: true,
+    title: "릴리즈 변경사항"
+  },
   parameters: createDocsDescription(storyDescriptions.customSemanticDomStyling)
 };

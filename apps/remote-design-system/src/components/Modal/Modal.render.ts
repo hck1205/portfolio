@@ -1,10 +1,12 @@
 import { X, createElement as createLucideElement } from "lucide";
 
+import { hasAssignedContent } from "./dom/Modal.dom";
 import { MODAL_STYLES } from "./Modal.styles";
 
 export type ModalElements = {
   closeButtonElement: HTMLButtonElement;
   dialogElement: HTMLDivElement;
+  footerElement: HTMLElement;
   footerSlotElement: HTMLSlotElement;
   maskElement: HTMLDivElement;
   rootElement: HTMLDivElement;
@@ -57,6 +59,7 @@ export function createModalElements(): ModalElements {
   const closeButtonElement = document.createElement("button");
   const bodyElement = document.createElement("div");
   const bodySlotElement = document.createElement("slot");
+  const footerElement = document.createElement("footer");
   const footerSlotElement = document.createElement("slot");
 
   rootElement.className = "ds-modal";
@@ -66,17 +69,18 @@ export function createModalElements(): ModalElements {
   titleElement.className = "ds-modal__title";
   closeButtonElement.className = "ds-modal__close";
   bodyElement.className = "ds-modal__body";
-  footerSlotElement.className = "ds-modal__footer";
+  footerElement.className = "ds-modal__footer";
   footerSlotElement.name = "footer";
   closeButtonElement.type = "button";
   rootElement.setAttribute("part", "root");
   maskElement.setAttribute("part", "mask");
   dialogElement.setAttribute("part", "dialog");
+  dialogElement.tabIndex = -1;
   headerElement.setAttribute("part", "header");
   titleElement.setAttribute("part", "title");
   closeButtonElement.setAttribute("part", "close");
   bodyElement.setAttribute("part", "body");
-  footerSlotElement.setAttribute("part", "footer");
+  footerElement.setAttribute("part", "footer");
   closeButtonElement.append(
     createLucideElement(X, {
       "aria-hidden": "true",
@@ -86,12 +90,14 @@ export function createModalElements(): ModalElements {
   );
   headerElement.append(titleElement, closeButtonElement);
   bodyElement.append(bodySlotElement);
-  dialogElement.append(headerElement, bodyElement, footerSlotElement);
+  footerElement.append(footerSlotElement);
+  dialogElement.append(headerElement, bodyElement, footerElement);
   rootElement.append(maskElement, dialogElement);
 
   return {
     closeButtonElement,
     dialogElement,
+    footerElement,
     footerSlotElement,
     maskElement,
     rootElement,
@@ -122,4 +128,10 @@ export function syncModalElements(
   elements.titleElement.textContent = state.title;
   elements.closeButtonElement.hidden = !state.closable;
   elements.closeButtonElement.setAttribute("aria-label", state.closeLabel);
+  elements.maskElement.hidden = !state.mask;
+  syncModalFooterVisibility(elements);
+}
+
+export function syncModalFooterVisibility(elements: ModalElements) {
+  elements.footerElement.hidden = !hasAssignedContent(elements.footerSlotElement);
 }

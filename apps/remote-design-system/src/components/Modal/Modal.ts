@@ -1,21 +1,43 @@
 import { MODAL_CLOSE_EVENT, MODAL_OBSERVED_ATTRIBUTES, MODAL_OPEN_CHANGE_EVENT } from "./constants/Modal.constants";
-import { normalizeBooleanAttribute, syncNullableAttribute } from "./dom/Modal.dom";
-import { applyModalStyles, createModalElements, syncModalElements, type ModalElements } from "./Modal.render";
+import { normalizeBooleanAttribute, syncBooleanAttribute, syncNullableAttribute } from "./dom/Modal.dom";
+import { ModalPortalController } from "./dom/Modal.portal";
+import { lockModalDocumentScroll, unlockModalDocumentScroll } from "./dom/Modal.scrollLock";
+import {
+  applyModalStyles,
+  createModalElements,
+  syncModalElements,
+  syncModalFooterVisibility,
+  type ModalElements
+} from "./Modal.render";
 import type { ModalOpenChangeDetail } from "./types/Modal.types";
 
 export class DsModal extends HTMLElement {
   static observedAttributes = MODAL_OBSERVED_ATTRIBUTES;
 
   private elements?: ModalElements;
+  private isScrollLocked = false;
+  private portal = new ModalPortalController(this);
   private previousFocusedElement?: HTMLElement;
 
   connectedCallback() {
     this.render();
     this.syncGlobalListeners();
+    this.syncOpenEffects();
+
+    if (this.open) {
+      this.syncFocusAfterOpenChange();
+    }
   }
 
   disconnectedCallback() {
-    document.removeEventListener("keydown", this.handleDocumentKeyDown);
+    this.ownerDocument.removeEventListener("keydown", this.handleDocumentKeyDown);
+
+    if (!this.portal.isMoving) {
+      this.elements?.footerSlotElement.removeEventListener("slotchange", this.handleSlotChange);
+      this.syncScrollLock(false);
+    }
+
+    this.portal.disconnect();
   }
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
@@ -27,6 +49,7 @@ export class DsModal extends HTMLElement {
 
     if (name === "open") {
       this.syncGlobalListeners();
+      this.syncOpenEffects();
       this.syncFocusAfterOpenChange();
     }
   }
@@ -36,7 +59,7 @@ export class DsModal extends HTMLElement {
   }
 
   set centered(value: boolean) {
-    this.setBooleanAttribute("centered", value);
+    syncBooleanAttribute(this, "centered", value);
   }
 
   get closable() {
@@ -44,7 +67,7 @@ export class DsModal extends HTMLElement {
   }
 
   set closable(value: boolean) {
-    this.setBooleanAttribute("closable", value);
+    syncBooleanAttribute(this, "closable", value);
   }
 
   get closeLabel() {
@@ -60,7 +83,7 @@ export class DsModal extends HTMLElement {
   }
 
   set closeOnEscape(value: boolean) {
-    this.setBooleanAttribute("close-on-escape", value);
+    syncBooleanAttribute(this, "close-on-escape", value);
   }
 
   get closeOnMask() {
@@ -68,7 +91,7 @@ export class DsModal extends HTMLElement {
   }
 
   set closeOnMask(value: boolean) {
-    this.setBooleanAttribute("close-on-mask", value);
+    syncBooleanAttribute(this, "close-on-mask", value);
   }
 
   get mask() {
@@ -76,7 +99,7 @@ export class DsModal extends HTMLElement {
   }
 
   set mask(value: boolean) {
-    this.setBooleanAttribute("mask", value);
+    syncBooleanAttribute(this, "mask", value);
   }
 
   get open() {
@@ -130,6 +153,12 @@ export class DsModal extends HTMLElement {
     this.setOpen(false, "escape");
   };
 
+  private handleSlotChange = () => {
+    if (this.elements) {
+      syncModalFooterVisibility(this.elements);
+    }
+  };
+
   private render() {
     if (!this.isConnected && !this.elements) {
       return;
@@ -159,6 +188,7 @@ export class DsModal extends HTMLElement {
 
     this.elements = createModalElements();
     this.elements.closeButtonElement.addEventListener("click", this.handleCloseButtonClick);
+    this.elements.footerSlotElement.addEventListener("slotchange", this.handleSlotChange);
     this.elements.maskElement.addEventListener("pointerdown", this.handleMaskPointerDown);
     shadowRoot.replaceChildren(this.elements.rootElement);
     applyModalStyles(shadowRoot);
@@ -167,7 +197,7 @@ export class DsModal extends HTMLElement {
   private setOpen(open: boolean, source: ModalOpenChangeDetail["source"]) {
     const previousOpen = this.open;
 
-    this.setBooleanAttribute("open", open);
+    syncBooleanAttribute(this, "open", open);
 
     if (previousOpen !== open) {
       this.dispatchEvent(
@@ -186,20 +216,11 @@ export class DsModal extends HTMLElement {
     }
   }
 
-  private setBooleanAttribute(name: string, value: boolean) {
-    if (value) {
-      this.setAttribute(name, "true");
-      return;
-    }
-
-    this.setAttribute(name, "false");
-  }
-
   private syncGlobalListeners() {
-    document.removeEventListener("keydown", this.handleDocumentKeyDown);
+    this.ownerDocument.removeEventListener("keydown", this.handleDocumentKeyDown);
 
     if (this.open) {
-      document.addEventListener("keydown", this.handleDocumentKeyDown);
+      this.ownerDocument.addEventListener("keydown", this.handleDocumentKeyDown);
     }
   }
 
@@ -209,12 +230,46 @@ export class DsModal extends HTMLElement {
     }
 
     if (this.open) {
-      this.previousFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : undefined;
-      requestAnimationFrame(() => this.elements?.closeButtonElement.focus());
+      this.previousFocusedElement =
+        this.ownerDocument.activeElement instanceof HTMLElement ? this.ownerDocument.activeElement : undefined;
+      requestAnimationFrame(() => {
+        const focusTarget = this.closable ? this.elements?.closeButtonElement : this.elements?.dialogElement;
+
+        focusTarget?.focus();
+      });
       return;
     }
 
     this.previousFocusedElement?.focus();
     this.previousFocusedElement = undefined;
+  }
+
+  private syncOpenEffects() {
+    this.syncPortal();
+    this.syncScrollLock(this.open);
+  }
+
+  private syncPortal() {
+    if (this.open) {
+      this.portal.mount();
+      return;
+    }
+
+    this.portal.restore();
+  }
+
+  private syncScrollLock(locked: boolean) {
+    if (this.isScrollLocked === locked) {
+      return;
+    }
+
+    this.isScrollLocked = locked;
+
+    if (locked) {
+      lockModalDocumentScroll(this.ownerDocument);
+      return;
+    }
+
+    unlockModalDocumentScroll(this.ownerDocument);
   }
 }

@@ -1,10 +1,15 @@
 export const MODAL_STYLES = `
   :host {
     color: var(--color-ds-text);
-    display: contents;
+    display: block;
     font-family: var(--font-sans);
     font-size: var(--text-ds-2);
+    inset: 0;
     line-height: var(--leading-ds-readable);
+    overflow: hidden;
+    pointer-events: none;
+    position: fixed;
+    z-index: var(--z-index-ds-modal, 1050);
   }
 
   .ds-modal {
@@ -15,8 +20,7 @@ export const MODAL_STYLES = `
     overflow: auto;
     padding: 12vh var(--spacing-ds-5) var(--spacing-ds-8);
     pointer-events: none;
-    position: fixed;
-    z-index: var(--z-index-ds-modal, 1050);
+    position: absolute;
   }
 
   .ds-modal[data-open="false"] {
@@ -32,7 +36,7 @@ export const MODAL_STYLES = `
     background: rgba(15, 23, 42, 0.46);
     inset: 0;
     opacity: 0;
-    position: fixed;
+    position: absolute;
     transition: opacity 180ms ease;
   }
 
@@ -40,9 +44,16 @@ export const MODAL_STYLES = `
     display: none;
   }
 
+  .ds-modal__mask[hidden] {
+    display: none;
+  }
+
   .ds-modal[data-open="true"] {
-    pointer-events: auto;
     visibility: visible;
+  }
+
+  .ds-modal[data-open="true"][data-mask="true"] {
+    pointer-events: auto;
   }
 
   .ds-modal[data-open="true"] .ds-modal__mask {
@@ -61,6 +72,7 @@ export const MODAL_STYLES = `
     max-width: min(100%, var(--ds-modal-width, 520px));
     min-width: min(100%, 320px);
     opacity: 0;
+    pointer-events: auto;
     position: relative;
     transform: translateY(-12px) scale(0.98);
     transition:
@@ -76,11 +88,10 @@ export const MODAL_STYLES = `
 
   .ds-modal__header {
     align-items: center;
-    border-bottom: 1px solid var(--color-ds-border);
     display: flex;
     gap: var(--spacing-ds-3);
     justify-content: space-between;
-    padding: var(--spacing-ds-4) var(--spacing-ds-5);
+    padding: var(--spacing-ds-5) var(--spacing-ds-5) var(--spacing-ds-3);
   }
 
   .ds-modal__title {
@@ -129,19 +140,18 @@ export const MODAL_STYLES = `
   .ds-modal__body {
     min-height: 0;
     overflow: auto;
-    padding: var(--spacing-ds-5);
+    padding: var(--spacing-ds-2) var(--spacing-ds-5) var(--spacing-ds-5);
   }
 
   .ds-modal__footer {
     align-items: center;
-    border-top: 1px solid var(--color-ds-border);
     display: flex;
     gap: var(--spacing-ds-2);
     justify-content: flex-end;
-    padding: var(--spacing-ds-4) var(--spacing-ds-5);
+    padding: 0 var(--spacing-ds-5) var(--spacing-ds-5);
   }
 
-  .ds-modal__footer:empty {
+  .ds-modal__footer[hidden] {
     display: none;
   }
 `;
