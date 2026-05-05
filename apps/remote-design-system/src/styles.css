@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "./components/Collapse/Collapse.css";
 @import "./components/Form/Form.css";
+@import "./components/Notification/Notification.css";
 @import "./components/Splitter/Splitter.css";
 
 @theme static {

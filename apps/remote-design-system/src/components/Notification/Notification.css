@@ -1,0 +1,41 @@
+.ds-notification-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-ds-3, 12px);
+  max-width: min(384px, calc(100vw - 32px));
+  pointer-events: none;
+  position: fixed;
+  z-index: var(--z-index-ds-notification, 1120);
+}
+
+.ds-notification-container > ds-notification {
+  pointer-events: auto;
+}
+
+.ds-notification-container[data-placement="top"],
+.ds-notification-container[data-placement="bottom"] {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.ds-notification-container[data-placement="topLeft"],
+.ds-notification-container[data-placement="bottomLeft"] {
+  left: var(--spacing-ds-6, 24px);
+}
+
+.ds-notification-container[data-placement="topRight"],
+.ds-notification-container[data-placement="bottomRight"] {
+  right: var(--spacing-ds-6, 24px);
+}
+
+.ds-notification-container[data-placement="top"],
+.ds-notification-container[data-placement="topLeft"],
+.ds-notification-container[data-placement="topRight"] {
+  top: var(--spacing-ds-6, 24px);
+}
+
+.ds-notification-container[data-placement="bottom"],
+.ds-notification-container[data-placement="bottomLeft"],
+.ds-notification-container[data-placement="bottomRight"] {
+  bottom: var(--spacing-ds-6, 24px);
+}

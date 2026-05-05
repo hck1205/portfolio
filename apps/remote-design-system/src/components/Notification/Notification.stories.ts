@@ -1,15 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
 import "./Notification.stories.css";
-import { DsNotification, defineDsNotification, type NotificationPlacement, type NotificationType } from ".";
-
-type NotificationStoryArgs = {
-  description: string;
-  placement: NotificationPlacement;
-  showProgress: boolean;
-  title: string;
-  type: NotificationType;
-};
+import { defineDsNotification, type NotificationPlacement } from ".";
+import {
+  createButton,
+  createDocsDescription,
+  createFrame,
+  createNotification,
+  createPlacementButtons,
+  preventCloseButtonAction
+} from "./stories/Notification.storyDom";
+import type { NotificationStoryArgs } from "./stories/Notification.storyTypes";
 
 const storyDescriptions = {
   customSemanticDomStyling: "`part`를 사용해 알림 카드의 루트와 제목 영역 스타일을 외부에서 조정합니다.",
@@ -26,43 +27,6 @@ const defaultArgs = {
   title: "알림 제목",
   type: "info"
 } satisfies NotificationStoryArgs;
-
-function createDocsDescription(story: string) {
-  return { docs: { description: { story } } };
-}
-
-function createNotification(args: NotificationStoryArgs) {
-  const notification = document.createElement("ds-notification");
-
-  notification.setAttribute("title", args.title);
-  notification.setAttribute("description", args.description);
-  notification.setAttribute("type", args.type);
-  notification.setAttribute("duration", "0");
-  notification.setAttribute("placement", args.placement);
-  notification.toggleAttribute("show-progress", args.showProgress);
-
-  return notification;
-}
-
-function createFrame(children: HTMLElement[]) {
-  const frame = document.createElement("div");
-
-  frame.className = "ds-notification-story-frame";
-  frame.append(...children);
-
-  return frame;
-}
-
-function createButton(label: string, options: Parameters<typeof DsNotification.show>[0]) {
-  const button = document.createElement("button");
-
-  button.className = "ds-notification-story-button";
-  button.type = "button";
-  button.textContent = label;
-  button.addEventListener("click", () => DsNotification.show(options));
-
-  return button;
-}
 
 function renderDefault(args: NotificationStoryArgs) {
   defineDsNotification();
@@ -85,20 +49,8 @@ function renderPlacement() {
   defineDsNotification();
 
   const placements: NotificationPlacement[] = ["topLeft", "topRight", "bottomLeft", "bottomRight"];
-  const row = document.createElement("div");
 
-  row.className = "ds-notification-story-row";
-  row.append(
-    ...placements.map((placement) =>
-      createButton(placement, {
-        description: "선택한 위치에서 표시되는 알림입니다.",
-        placement,
-        title: `${placement} 알림`
-      })
-    )
-  );
-
-  return createFrame([row]);
+  return createFrame([createPlacementButtons(placements)]);
 }
 
 function renderProgress() {
@@ -121,6 +73,7 @@ function renderCustomSemanticDomStyling() {
   const notification = createNotification({ ...defaultArgs, title: "스타일이 조정된 알림" });
 
   notification.className = "ds-notification-story-custom";
+  preventCloseButtonAction(notification);
 
   return createFrame([notification]);
 }
@@ -154,10 +107,25 @@ export default meta;
 
 type Story = StoryObj<NotificationStoryArgs>;
 
-export const Default: Story = { parameters: createDocsDescription(storyDescriptions.default) };
-export const Types: Story = { render: renderTypes, parameters: createDocsDescription(storyDescriptions.types) };
-export const Placement: Story = { render: renderPlacement, parameters: createDocsDescription(storyDescriptions.placement) };
-export const Progress: Story = { render: renderProgress, parameters: createDocsDescription(storyDescriptions.progress) };
+export const Default: Story = {
+  parameters: createDocsDescription(storyDescriptions.default)
+};
+
+export const Types: Story = {
+  render: renderTypes,
+  parameters: createDocsDescription(storyDescriptions.types)
+};
+
+export const Placement: Story = {
+  render: renderPlacement,
+  parameters: createDocsDescription(storyDescriptions.placement)
+};
+
+export const Progress: Story = {
+  render: renderProgress,
+  parameters: createDocsDescription(storyDescriptions.progress)
+};
+
 export const CustomSemanticDomStyling: Story = {
   render: renderCustomSemanticDomStyling,
   parameters: createDocsDescription(storyDescriptions.customSemanticDomStyling)

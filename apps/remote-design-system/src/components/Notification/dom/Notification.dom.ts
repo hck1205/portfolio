@@ -31,6 +31,10 @@ export function normalizeBooleanAttribute(element: HTMLElement, name: string, fa
   return value === "" || value === "true";
 }
 
+export function syncBooleanAttribute(element: HTMLElement, name: string, value: boolean) {
+  element.setAttribute(name, String(value));
+}
+
 export function syncNullableAttribute(element: HTMLElement, name: string, value: string | null | undefined) {
   if (value === null || value === undefined) {
     element.removeAttribute(name);

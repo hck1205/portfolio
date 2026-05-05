@@ -12,40 +12,7 @@ export const NOTIFICATION_STYLES = `
   }
 
   :host([floating]) {
-    position: fixed;
-    z-index: var(--z-index-ds-notification, 1120);
-  }
-
-  :host([placement="topRight"]),
-  :host([placement="bottomRight"]) {
-    right: var(--spacing-ds-6);
-  }
-
-  :host([placement="topLeft"]),
-  :host([placement="bottomLeft"]) {
-    left: var(--spacing-ds-6);
-  }
-
-  :host([placement="top"]) {
-    left: 50%;
-    top: var(--spacing-ds-6);
-    transform: translateX(-50%);
-  }
-
-  :host([placement="bottom"]) {
-    bottom: var(--spacing-ds-6);
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  :host([placement="topRight"]),
-  :host([placement="topLeft"]) {
-    top: var(--spacing-ds-6);
-  }
-
-  :host([placement="bottomRight"]),
-  :host([placement="bottomLeft"]) {
-    bottom: var(--spacing-ds-6);
+    display: block;
   }
 
   .ds-notification {

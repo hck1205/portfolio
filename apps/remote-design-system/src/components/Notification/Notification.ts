@@ -4,8 +4,10 @@ import {
   getNotificationPlacement,
   getNotificationType,
   normalizeBooleanAttribute,
+  syncBooleanAttribute,
   syncNullableAttribute
 } from "./dom/Notification.dom";
+import { appendFloatingNotification, removeFloatingNotification } from "./dom/Notification.container";
 import {
   applyNotificationStyles,
   createNotificationElements,
@@ -18,6 +20,9 @@ import type {
   NotificationShowOptions,
   NotificationType
 } from "./types/Notification.types";
+
+const AUTO_CLOSE_ATTRIBUTES = new Set(["duration", "show-progress"]);
+const FLOATING_PLACEMENT_ATTRIBUTES = new Set(["floating", "placement"]);
 
 export class DsNotification extends HTMLElement {
   static observedAttributes = NOTIFICATION_OBSERVED_ATTRIBUTES;
@@ -38,13 +43,14 @@ export class DsNotification extends HTMLElement {
     notification.showProgress = options.showProgress ?? false;
     notification.closable = options.closable ?? true;
     notification.floating = true;
-    document.body.append(notification);
+    appendFloatingNotification(notification, notification.placement);
 
     return notification;
   }
 
   connectedCallback() {
     this.render();
+    this.syncFloatingPlacement();
     this.startAutoClose();
   }
 
@@ -52,13 +58,20 @@ export class DsNotification extends HTMLElement {
     this.stopTimers();
   }
 
-  attributeChangedCallback(_name: string, oldValue: string | null, newValue: string | null) {
+  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
     if (oldValue === newValue) {
       return;
     }
 
     this.render();
-    this.startAutoClose();
+
+    if (FLOATING_PLACEMENT_ATTRIBUTES.has(name)) {
+      this.syncFloatingPlacement();
+    }
+
+    if (AUTO_CLOSE_ATTRIBUTES.has(name)) {
+      this.startAutoClose();
+    }
   }
 
   get closable() {
@@ -66,7 +79,7 @@ export class DsNotification extends HTMLElement {
   }
 
   set closable(value: boolean) {
-    this.setBooleanAttribute("closable", value);
+    syncBooleanAttribute(this, "closable", value);
   }
 
   get description() {
@@ -90,7 +103,7 @@ export class DsNotification extends HTMLElement {
   }
 
   set floating(value: boolean) {
-    this.setBooleanAttribute("floating", value);
+    syncBooleanAttribute(this, "floating", value);
   }
 
   get pauseOnHover() {
@@ -98,7 +111,7 @@ export class DsNotification extends HTMLElement {
   }
 
   set pauseOnHover(value: boolean) {
-    this.setBooleanAttribute("pause-on-hover", value);
+    syncBooleanAttribute(this, "pause-on-hover", value);
   }
 
   get placement(): NotificationPlacement {
@@ -114,7 +127,7 @@ export class DsNotification extends HTMLElement {
   }
 
   set showProgress(value: boolean) {
-    this.setBooleanAttribute("show-progress", value);
+    syncBooleanAttribute(this, "show-progress", value);
   }
 
   get title() {
@@ -147,7 +160,7 @@ export class DsNotification extends HTMLElement {
     );
 
     if (this.floating) {
-      this.remove();
+      removeFloatingNotification(this);
     }
   }
 
@@ -202,15 +215,6 @@ export class DsNotification extends HTMLElement {
     applyNotificationStyles(shadowRoot);
   }
 
-  private setBooleanAttribute(name: string, value: boolean) {
-    if (value) {
-      this.setAttribute(name, "true");
-      return;
-    }
-
-    this.setAttribute(name, "false");
-  }
-
   private startAutoClose() {
     this.stopTimers();
 
@@ -234,6 +238,12 @@ export class DsNotification extends HTMLElement {
     this.render(progress);
     this.progressAnimationFrame = window.requestAnimationFrame(this.animateProgress);
   };
+
+  private syncFloatingPlacement() {
+    if (this.floating && this.isConnected) {
+      appendFloatingNotification(this, this.placement);
+    }
+  }
 
   private stopTimers() {
     window.clearTimeout(this.autoCloseTimer);
