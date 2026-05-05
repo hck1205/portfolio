@@ -13,6 +13,7 @@ export * from './Collapse';
 export * from './DatePicker';
 export * from './Descriptions';
 export * from './Divider';
+export * from './Drawer';
 export * from './Dropdown';
 export * from './Empty';
 export * from './FloatButton';
