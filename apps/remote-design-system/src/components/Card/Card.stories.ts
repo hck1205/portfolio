@@ -51,13 +51,13 @@ const contentCards = [
   {
     avatarSrc: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80",
     coverSrc: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=800&q=80",
-    description: "Design system overview",
+    description: "디자인 시스템 개요",
     title: "Object Card"
   },
   {
     avatarSrc: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=120&q=80",
     coverSrc: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=800&q=80",
-    description: "Component documentation",
+    description: "컴포넌트 문서",
     title: "Function Card"
   }
 ] as const;
@@ -232,7 +232,7 @@ const meta: Meta<CardStoryArgs> = {
     docs: {
       description: {
         component:
-          "Card는 단일 주제의 정보를 title, extra, cover, body, actions, grid, meta 구조로 담는 Data Display 컨테이너입니다. Ant Design의 variant, hoverable, loading, inner card, Card.Grid, Card.Meta 패턴을 Web Component API로 제공합니다."
+          "Card는 단일 주제의 정보를 title, extra, cover, body, actions, grid, meta 구조로 담는 Data Display 컨테이너입니다. variant, hoverable, loading, inner card, Card.Grid, Card.Meta 패턴을 Web Component API로 제공합니다."
       }
     }
   },

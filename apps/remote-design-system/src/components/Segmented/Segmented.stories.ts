@@ -28,7 +28,7 @@ const storyDescriptions = {
   default: "가장 기본적인 단일 선택 segmented control입니다.",
   block: "block 모드는 옵션을 부모 너비에 맞춰 균등하게 확장합니다.",
   vertical: "vertical 방향은 옵션을 한 열로 쌓아 표시합니다.",
-  round: "round shape은 Ant Design의 pill 형태 segmented 스타일과 맞닿아 있습니다.",
+  round: "round shape은 pill 형태의 segmented 스타일을 표현합니다.",
   disabled: "disabled 상태에서는 옵션 변경을 막습니다.",
   sizes: "small, middle, large 크기는 24px, 32px, 40px 컨트롤 높이에 대응합니다.",
   customRender: "옵션 메타의 icon과 label을 조합해 더 풍부한 항목 UI를 렌더링합니다.",
@@ -187,7 +187,7 @@ const meta: Meta<SegmentedStoryArgs> = {
     },
     disabled: {
       control: "boolean",
-      description: "전체 segmented control을 비활성화합니다."
+      description: "전체 세그먼트 컨트롤을 비활성화합니다."
     },
     options: {
       control: "text",

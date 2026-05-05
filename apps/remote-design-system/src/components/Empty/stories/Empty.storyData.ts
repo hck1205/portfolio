@@ -1,7 +1,7 @@
 import type { EmptyStoryArgs } from "./Empty.storyTypes";
 
 export const defaultEmptyStoryArgs = {
-  description: "No data",
+  description: "데이터가 없습니다",
   image: "default",
   size: "middle"
 } satisfies EmptyStoryArgs;

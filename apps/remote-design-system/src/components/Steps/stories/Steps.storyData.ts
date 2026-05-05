@@ -74,17 +74,17 @@ export const defaultSteps = [
 
 export const panelSteps = [
   {
-    description: "This is a content.",
+    description: "첫 번째 단계의 상세 내용입니다.",
     subTitle: "00:00",
     title: "Step 1"
   },
   {
-    description: "This is a content.",
+    description: "두 번째 단계에서 오류가 발생했습니다.",
     status: "error",
     title: "Step 2"
   },
   {
-    description: "This is a content.",
+    description: "마지막 단계의 상세 내용입니다.",
     title: "Step 3"
   }
 ] satisfies StepStoryData[];

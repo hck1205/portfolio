@@ -24,7 +24,7 @@ function renderSimple() {
   return createFrame([
     createGrid([
       createPanel(createEmpty({ ...defaultEmptyStoryArgs, image: "simple", size: "small" })),
-      createPanel(createEmpty({ ...defaultEmptyStoryArgs, description: "Data Not Found", image: "simple", size: "small" }))
+      createPanel(createEmpty({ ...defaultEmptyStoryArgs, description: "데이터를 찾을 수 없습니다", image: "simple", size: "small" }))
     ])
   ]);
 }
@@ -35,7 +35,7 @@ function renderCustomize() {
   return createFrame([
     createEmpty(
       {
-        description: "Create your first dashboard to start tracking important metrics.",
+        description: "중요한 지표를 추적하려면 첫 대시보드를 만들어 보세요.",
         image: "default",
         size: "middle"
       },

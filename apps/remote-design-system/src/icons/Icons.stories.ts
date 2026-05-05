@@ -11,7 +11,7 @@ const meta: Meta<IconCatalogArgs> = {
     docs: {
       description: {
         component:
-          "Lucide icon catalog rendered from the package icon registry."
+          "패키지 아이콘 레지스트리를 기준으로 렌더링한 Lucide 아이콘 카탈로그입니다."
       }
     }
   },

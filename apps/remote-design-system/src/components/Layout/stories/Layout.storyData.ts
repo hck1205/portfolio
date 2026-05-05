@@ -70,9 +70,9 @@ export const storyDescriptions = {
     "Sider가 전체 높이를 차지하고, 오른쪽 영역 안에 Header, Content, Footer가 쌓이는 구조입니다.",
   responsive:
     "breakpoint 아래에서 Sider가 64px로 접히며 메뉴 아이콘만 남는 passive responsive 예시입니다.",
-  siderContent: "Sider and Content only. This story omits Header and Footer to show the lean side navigation layout.",
+  siderContent: "Sider와 Content만 사용하는 단순한 side navigation 레이아웃입니다.",
   customTriggerIcon:
-    "Uses slot=\"trigger\" to replace the default collapse trigger content with custom expand/collapse icons and label.",
+    "slot=\"trigger\"를 사용해 기본 접힘 트리거를 커스텀 아이콘과 라벨로 교체합니다.",
   scrollableSider:
     "Sider 안에 많은 메뉴가 들어가도 Sider body만 스크롤됩니다. collapse 버튼은 스크롤 영역 밖 상단에 남습니다."
 };

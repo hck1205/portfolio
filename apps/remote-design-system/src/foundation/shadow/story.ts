@@ -1,5 +1,5 @@
 export const shadowStory = {
   category: "shadow",
   label: "Shadow",
-  description: "Elevation tokens for light and dark surfaces."
+  description: "밝은 표면과 어두운 표면에서 사용하는 높이감 토큰입니다."
 } as const;

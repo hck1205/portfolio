@@ -326,7 +326,7 @@ const meta: Meta<TokensOverviewProps> = {
     docs: {
       description: {
         component:
-          "Token catalog generated from each foundation folder's token and story files."
+          "각 foundation 폴더의 토큰과 story 파일을 기준으로 생성한 토큰 카탈로그입니다."
       }
     }
   },

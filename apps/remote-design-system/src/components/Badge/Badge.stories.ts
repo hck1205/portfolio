@@ -32,12 +32,12 @@ const defaultArgs = {
 const STATUS_OPTIONS: BadgeStatus[] = ["success", "error", "default", "processing", "warning"];
 
 const storyDescriptions = {
-  basic: "Displays a count or dot on a target element.",
-  color: "Uses color to customize count and dot badges.",
-  overflow: "Collapses large counts with overflow-count.",
-  ribbon: "Attaches a ribbon label to the corner of card-like content.",
-  standalone: "Shows badges without target content.",
-  status: "Shows status dots on target elements with labels for comparison."
+  basic: "대상 요소 위에 숫자나 점 형태의 배지를 표시합니다.",
+  color: "색상을 지정해 숫자 배지와 점 배지의 표현을 조정합니다.",
+  overflow: "큰 숫자는 overflow-count 기준에 따라 축약해 표시합니다.",
+  ribbon: "카드 형태 콘텐츠의 모서리에 리본 라벨을 붙입니다.",
+  standalone: "대상 콘텐츠 없이 배지만 단독으로 표시합니다.",
+  status: "상태 점과 라벨을 함께 배치해 여러 상태를 비교합니다."
 };
 
 function ensureBadgeDefined() {

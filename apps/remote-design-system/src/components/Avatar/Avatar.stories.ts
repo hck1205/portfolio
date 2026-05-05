@@ -177,7 +177,7 @@ const meta: Meta<AvatarStoryArgs> = {
     docs: {
       description: {
         component:
-          "Avatar는 사용자나 대상을 이미지, 아이콘, 문자로 표현하는 Data Display 컴포넌트입니다. Ant Design의 image, icon, character, group, shape, size 패턴을 Web Component API로 제공합니다."
+          "Avatar는 사용자나 대상을 이미지, 아이콘, 문자로 표현하는 Data Display 컴포넌트입니다. 이미지, 아이콘, 문자, 그룹, 형태, 크기 조합을 Web Component API로 제공합니다."
       }
     }
   },

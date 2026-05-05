@@ -96,7 +96,7 @@ const meta: Meta<CarouselStoryArgs> = {
     docs: {
       description: {
         component:
-          "Carousel은 이미지나 카드처럼 같은 수준의 콘텐츠를 순환 표시하는 Data Display 컴포넌트입니다. Ant Design의 dots, dot placement, autoplay, fade, arrows, draggable 패턴을 Web Component API로 제공합니다."
+          "Carousel은 이미지나 카드처럼 같은 수준의 콘텐츠를 순환 표시하는 Data Display 컴포넌트입니다. 점 표시, 점 위치, 자동 재생, 페이드, 화살표, 드래그 패턴을 Web Component API로 제공합니다."
       }
     }
   },

@@ -177,10 +177,10 @@ function renderIconStory() {
 
   return createFrame([
     createSteps(defaultStepsStoryArgs, [
-      { description: "Login account information.", icon: "L", title: "Login" },
-      { description: "Verify the security code.", icon: "V", title: "Verification" },
-      { description: "Confirm payment details.", icon: "P", title: "Pay" },
-      { description: "Complete the task.", icon: "D", title: "Done" }
+      { description: "계정 정보를 입력합니다.", icon: "L", title: "Login" },
+      { description: "보안 코드를 확인합니다.", icon: "V", title: "Verification" },
+      { description: "결제 정보를 확인합니다.", icon: "P", title: "Pay" },
+      { description: "작업을 완료합니다.", icon: "D", title: "Done" }
     ])
   ]);
 }

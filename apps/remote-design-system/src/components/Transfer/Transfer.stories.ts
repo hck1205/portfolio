@@ -15,7 +15,7 @@ type TransferStoryArgs = {
 };
 
 const sampleItems = Array.from({ length: 12 }, (_, index) => ({
-  description: `Description of item ${index + 1}`,
+  description: `${index + 1}번 항목 설명`,
   key: `item-${index + 1}`,
   title: `Content ${index + 1}`
 }));

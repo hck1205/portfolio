@@ -1,5 +1,5 @@
 export const breakpointStory = {
   category: "breakpoint",
   label: "Breakpoints",
-  description: "Responsive viewport thresholds used across remote apps."
+  description: "원격 앱 전반에서 사용하는 반응형 viewport 기준값입니다."
 } as const;

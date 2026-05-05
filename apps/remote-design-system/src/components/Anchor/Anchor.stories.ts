@@ -11,22 +11,22 @@ type AnchorStoryArgs = {
 
 const sections = [
   {
-    description: "Section navigation keeps long pages scannable without owning the surrounding layout size.",
+    description: "긴 페이지의 섹션을 빠르게 훑고 이동할 수 있도록 돕습니다.",
     id: "anchor-overview",
     title: "Overview"
   },
   {
-    description: "Each link is a semantic anchor and emits typed change/click events for host applications.",
+    description: "각 링크는 의미 있는 앵커로 동작하며 호스트 앱에 변경/클릭 이벤트를 전달합니다.",
     id: "anchor-usage",
     title: "Usage"
   },
   {
-    description: "The wrapper controls available width and height while the component fills naturally.",
+    description: "wrapper가 사용 가능한 너비와 높이를 제어하고 컴포넌트는 그 안에서 자연스럽게 배치됩니다.",
     id: "anchor-container",
     title: "Container"
   },
   {
-    description: "Nested links can group nearby sections without placing interactive anchors inside anchors.",
+    description: "중첩 링크를 사용하면 가까운 섹션을 계층적으로 묶어 보여줄 수 있습니다.",
     id: "anchor-nested",
     title: "Nested"
   }

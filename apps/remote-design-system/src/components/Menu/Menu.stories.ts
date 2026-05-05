@@ -319,7 +319,7 @@ export const Submenu: Story = {
   parameters: {
     docs: {
       description: {
-        story: "submenu를 포함한 vertical Menu 예시입니다. submenu open state와 nested item 선택을 확인합니다."
+        story: "하위 메뉴를 포함한 세로형 Menu 예시입니다. 하위 메뉴의 열린 상태와 중첩 항목 선택을 확인합니다."
       }
     }
   }

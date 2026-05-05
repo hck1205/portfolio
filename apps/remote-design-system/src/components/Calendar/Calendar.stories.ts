@@ -130,7 +130,7 @@ const meta: Meta<CalendarStoryArgs> = {
     docs: {
       description: {
         component:
-          "Calendar는 일정, 날짜별 데이터, 가격표처럼 날짜 형태의 정보를 월 또는 연 단위로 보여주는 Data Display 컴포넌트입니다. Ant Design의 기본, 카드형, 주차 표시, 선택형, Notice Calendar 패턴을 Web Component API로 제공합니다."
+          "Calendar는 일정, 날짜별 데이터, 가격표처럼 날짜 형태의 정보를 월 또는 연 단위로 보여주는 Data Display 컴포넌트입니다. 기본형, 카드형, 주차 표시, 선택형, 일정 안내 패턴을 Web Component API로 제공합니다."
       }
     }
   },
