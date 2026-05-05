@@ -11,7 +11,8 @@ export const SPIN_STYLES = `
     display: none;
   }
 
-  :host([fullscreen]) {
+  :host([fullscreen=""]),
+  :host([fullscreen="true"]) {
     inset: 0;
     position: fixed;
     z-index: var(--z-index-ds-spin, 1200);
@@ -24,7 +25,8 @@ export const SPIN_STYLES = `
     justify-items: center;
   }
 
-  :host([fullscreen]) .ds-spin {
+  :host([fullscreen=""]) .ds-spin,
+  :host([fullscreen="true"]) .ds-spin {
     background: rgba(255, 255, 255, 0.72);
     height: 100%;
     place-content: center;

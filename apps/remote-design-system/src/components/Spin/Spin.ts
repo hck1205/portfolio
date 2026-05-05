@@ -41,7 +41,7 @@ export class DsSpin extends HTMLElement {
   }
 
   set fullscreen(value: boolean) {
-    this.setAttribute("fullscreen", String(value));
+    this.toggleAttribute("fullscreen", value);
   }
 
   get size(): SpinSize {
