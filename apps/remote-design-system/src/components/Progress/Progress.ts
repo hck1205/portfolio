@@ -7,21 +7,19 @@ import {
   getProgressType,
   normalizeBooleanAttribute
 } from "./dom/Progress.dom";
-import { PROGRESS_STYLES } from "./Progress.styles";
+import { createProgressElements, type ProgressElements } from "./dom/Progress.structure";
+import { getProgressStatusIconMarkup } from "./icons/Progress.icons";
+import { applyProgressStyles } from "./styles/Progress.stylesheet";
 import type { ProgressSize, ProgressStatus, ProgressType } from "./types/Progress.types";
 
-let progressStyleSheet: CSSStyleSheet | undefined;
+const CIRCLE_RADIUS = 42;
+const CIRCLE_CIRCUMFERENCE = 2 * Math.PI * CIRCLE_RADIUS;
 
 export class DsProgress extends HTMLElement {
   static observedAttributes = PROGRESS_OBSERVED_ATTRIBUTES;
 
-  private barElement?: HTMLDivElement;
-  private circleBarElement?: SVGCircleElement;
-  private circleElement?: HTMLDivElement;
-  private infoElement?: HTMLSpanElement;
-  private rootElement?: HTMLDivElement;
-  private stepsElement?: HTMLDivElement;
-  private trackElement?: HTMLDivElement;
+  private elements?: ProgressElements;
+  private renderedStatusIcon = "";
 
   connectedCallback() {
     this.render();
@@ -37,6 +35,14 @@ export class DsProgress extends HTMLElement {
 
   set percent(value: number) {
     this.setAttribute("percent", String(value));
+  }
+
+  get format() {
+    return this.getAttribute("format") ?? "";
+  }
+
+  set format(value: string) {
+    this.setAttribute("format", value);
   }
 
   get showInfo() {
@@ -80,136 +86,80 @@ export class DsProgress extends HTMLElement {
   }
 
   private render() {
-    if (!this.isConnected && !this.rootElement) {
+    if (!this.isConnected && !this.elements) {
       return;
     }
 
-    if (!this.rootElement) {
-      this.initializeStructure();
-    }
-
+    const elements = this.elements ?? this.initializeStructure();
     const percent = this.percent;
-    const radius = 42;
-    const circumference = 2 * Math.PI * radius;
-    const rootElement = this.rootElement;
+    const status = this.status;
+    const type = this.type;
+    const { barElement, circleBarElement, infoElement, infoTextElement, rootElement } = elements;
 
-    rootElement?.setAttribute("role", "progressbar");
-    rootElement?.setAttribute("aria-valuemin", "0");
-    rootElement?.setAttribute("aria-valuemax", "100");
-    rootElement?.setAttribute("aria-valuenow", String(percent));
+    rootElement.setAttribute("role", "progressbar");
+    rootElement.setAttribute("aria-valuemin", "0");
+    rootElement.setAttribute("aria-valuemax", "100");
+    rootElement.setAttribute("aria-valuenow", String(percent));
+    rootElement.dataset.size = this.size;
+    rootElement.dataset.status = status;
+    rootElement.dataset.type = type;
 
-    if (rootElement) {
-      rootElement.dataset.size = this.size;
-      rootElement.dataset.status = this.status;
-      rootElement.dataset.type = this.type;
-    }
-    if (this.barElement) {
-      this.barElement.style.width = `${percent}%`;
-    }
-    if (this.circleBarElement) {
-      this.circleBarElement.setAttribute("stroke-dasharray", String(circumference));
-      this.circleBarElement.setAttribute("stroke-dashoffset", String(circumference * (1 - percent / 100)));
-    }
-    if (this.infoElement) {
-      this.infoElement.hidden = !this.showInfo;
-      this.infoElement.textContent = `${Math.round(percent)}%`;
-    }
-    this.syncSteps(percent);
+    barElement.style.width = `${percent}%`;
+    circleBarElement.setAttribute("stroke-dasharray", String(CIRCLE_CIRCUMFERENCE));
+    circleBarElement.setAttribute("stroke-dashoffset", String(CIRCLE_CIRCUMFERENCE * (1 - percent / 100)));
+    infoElement.hidden = !this.showInfo;
+    infoElement.dataset.status = status;
+    infoTextElement.textContent = this.formatPercent(percent);
+
+    this.syncStatusIcon(elements, status, type);
+    this.syncSteps(elements, percent);
+  }
+
+  private formatPercent(percent: number) {
+    const roundedPercent = String(Math.round(percent));
+
+    return this.format ? this.format.replaceAll("{percent}", roundedPercent) : `${roundedPercent}%`;
   }
 
   private initializeStructure() {
     const shadowRoot = this.shadowRoot ?? this.attachShadow({ mode: "open" });
-    const rootElement = document.createElement("div");
-    const trackElement = document.createElement("div");
-    const barElement = document.createElement("div");
-    const circleElement = document.createElement("div");
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    const circleTrack = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    const circleBarElement = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    const stepsElement = document.createElement("div");
-    const infoElement = document.createElement("span");
+    const elements = createProgressElements();
 
-    rootElement.className = "ds-progress";
-    trackElement.className = "ds-progress__track";
-    barElement.className = "ds-progress__bar";
-    circleElement.className = "ds-progress__circle";
-    circleTrack.classList.add("ds-progress__circle-track");
-    circleBarElement.classList.add("ds-progress__circle-bar");
-    stepsElement.className = "ds-progress__steps";
-    infoElement.className = "ds-progress__info";
-    rootElement.setAttribute("part", "root");
-    trackElement.setAttribute("part", "track");
-    barElement.setAttribute("part", "bar");
-    circleElement.setAttribute("part", "circle");
-    stepsElement.setAttribute("part", "steps");
-    infoElement.setAttribute("part", "info");
-    svg.setAttribute("viewBox", "0 0 100 100");
-    circleTrack.setAttribute("cx", "50");
-    circleTrack.setAttribute("cy", "50");
-    circleTrack.setAttribute("r", "42");
-    circleBarElement.setAttribute("cx", "50");
-    circleBarElement.setAttribute("cy", "50");
-    circleBarElement.setAttribute("r", "42");
-    trackElement.append(barElement);
-    svg.append(circleTrack, circleBarElement);
-    circleElement.append(svg);
-    rootElement.append(trackElement, circleElement, stepsElement, infoElement);
-    shadowRoot.replaceChildren(rootElement);
+    shadowRoot.replaceChildren(elements.rootElement);
     applyProgressStyles(shadowRoot);
-    this.rootElement = rootElement;
-    this.trackElement = trackElement;
-    this.barElement = barElement;
-    this.circleElement = circleElement;
-    this.circleBarElement = circleBarElement;
-    this.stepsElement = stepsElement;
-    this.infoElement = infoElement;
+    this.elements = elements;
+
+    return elements;
   }
 
-  private syncSteps(percent: number) {
-    if (!this.stepsElement) {
-      return;
+  private syncStatusIcon({ statusIconElement }: ProgressElements, status: ProgressStatus, type: ProgressType) {
+    const iconMarkup = type === "circle" ? getProgressStatusIconMarkup(status) : "";
+
+    statusIconElement.hidden = !iconMarkup;
+    if (this.renderedStatusIcon !== iconMarkup) {
+      statusIconElement.innerHTML = iconMarkup;
+      this.renderedStatusIcon = iconMarkup;
     }
+  }
 
-    const activeCount = Math.round((percent / 100) * this.steps);
-    const existingSteps = Array.from(this.stepsElement.children);
+  private syncSteps({ stepsElement }: ProgressElements, percent: number) {
+    const stepCount = this.steps;
+    const activeCount = Math.round((percent / 100) * stepCount);
 
-    if (existingSteps.length !== this.steps) {
-      this.stepsElement.replaceChildren(
-        ...Array.from({ length: this.steps }, () => {
+    if (stepsElement.childElementCount !== stepCount) {
+      stepsElement.replaceChildren(
+        ...Array.from({ length: stepCount }, () => {
           const step = document.createElement("span");
 
           step.className = "ds-progress__step";
+          step.setAttribute("part", "step");
           return step;
         })
       );
     }
 
-    Array.from(this.stepsElement.children).forEach((step, index) => {
+    Array.from(stepsElement.children).forEach((step, index) => {
       (step as HTMLElement).dataset.active = String(index < activeCount);
     });
   }
-}
-
-function canAdoptStyleSheets() {
-  return "adoptedStyleSheets" in Document.prototype && "replaceSync" in CSSStyleSheet.prototype;
-}
-
-function applyProgressStyles(shadowRoot: ShadowRoot) {
-  if (canAdoptStyleSheets()) {
-    if (!progressStyleSheet) {
-      progressStyleSheet = new CSSStyleSheet();
-      progressStyleSheet.replaceSync(PROGRESS_STYLES);
-    }
-
-    if (!shadowRoot.adoptedStyleSheets.includes(progressStyleSheet)) {
-      shadowRoot.adoptedStyleSheets = [...shadowRoot.adoptedStyleSheets, progressStyleSheet];
-    }
-
-    return;
-  }
-
-  const styleElement = document.createElement("style");
-
-  styleElement.textContent = PROGRESS_STYLES;
-  shadowRoot.prepend(styleElement);
 }
