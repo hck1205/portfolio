@@ -34,6 +34,7 @@ export * from './Popover';
 export * from './Progress';
 export * from './Radio';
 export * from './Rate';
+export * from './Result';
 export * from './Select';
 export * from './Segmented';
 export * from './Slider';

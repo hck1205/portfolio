@@ -37,6 +37,7 @@ import {
   defineDsProgress,
   defineDsRadio,
   defineDsRate,
+  defineDsResult,
   defineDsSelect,
   defineDsSegmented,
   defineDsSlider,
@@ -92,6 +93,7 @@ export function defineDesignSystemElements(registry?: CustomElementRegistry) {
   defineDsProgress(registry);
   defineDsRadio(registry);
   defineDsRate(registry);
+  defineDsResult(registry);
   defineDsSelect(registry);
   defineDsSegmented(registry);
   defineDsSlider(registry);
