@@ -24,6 +24,7 @@ export * from './Input';
 export * from './InputNumber';
 export * from './Layout';
 export * from './Menu';
+export * from './Message';
 export * from './Mentions';
 export * from './Pagination';
 export * from './Popover';
