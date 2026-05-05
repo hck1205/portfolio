@@ -1,0 +1,28 @@
+.ds-carousel-story-frame {
+  min-width: 360px;
+  padding: var(--spacing-ds-5, 20px);
+  width: min(720px, 90vw);
+}
+
+.ds-carousel-story-slide {
+  align-items: center;
+  background: linear-gradient(135deg, #1677ff, #52c41a);
+  color: #fff;
+  display: flex;
+  font-size: 28px;
+  font-weight: 600;
+  height: 220px;
+  justify-content: center;
+}
+
+.ds-carousel-story-slide:nth-child(2) {
+  background: linear-gradient(135deg, #722ed1, #eb2f96);
+}
+
+.ds-carousel-story-slide:nth-child(3) {
+  background: linear-gradient(135deg, #fa8c16, #fadb14);
+}
+
+.ds-carousel-story-slide:nth-child(4) {
+  background: linear-gradient(135deg, #13c2c2, #2f54eb);
+}
