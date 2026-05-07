@@ -1,4 +1,8 @@
-import { COLLAPSE_OBSERVED_ATTRIBUTES, COLLAPSE_TOGGLE_EVENT } from "./constants/Collapse.constants";
+import {
+  COLLAPSE_ITEM_OBSERVED_ATTRIBUTES,
+  COLLAPSE_OBSERVED_ATTRIBUTES,
+  COLLAPSE_TOGGLE_EVENT
+} from "./constants/Collapse.constants";
 import { normalizeBooleanAttribute } from "./dom/Collapse.dom";
 import { DsCollapseItem } from "./item/CollapseItem";
 import type { CollapseExpandIconPlacement, CollapseSize, CollapseToggleDetail } from "./types/Collapse.types";
@@ -259,7 +263,10 @@ export class DsCollapse extends HTMLElement {
       this.syncItems();
     });
     this.itemObserver.observe(this, {
-      childList: true
+      attributeFilter: COLLAPSE_ITEM_OBSERVED_ATTRIBUTES,
+      attributes: true,
+      childList: true,
+      subtree: true
     });
   }
 

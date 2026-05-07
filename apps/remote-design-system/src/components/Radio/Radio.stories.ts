@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
+import clsx from "classnames";
 
 import "./Radio.stories.css";
 import {
@@ -67,7 +68,7 @@ function ensureRadioDefined() {
 function createFrame(children: HTMLElement[], className = "") {
   const frame = document.createElement("div");
 
-  frame.className = ["ds-radio-story-frame", className].filter(Boolean).join(" ");
+  frame.className = clsx("ds-radio-story-frame", className);
   frame.append(...children);
 
   return frame;

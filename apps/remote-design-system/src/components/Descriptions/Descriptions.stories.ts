@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
+import clsx from "classnames";
 
 import "./Descriptions.stories.css";
 import { defineDsDescriptions, type DescriptionsLayout, type DescriptionsSize } from ".";
@@ -108,11 +109,7 @@ function createBaseItems() {
 function createFrame(children: HTMLElement[], className?: string) {
   const frame = document.createElement("div");
 
-  frame.className = "ds-descriptions-story-frame";
-  if (className) {
-    frame.classList.add(className);
-  }
-
+  frame.className = clsx("ds-descriptions-story-frame", className);
   frame.append(...children);
 
   return frame;

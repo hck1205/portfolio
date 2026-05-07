@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
+import clsx from "classnames";
 
 import "./Select.stories.css";
 import {
@@ -66,7 +67,7 @@ function ensureSelectDefined() {
 function createFrame(children: HTMLElement[], className = "") {
   const frame = document.createElement("div");
 
-  frame.className = ["ds-select-story-frame", className].filter(Boolean).join(" ");
+  frame.className = clsx("ds-select-story-frame", className);
   frame.append(...children);
 
   return frame;

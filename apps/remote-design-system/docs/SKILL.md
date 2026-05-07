@@ -62,6 +62,19 @@ Build components that are:
    - `corepack pnpm --filter @portfolio/remote-design-system build:lib`
    - `git diff --check`
 
+## ClassName Handling Rules
+
+- For dynamic `className` or SVG `class` composition, prefer the `classnames` package instead of
+  manual array filtering, string concatenation, or conditional template literals.
+- Import it with the local alias `clsx`:
+
+```ts
+import clsx from "classnames";
+```
+
+- Use `clsx("base-class", optionalClass, { "state-class": condition })` for conditional classes.
+- Static single-class assignments may stay as plain strings.
+
 ## Folder Structure
 
 Use this structure for non-trivial components:

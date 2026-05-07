@@ -7,6 +7,7 @@ import {
   CircleX,
   createElement as createLucideElement
 } from "lucide";
+import clsx from "classnames";
 
 import { DATE_PICKER_STYLES } from "../DatePicker.styles";
 import type { DatePickerCell, DatePickerPicker, DatePickerPlacement } from "../types/DatePicker.types";
@@ -204,7 +205,7 @@ export function syncDatePickerElements({
   elements.titleElement.textContent = title;
   syncNavigationLabels(elements, picker);
   elements.weekdaysElement.hidden = picker !== "date";
-  elements.gridElement.className = `ds-date-picker__grid ds-date-picker__grid--${picker}`;
+  elements.gridElement.className = clsx("ds-date-picker__grid", `ds-date-picker__grid--${picker}`);
   elements.gridElement.setAttribute("aria-label", title);
   syncCells(elements.gridElement, cells);
 }

@@ -1,3 +1,5 @@
+import clsx from "classnames";
+
 export type ProgressElements = {
   barElement: HTMLDivElement;
   circleBarElement: SVGCircleElement;
@@ -62,7 +64,7 @@ function createPartElement<K extends keyof HTMLElementTagNameMap>(
 function createCircleElement(className: string, partName: string) {
   const element = document.createElementNS(SVG_NAMESPACE, "circle");
 
-  element.classList.add(className);
+  element.setAttribute("class", clsx(className));
   element.setAttribute("part", partName);
   Object.entries(CIRCLE_ATTRIBUTES).forEach(([name, value]) => element.setAttribute(name, value));
 

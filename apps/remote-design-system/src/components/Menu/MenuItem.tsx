@@ -10,7 +10,12 @@ import {
   syncMenuItemElements,
   type MenuItemElements
 } from "./render/Menu.render";
-import type { MenuItemClickDetail, MenuItemToggleDetail, MenuItemType, MenuMode } from "./types/Menu.types";
+import type {
+  MenuItemClickDetail,
+  MenuItemToggleDetail,
+  MenuItemType,
+  MenuMode
+} from "./types/Menu.types";
 
 export class DsMenuItem extends HTMLElement {
   static observedAttributes = MENU_ITEM_OBSERVED_ATTRIBUTES;
@@ -193,7 +198,6 @@ export class DsMenuItem extends HTMLElement {
       href: this.href,
       label: this.label,
       collapsed: this.collapsed,
-      mode: this.menuMode,
       onClick: this.handleClick,
       open: this.open,
       selected: this.selected,

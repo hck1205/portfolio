@@ -1,4 +1,5 @@
 import { ChevronLeft, createElement as createLucideElement } from "lucide";
+import clsx from "classnames";
 
 import { LAYOUT_REGION_STYLES, LAYOUT_SIDER_STYLES, LAYOUT_STYLES } from "../Layout.styles";
 
@@ -71,7 +72,7 @@ export function createLayoutRegionElements(region: "header" | "content" | "foote
   const rootElement = document.createElement(tagName);
   const slotElement = document.createElement("slot");
 
-  rootElement.className = `ds-layout-region ds-layout-${region}`;
+  rootElement.className = clsx("ds-layout-region", `ds-layout-${region}`);
   rootElement.append(slotElement);
 
   return { rootElement, slotElement };

@@ -1,3 +1,5 @@
+import clsx from "classnames";
+
 import { defineDsSwitch } from "../../Switch";
 import { defineDsSpin } from "..";
 import { SPIN_SIZE_OPTIONS } from "./Spin.stories.constants";
@@ -101,7 +103,7 @@ export function renderProgress() {
   const row = createRow(...createStaticProgressItems());
   const frame = createFrame(row);
 
-  row.classList.add("ds-spin-story-row--sizes", "ds-spin-story-row--progress");
+  row.className = clsx("ds-spin-story-row", "ds-spin-story-row--sizes", "ds-spin-story-row--progress");
   dynamicItem.classList.add("ds-spin-story-progress-dynamic");
   setProgressPercent(dynamicItem, dynamicSpin, 0);
   row.append(dynamicItem);

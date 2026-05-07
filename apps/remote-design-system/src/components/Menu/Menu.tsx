@@ -1,6 +1,7 @@
 import {
   MENU_ITEM_CLICK_EVENT,
   MENU_ITEM_ELEMENT_NAME,
+  MENU_ITEM_OBSERVED_ATTRIBUTES,
   MENU_ITEM_TOGGLE_EVENT,
   MENU_OBSERVED_ATTRIBUTES,
   MENU_OPEN_CHANGE_EVENT,
@@ -36,9 +37,12 @@ export class DsMenu extends HTMLElement {
 
   private elements?: MenuElements;
   private initializedDefaults = false;
+  private itemObserver?: MutationObserver;
+  private previousInlineCollapsed?: boolean;
 
   connectedCallback() {
     this.initializeDefaultState();
+    this.observeItemChanges();
     this.render();
     this.addEventListener(MENU_ITEM_CLICK_EVENT, this.handleItemClick as EventListener);
     this.addEventListener(MENU_ITEM_TOGGLE_EVENT, this.handleItemToggle as EventListener);
@@ -47,6 +51,7 @@ export class DsMenu extends HTMLElement {
   disconnectedCallback() {
     this.removeEventListener(MENU_ITEM_CLICK_EVENT, this.handleItemClick as EventListener);
     this.removeEventListener(MENU_ITEM_TOGGLE_EVENT, this.handleItemToggle as EventListener);
+    this.itemObserver?.disconnect();
   }
 
   attributeChangedCallback() {
@@ -217,11 +222,28 @@ export class DsMenu extends HTMLElement {
     }
   }
 
+  private observeItemChanges() {
+    if (this.itemObserver || typeof MutationObserver === "undefined") {
+      return;
+    }
+
+    this.itemObserver = new MutationObserver(() => {
+      this.syncItems();
+    });
+    this.itemObserver.observe(this, {
+      attributeFilter: [...MENU_ITEM_OBSERVED_ATTRIBUTES],
+      attributes: true,
+      childList: true,
+      subtree: true
+    });
+  }
+
   private syncAttributes() {
     if (!this.elements) {
       return;
     }
 
+    this.syncInlineCollapsedState();
     this.setAttributeIfChanged("mode", this.inlineCollapsed ? "inline" : this.mode);
     this.setAttributeIfChanged("theme", this.theme);
     syncMenuElements({
@@ -232,6 +254,20 @@ export class DsMenu extends HTMLElement {
     });
   }
 
+  private syncInlineCollapsedState() {
+    const inlineCollapsed = this.inlineCollapsed;
+
+    if (this.previousInlineCollapsed === inlineCollapsed) {
+      return;
+    }
+
+    this.previousInlineCollapsed = inlineCollapsed;
+
+    if (inlineCollapsed && this.openKeys.length > 0) {
+      this.openKeys = [];
+    }
+  }
+
   private syncItems() {
     const selectedKeySet = new Set(this.selectedKeys);
     const openKeySet = new Set(this.openKeys);
@@ -240,7 +276,7 @@ export class DsMenu extends HTMLElement {
       const nestedInMenuItem = this.isNestedMenuItem(item);
 
       item.syncFromMenu({
-        collapsed: !nestedInMenuItem && this.inlineCollapsed,
+        collapsed: this.inlineCollapsed,
         mode: this.mode === "horizontal" && nestedInMenuItem ? "vertical" : this.mode,
         open: openKeySet.has(item.itemKey),
         selected: selectedKeySet.has(item.itemKey)

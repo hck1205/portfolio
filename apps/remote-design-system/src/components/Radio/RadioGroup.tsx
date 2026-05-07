@@ -2,7 +2,8 @@ import { DsRadio } from "./Radio";
 import {
   RADIO_CHANGE_EVENT,
   RADIO_GROUP_CHANGE_EVENT,
-  RADIO_GROUP_OBSERVED_ATTRIBUTES
+  RADIO_GROUP_OBSERVED_ATTRIBUTES,
+  RADIO_OBSERVED_ATTRIBUTES
 } from "./constants/Radio.constants";
 import {
   getRadioButtonStyle,
@@ -243,7 +244,10 @@ export class DsRadioGroup extends HTMLElement {
       this.syncRadios();
     });
     this.mutationObserver.observe(this, {
-      childList: true
+      attributeFilter: [...RADIO_OBSERVED_ATTRIBUTES],
+      attributes: true,
+      childList: true,
+      subtree: true
     });
   }
 

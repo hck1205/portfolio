@@ -12,6 +12,11 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
+    "./register": {
+      "types": "./dist/register.d.ts",
+      "import": "./dist/register.js",
+      "require": "./dist/register.cjs"
+    },
     "./styles.css": "./dist/styles.css"
   },
   "files": [
@@ -35,6 +40,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "classnames": "2.5.1",
     "dayjs": "^1.11.20",
     "lucide": "^0.560.0"
   },

@@ -1,3 +1,5 @@
+import clsx from "classnames";
+
 import { createDsButton } from "../../shared/stories/storyElements";
 import { defaultEmptyStoryArgs } from "./Empty.storyData";
 import type { EmptyStoryArgs } from "./Empty.storyTypes";
@@ -19,7 +21,7 @@ export function createEmpty(args: EmptyStoryArgs, actionText?: string) {
 export function createFrame(children: HTMLElement[], className = "") {
   const frame = document.createElement("div");
 
-  frame.className = ["ds-empty-story-frame", className].filter(Boolean).join(" ");
+  frame.className = clsx("ds-empty-story-frame", className);
   frame.append(...children);
 
   return frame;
@@ -48,7 +50,7 @@ export function createComponentCase(title: string, child: HTMLElement, className
   const heading = document.createElement("h3");
   const body = document.createElement("div");
 
-  section.className = ["ds-empty-story-component", className].filter(Boolean).join(" ");
+  section.className = clsx("ds-empty-story-component", className);
   heading.className = "ds-empty-story-component-title";
   heading.textContent = title;
   body.className = "ds-empty-story-component-body";
