@@ -1,0 +1,115 @@
+import {
+  defineDsAlert,
+  defineDsAnchor,
+  defineDsAutoComplete,
+  defineDsAvatar,
+  defineDsBadge,
+  defineDsButton,
+  defineDsCalendar,
+  defineDsCard,
+  defineDsCheckbox,
+  defineDsColorPicker,
+  defineDsCascader,
+  defineDsCarousel,
+  defineDsCollapse,
+  defineDsDatePicker,
+  defineDsDescriptions,
+  defineDsDivider,
+  defineDsDrawer,
+  defineDsDropdown,
+  defineDsEmpty,
+  defineDsFloatButton,
+  defineDsForm,
+  defineDsImage,
+  defineDsInput,
+  defineDsInputNumber,
+  defineDsLayout,
+  defineDsMenu,
+  defineDsMessage,
+  defineDsMentions,
+  defineDsModal,
+  defineDsNotification,
+  defineDsPagination,
+  defineDsPopconfirm,
+  defineDsPopover,
+  defineDsProgress,
+  defineDsRadio,
+  defineDsRate,
+  defineDsResult,
+  defineDsSelect,
+  defineDsSegmented,
+  defineDsSkeleton,
+  defineDsSlider,
+  defineDsSteps,
+  defineDsSplitter,
+  defineDsSpin,
+  defineDsSwitch,
+  defineDsTabs,
+  defineDsTreeSelect,
+  defineDsTimePicker,
+  defineDsTransfer,
+  defineDsUpload,
+  defineDsTypography,
+} from "./components";
+
+export function defineDesignSystemElements(registry?: CustomElementRegistry) {
+  const elementRegistry = registry ?? globalThis.customElements;
+
+  if (!elementRegistry) {
+    return;
+  }
+
+  defineDsAlert(elementRegistry);
+  defineDsAnchor(elementRegistry);
+  defineDsAutoComplete(elementRegistry);
+  defineDsAvatar(elementRegistry);
+  defineDsBadge(elementRegistry);
+  defineDsButton(elementRegistry);
+  defineDsCalendar(elementRegistry);
+  defineDsCard(elementRegistry);
+  defineDsCheckbox(elementRegistry);
+  defineDsColorPicker(elementRegistry);
+  defineDsDatePicker(elementRegistry);
+  defineDsCascader(elementRegistry);
+  defineDsCarousel(elementRegistry);
+  defineDsDescriptions(elementRegistry);
+  defineDsDivider(elementRegistry);
+  defineDsDrawer(elementRegistry);
+  defineDsDropdown(elementRegistry);
+  defineDsEmpty(elementRegistry);
+  defineDsTypography(elementRegistry);
+  defineDsFloatButton(elementRegistry);
+  defineDsForm(elementRegistry);
+  defineDsImage(elementRegistry);
+  defineDsInput(elementRegistry);
+  defineDsInputNumber(elementRegistry);
+  defineDsCollapse(elementRegistry);
+  defineDsLayout(elementRegistry);
+  defineDsMenu(elementRegistry);
+  defineDsMessage(elementRegistry);
+  defineDsMentions(elementRegistry);
+  defineDsModal(elementRegistry);
+  defineDsNotification(elementRegistry);
+  defineDsPagination(elementRegistry);
+  defineDsPopconfirm(elementRegistry);
+  defineDsPopover(elementRegistry);
+  defineDsProgress(elementRegistry);
+  defineDsRadio(elementRegistry);
+  defineDsRate(elementRegistry);
+  defineDsResult(elementRegistry);
+  defineDsSelect(elementRegistry);
+  defineDsSegmented(elementRegistry);
+  defineDsSkeleton(elementRegistry);
+  defineDsSlider(elementRegistry);
+  defineDsSteps(elementRegistry);
+  defineDsSplitter(elementRegistry);
+  defineDsSpin(elementRegistry);
+  defineDsSwitch(elementRegistry);
+  defineDsTabs(elementRegistry);
+  defineDsTreeSelect(elementRegistry);
+  defineDsTimePicker(elementRegistry);
+  defineDsTransfer(elementRegistry);
+  defineDsUpload(elementRegistry);
+}
+
+defineDesignSystemElements();

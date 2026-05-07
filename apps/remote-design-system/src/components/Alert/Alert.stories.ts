@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
+import clsx from "classnames";
 
 import "./Alert.stories.css";
 import { defineDsButton } from "../Button";
@@ -70,7 +71,7 @@ function createAlert(args: AlertStoryArgs) {
 function createFrame(children: HTMLElement[], className = "") {
   const frame = document.createElement("div");
 
-  frame.className = ["ds-alert-story-frame", className].filter(Boolean).join(" ");
+  frame.className = clsx("ds-alert-story-frame", className);
   frame.append(...children);
 
   return frame;

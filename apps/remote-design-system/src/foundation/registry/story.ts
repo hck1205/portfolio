@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
+import clsx from "classnames";
 
 import { breakpointStory } from "../breakpoint";
 import { colorStory } from "../color";
@@ -214,7 +215,7 @@ function getColorTokenFamilies(tokens: readonly FoundationToken[]) {
 function createTokenCard(group: FoundationTokenGroup, token: FoundationToken) {
   const card = createElement("article", { className: "ds-token-card" });
   const preview = createElement("div", {
-    className: `ds-token-preview ds-token-preview--${group.category}`,
+    className: clsx("ds-token-preview", `ds-token-preview--${group.category}`),
     textContent: group.category === "font" ? "Aa" : undefined
   });
   const body = createElement("div", { className: "ds-token-card__body" });

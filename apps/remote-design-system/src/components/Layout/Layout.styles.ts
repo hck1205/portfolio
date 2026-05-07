@@ -74,7 +74,8 @@ export const LAYOUT_REGION_STYLES = `
     font-family: var(--font-sans);
     height: 100%;
     min-height: 0;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
     padding: var(--ds-layout-content-padding, 0);
   }
 
@@ -105,6 +106,7 @@ export const LAYOUT_SIDER_STYLES = `
 
   :host([collapsed]) {
     --ds-layout-sider-current-width: var(--ds-layout-sider-collapsed-width, 80px);
+    --ds-menu-collapsed-width: var(--ds-layout-sider-current-width);
   }
 
   *, *::before, *::after {
@@ -143,7 +145,8 @@ export const LAYOUT_SIDER_STYLES = `
     flex: auto;
     min-height: 0;
     min-width: 0;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
   .ds-layout-sider__trigger {

@@ -1,4 +1,5 @@
 import { Eye, EyeOff, LoaderCircle, Search, X, createElement as createLucideElement } from "lucide";
+import clsx from "classnames";
 
 import { INPUT_STYLES } from "./Input.styles";
 import type { InputMode, InputStatus, InputVariant } from "./types/Input.types";
@@ -344,13 +345,18 @@ function syncSearchButtonContent(
 
   const textElement = document.createElement("span");
   const iconElement = createIcon(icon, 16);
+  const iconClassName = clsx({
+    "ds-input__spinner": loading
+  });
 
   button.dataset.iconName = iconName;
   button.dataset.showIcon = nextShowIcon;
   button.dataset.loading = nextLoading;
   textElement.textContent = "Search";
+  if (iconClassName) {
+    iconElement.setAttribute("class", iconClassName);
+  }
   button.replaceChildren(...(showIcon ? [iconElement] : []), textElement);
-  button.firstElementChild?.classList.toggle("ds-input__spinner", loading);
 }
 
 function syncSlotVisibility(slotElement: HTMLSlotElement) {

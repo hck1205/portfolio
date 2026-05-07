@@ -3,6 +3,7 @@ import {
   LAYOUT_SIDER_COLLAPSE_EVENT,
   LAYOUT_SIDER_OBSERVED_ATTRIBUTES
 } from "./constants/Layout.constants";
+import { MENU_ELEMENT_NAME } from "../Menu/constants/Menu.constants";
 import {
   getLayoutBreakpoint,
   getLayoutSiderTheme,
@@ -23,15 +24,18 @@ export class DsLayoutSider extends HTMLElement {
 
   private elements?: LayoutSiderElements;
   private hasAppliedDefaultCollapsed = false;
+  private menuObserver?: MutationObserver;
   private mediaQueryList?: MediaQueryList;
 
   connectedCallback() {
     this.render();
     this.syncResponsiveListener();
+    this.syncMenuObserver();
   }
 
   disconnectedCallback() {
     this.mediaQueryList?.removeEventListener("change", this.handleBreakpointChange);
+    this.menuObserver?.disconnect();
     this.elements?.triggerSlotElement.removeEventListener("slotchange", this.handleTriggerSlotChange);
   }
 
@@ -131,6 +135,10 @@ export class DsLayoutSider extends HTMLElement {
     this.syncStructure();
   };
 
+  private handleMenuContentChange = () => {
+    this.syncNestedMenuCollapsed();
+  };
+
   private render() {
     if (!this.elements) {
       const shadowRoot = this.shadowRoot ?? this.attachShadow({ mode: "open" });
@@ -144,6 +152,7 @@ export class DsLayoutSider extends HTMLElement {
     this.syncDefaultCollapsed();
     this.syncAttributes();
     this.syncStructure();
+    this.syncNestedMenuCollapsed();
   }
 
   private syncDefaultCollapsed() {
@@ -205,6 +214,24 @@ export class DsLayoutSider extends HTMLElement {
     this.mediaQueryList = window.matchMedia(`(max-width: ${LAYOUT_BREAKPOINTS[breakpoint] - 0.02}px)`);
     this.mediaQueryList.addEventListener("change", this.handleBreakpointChange);
     this.setCollapsed(this.mediaQueryList.matches, "responsive", false);
+  }
+
+  private syncMenuObserver() {
+    if (typeof MutationObserver === "undefined") {
+      return;
+    }
+
+    this.menuObserver ??= new MutationObserver(this.handleMenuContentChange);
+    this.menuObserver.observe(this, {
+      childList: true,
+      subtree: true
+    });
+  }
+
+  private syncNestedMenuCollapsed() {
+    for (const menu of this.querySelectorAll<HTMLElement>(MENU_ELEMENT_NAME)) {
+      menu.toggleAttribute("inline-collapsed", this.collapsed);
+    }
   }
 
   private setCollapsed(

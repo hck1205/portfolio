@@ -1,4 +1,5 @@
 import { ChevronDown, ChevronLeft, ChevronRight, Ellipsis, createElement as createLucideElement } from "lucide";
+import clsx from "classnames";
 
 import { PAGINATION_STYLES } from "../Pagination.styles";
 import type { PaginationItem } from "../types/Pagination.types";
@@ -197,7 +198,7 @@ function syncListElement(listElement: HTMLUListElement, items: PaginationItem[],
     const listItemElement = document.createElement("li");
     const buttonElement = document.createElement("button");
 
-    buttonElement.className = `ds-pagination__button ds-pagination__button--${item.type}`;
+    buttonElement.className = clsx("ds-pagination__button", `ds-pagination__button--${item.type}`);
     buttonElement.type = "button";
     buttonElement.disabled = disabled || item.disabled;
     buttonElement.dataset.page = String(item.page);

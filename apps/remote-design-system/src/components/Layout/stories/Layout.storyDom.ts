@@ -1,3 +1,4 @@
+import clsx from "classnames";
 import {
   Bell,
   Boxes,
@@ -33,7 +34,7 @@ export function resolveSideKey(key: MenuKey): SideKey {
 export function createPreview(modifier?: string) {
   const preview = document.createElement("div");
 
-  preview.className = ["ds-layout-story-preview", modifier].filter(Boolean).join(" ");
+  preview.className = clsx("ds-layout-story-preview", modifier);
 
   return preview;
 }
@@ -149,7 +150,6 @@ export function createSiderMenu(args: LayoutStoryArgs, activeKey: MenuKey, onSel
   setAttributes(menu, {
     "aria-label": "Side menu",
     "default-open-keys": getOpenGroupKeys(activeKey).join(","),
-    "inline-collapsed": args.collapsed,
     mode: "inline",
     selectable: true,
     "selected-keys": activeKey,
@@ -233,6 +233,7 @@ function createHeaderAction(label: string, icon: StoryIcon, hasIndicator = false
 function createMenuGroupElement(key: string, label: string, items: SideItem[]) {
   const group = createMenuItemElement({ icon: LayoutDashboard, key, label }, "submenu");
 
+  group.setAttribute("collapsed-children-align", "center");
   group.append(...items.map((item) => createMenuItemElement(item)));
 
   return group;

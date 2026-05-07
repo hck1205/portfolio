@@ -12,12 +12,44 @@ export type MenuItemElements = {
   controlElement: HTMLAnchorElement | HTMLButtonElement;
   dividerElement: HTMLHRElement;
   extraElement: HTMLSpanElement;
+  iconStackElement: HTMLSpanElement;
   groupLabelElement: HTMLDivElement;
   iconSlotElement: HTMLSlotElement;
   labelElement: HTMLSpanElement;
   rootElement: HTMLLIElement;
   chevronElement: HTMLSpanElement;
 };
+
+function syncMenuItemIconState(elements: MenuItemElements) {
+  const hasIcon = elements.iconSlotElement.assignedElements({ flatten: true }).length > 0;
+
+  elements.iconStackElement.hidden = !hasIcon;
+  elements.iconSlotElement.hidden = !hasIcon;
+  elements.rootElement.toggleAttribute("data-has-icon", hasIcon);
+
+  return hasIcon;
+}
+
+function syncMenuItemChevronState(elements: MenuItemElements, hasIcon: boolean) {
+  const collapsed = elements.rootElement.dataset.menuCollapsed === "true";
+  const isSubmenu = elements.rootElement.dataset.type === "submenu";
+  const stackChevron = collapsed && isSubmenu && hasIcon;
+
+  elements.chevronElement.hidden = !isSubmenu;
+  elements.rootElement.toggleAttribute("data-chevron-stacked", stackChevron);
+
+  if (stackChevron) {
+    if (elements.chevronElement.parentElement !== elements.iconStackElement) {
+      elements.iconStackElement.append(elements.chevronElement);
+    }
+
+    return;
+  }
+
+  if (elements.chevronElement.parentElement !== elements.controlElement) {
+    elements.controlElement.append(elements.chevronElement);
+  }
+}
 
 let menuStyleSheet: CSSStyleSheet | undefined;
 let menuItemStyleSheet: CSSStyleSheet | undefined;
@@ -132,6 +164,7 @@ export function createMenuItemElements({
 }): MenuItemElements {
   const rootElement = document.createElement("li");
   const controlElement = createMenuItemControl(href);
+  const iconStackElement = document.createElement("span");
   const iconSlotElement = document.createElement("slot");
   const labelElement = document.createElement("span");
   const extraElement = document.createElement("span");
@@ -142,6 +175,8 @@ export function createMenuItemElements({
   const childrenSlotElement = document.createElement("slot");
 
   rootElement.className = "ds-menu-item";
+  iconStackElement.className = "ds-menu-item__icon-stack";
+  iconStackElement.hidden = true;
   iconSlotElement.className = "ds-menu-item__icon";
   iconSlotElement.name = "icon";
   iconSlotElement.hidden = true;
@@ -151,29 +186,37 @@ export function createMenuItemElements({
   chevronElement.setAttribute("aria-hidden", "true");
   chevronElement.append(createChevronIcon());
   childrenElement.className = "ds-menu-item__children";
+  childrenSlotElement.className = "ds-menu-item__children-slot";
   groupLabelElement.className = "ds-menu-item__group-label";
   dividerElement.className = "ds-menu-item__divider";
   dividerElement.setAttribute("role", "separator");
 
-  iconSlotElement.addEventListener("slotchange", () => {
-    iconSlotElement.hidden = iconSlotElement.assignedElements({ flatten: true }).length === 0;
-  });
   controlElement.addEventListener("click", onClick);
+  iconStackElement.append(iconSlotElement);
   childrenElement.append(childrenSlotElement);
-  controlElement.append(iconSlotElement, labelElement, extraElement, chevronElement);
+  controlElement.append(iconStackElement, labelElement, extraElement, chevronElement);
   rootElement.append(controlElement, groupLabelElement, childrenElement, dividerElement);
 
-  return {
+  const elements = {
     chevronElement,
     childrenElement,
     controlElement,
     dividerElement,
     extraElement,
     groupLabelElement,
+    iconStackElement,
     iconSlotElement,
     labelElement,
     rootElement
   };
+
+  iconSlotElement.addEventListener("slotchange", () => {
+    const hasIcon = syncMenuItemIconState(elements);
+
+    syncMenuItemChevronState(elements, hasIcon);
+  });
+
+  return elements;
 }
 
 function replaceMenuItemControl({
@@ -189,7 +232,12 @@ function replaceMenuItemControl({
 
   elements.controlElement.removeEventListener("click", onClick);
   controlElement.addEventListener("click", onClick);
-  controlElement.append(elements.iconSlotElement, elements.labelElement, elements.extraElement, elements.chevronElement);
+  controlElement.append(
+    elements.iconStackElement,
+    elements.labelElement,
+    elements.extraElement,
+    elements.chevronElement
+  );
   elements.controlElement.replaceWith(controlElement);
 
   return {
@@ -205,7 +253,6 @@ export function syncMenuItemElements({
   href,
   label,
   collapsed,
-  mode,
   onClick,
   open,
   selected,
@@ -218,7 +265,6 @@ export function syncMenuItemElements({
   href: string;
   label: string;
   collapsed: boolean;
-  mode: MenuMode;
   onClick: (event: Event) => void;
   open: boolean;
   selected: boolean;
@@ -232,11 +278,17 @@ export function syncMenuItemElements({
   const isSubmenu = type === "submenu";
   const isGroup = type === "group";
 
+  nextElements.rootElement.dataset.menuCollapsed = String(collapsed);
+  nextElements.rootElement.dataset.type = type;
+
+  const hasIcon = syncMenuItemIconState(nextElements);
   nextElements.labelElement.textContent = label;
   nextElements.extraElement.textContent = extra;
   nextElements.extraElement.hidden = !extra;
-  nextElements.chevronElement.hidden = !isSubmenu;
-  nextElements.childrenElement.hidden = collapsed || (!isSubmenu && !isGroup) || (isSubmenu && !open);
+  syncMenuItemChevronState(nextElements, hasIcon);
+  nextElements.childrenElement.hidden = collapsed
+    ? !isSubmenu || !open
+    : (!isSubmenu && !isGroup) || (isSubmenu && !open);
   nextElements.groupLabelElement.textContent = label;
   nextElements.rootElement.setAttribute("role", isDivider ? "separator" : "none");
   nextElements.controlElement.setAttribute("role", "menuitem");
@@ -263,9 +315,6 @@ export function syncMenuItemElements({
     syncOptionalAttribute(nextElements.controlElement, "target", target);
     syncOptionalAttribute(nextElements.controlElement, "rel", target === "_blank" ? "noreferrer" : "");
   }
-
-  nextElements.rootElement.dataset.menuMode = mode;
-  nextElements.rootElement.toggleAttribute("data-menu-collapsed", collapsed);
 
   return nextElements;
 }

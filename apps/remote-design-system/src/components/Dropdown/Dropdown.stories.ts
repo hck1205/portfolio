@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
+import clsx from "classnames";
 import {
   Archive,
   Check,
@@ -124,7 +125,7 @@ function createMenuItems() {
 function createStoryTriggerIcon(icon: Parameters<typeof createLucideElement>[0], className = "") {
   const wrapperElement = document.createElement("span");
 
-  wrapperElement.className = ["ds-dropdown-story-trigger-icon", className].filter(Boolean).join(" ");
+  wrapperElement.className = clsx("ds-dropdown-story-trigger-icon", className);
   wrapperElement.slot = "icon";
   wrapperElement.append(createStoryIcon(icon));
 
@@ -167,12 +168,9 @@ function createIconItemContent(
   const mainElement = document.createElement("span");
   const labelElement = document.createElement("span");
 
-  contentElement.className = [
-    "ds-dropdown-story-item-content",
-    suffix ? "ds-dropdown-story-item-content--suffix" : ""
-  ]
-    .filter(Boolean)
-    .join(" ");
+  contentElement.className = clsx("ds-dropdown-story-item-content", {
+    "ds-dropdown-story-item-content--suffix": suffix
+  });
   mainElement.className = "ds-dropdown-story-item-main";
   labelElement.className = "ds-dropdown-story-item-label";
   labelElement.textContent = label;
@@ -453,7 +451,7 @@ export const Selectable: Story = {
 function createStoryIcon(icon: Parameters<typeof createLucideElement>[0], className = "") {
   return createLucideElement(icon, {
     "aria-hidden": "true",
-    class: ["ds-dropdown-story-icon", className].filter(Boolean).join(" "),
+    class: clsx("ds-dropdown-story-icon", className),
     focusable: "false",
     height: 14,
     width: 14,

@@ -3,6 +3,7 @@ import {
   DROPDOWN_HOVER_CLOSE_DELAY,
   DROPDOWN_ITEM_CLICK_EVENT,
   DROPDOWN_ITEM_ELEMENT_NAME,
+  DROPDOWN_ITEM_OBSERVED_ATTRIBUTES,
   DROPDOWN_OBSERVED_ATTRIBUTES,
   DROPDOWN_OPEN_CHANGE_EVENT,
   DROPDOWN_SELECT_EVENT
@@ -36,8 +37,10 @@ export class DsDropdown extends HTMLElement {
   private closeTimer = 0;
   private documentListenerAttached = false;
   private elements?: DropdownElements;
+  private itemObserver?: MutationObserver;
 
   connectedCallback() {
+    this.observeItemChanges();
     this.render();
     this.addEventListener(DROPDOWN_ITEM_CLICK_EVENT, this.handleItemClick as EventListener);
     this.addEventListener("contextmenu", this.handleHostContextMenu);
@@ -48,6 +51,7 @@ export class DsDropdown extends HTMLElement {
     this.removeEventListener("contextmenu", this.handleHostContextMenu);
     this.detachDocumentListener();
     this.clearCloseTimer();
+    this.itemObserver?.disconnect();
   }
 
   attributeChangedCallback() {
@@ -247,6 +251,22 @@ export class DsDropdown extends HTMLElement {
     this.elements.rootElement.addEventListener("mouseleave", this.handleMouseLeave);
     shadowRoot.replaceChildren(this.elements.rootElement);
     applyDropdownStyles(shadowRoot);
+  }
+
+  private observeItemChanges() {
+    if (this.itemObserver || typeof MutationObserver === "undefined") {
+      return;
+    }
+
+    this.itemObserver = new MutationObserver(() => {
+      this.syncItems();
+    });
+    this.itemObserver.observe(this, {
+      attributeFilter: [...DROPDOWN_ITEM_OBSERVED_ATTRIBUTES],
+      attributes: true,
+      childList: true,
+      subtree: true
+    });
   }
 
   private syncAttributes() {

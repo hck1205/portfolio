@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
+import clsx from "classnames";
 
 import "./Mentions.stories.css";
 import { defineDsButton } from "../Button";
@@ -403,7 +404,10 @@ function createFormButton(label: string, variant: "submit" | "reset") {
     type: variant === "submit" ? "primary" : "default"
   });
 
-  button.className = `ds-mentions-story-form__${variant}`;
+  button.className = clsx({
+    "ds-mentions-story-form__reset": variant === "reset",
+    "ds-mentions-story-form__submit": variant === "submit"
+  });
 
   return button;
 }

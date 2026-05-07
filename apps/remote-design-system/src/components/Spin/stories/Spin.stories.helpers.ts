@@ -1,3 +1,5 @@
+import clsx from "classnames";
+
 import { SPIN_DEFAULT_ARGS } from "./Spin.stories.constants";
 import type { SpinStoryArgs } from "./Spin.stories.types";
 
@@ -139,11 +141,7 @@ function syncSwitchChecked(switchElement: HTMLElement, checked: boolean) {
 export function createSizeComparison(items: Array<{ label: string; spin: HTMLElement }>, className?: string) {
   const row = createRow(...items.map((item) => createSizeItem(item.label, item.spin)));
 
-  row.classList.add("ds-spin-story-row--sizes");
-
-  if (className) {
-    row.classList.add(className);
-  }
+  row.className = clsx("ds-spin-story-row", "ds-spin-story-row--sizes", className);
 
   return row;
 }

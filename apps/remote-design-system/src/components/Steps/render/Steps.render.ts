@@ -1,3 +1,5 @@
+import clsx from "classnames";
+
 import type { StepItemData } from "../types/Steps.types";
 import { createIndicatorContent, getIndicatorSignature } from "./Steps.icons";
 import { createPanelArrowElement } from "./Steps.panelArrow";
@@ -156,13 +158,14 @@ function createStepElement({
   listItemElement.className = "ds-steps__item";
   listItemElement.dataset.stepKey = item.key;
   listItemElement.dataset.status = item.status;
-  controlElement.className = "ds-steps__control";
+  controlElement.className = clsx("ds-steps__control", {
+    "ds-steps__control--clickable": clickable
+  });
   controlElement.dataset.stepIndex = String(item.index);
   controlElement.setAttribute("aria-current", item.index === current ? "step" : "false");
   controlElement.setAttribute("aria-disabled", String(item.disabled));
 
   if (clickable) {
-    controlElement.classList.add("ds-steps__control--clickable");
     (controlElement as HTMLButtonElement).type = "button";
     (controlElement as HTMLButtonElement).disabled = item.disabled;
   }
@@ -242,7 +245,9 @@ function syncStepElement({
   controlElement.dataset.stepIndex = String(item.index);
   controlElement.setAttribute("aria-current", item.index === current ? "step" : "false");
   controlElement.setAttribute("aria-disabled", String(item.disabled));
-  controlElement.classList.toggle("ds-steps__control--clickable", clickable);
+  controlElement.className = clsx("ds-steps__control", {
+    "ds-steps__control--clickable": clickable
+  });
 
   if (controlElement instanceof HTMLButtonElement) {
     controlElement.disabled = item.disabled;

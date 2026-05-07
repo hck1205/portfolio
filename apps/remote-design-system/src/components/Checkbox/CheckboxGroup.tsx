@@ -2,7 +2,8 @@ import { DsCheckbox } from "./Checkbox";
 import {
   CHECKBOX_CHANGE_EVENT,
   CHECKBOX_GROUP_CHANGE_EVENT,
-  CHECKBOX_GROUP_OBSERVED_ATTRIBUTES
+  CHECKBOX_GROUP_OBSERVED_ATTRIBUTES,
+  CHECKBOX_OBSERVED_ATTRIBUTES
 } from "./constants/Checkbox.constants";
 import {
   checkboxValueKey,
@@ -183,7 +184,10 @@ export class DsCheckboxGroup extends HTMLElement {
       this.syncCheckboxes();
     });
     this.mutationObserver.observe(this, {
-      childList: true
+      attributeFilter: [...CHECKBOX_OBSERVED_ATTRIBUTES],
+      attributes: true,
+      childList: true,
+      subtree: true
     });
   }
 

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
+import clsx from "classnames";
 
 import "./DatePicker.stories.css";
 import {
@@ -88,7 +89,7 @@ function createDatePicker(args: Partial<DatePickerStoryArgs> = {}) {
 function createFrame(children: HTMLElement[], className = "") {
   const frame = document.createElement("div");
 
-  frame.className = ["ds-date-picker-story-frame", className].filter(Boolean).join(" ");
+  frame.className = clsx("ds-date-picker-story-frame", className);
   frame.append(...children);
 
   return frame;

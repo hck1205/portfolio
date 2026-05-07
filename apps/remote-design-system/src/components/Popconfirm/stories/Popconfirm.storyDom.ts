@@ -1,3 +1,5 @@
+import clsx from "classnames";
+
 import { createDsButton } from "../../shared/stories/storyElements";
 import type { PopconfirmStoryArgs } from "./Popconfirm.storyTypes";
 
@@ -18,7 +20,9 @@ export function createButton(label: string, danger = false) {
     type: danger ? "primary" : "default"
   });
 
-  button.className = `ds-popconfirm-story-button${danger ? " ds-popconfirm-story-danger" : ""}`;
+  button.className = clsx("ds-popconfirm-story-button", {
+    "ds-popconfirm-story-danger": danger
+  });
 
   return button;
 }
