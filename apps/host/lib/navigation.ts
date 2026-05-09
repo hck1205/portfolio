@@ -1,29 +1,51 @@
-import { APP_ID } from "../components/LiveApp/LiveApp.const";
+import { APP_ID, type AppId } from "../components/LiveApp/LiveApp.const";
+import { axRemoteEntryUrl, designSystemUrl } from "./urls";
 
-export const navigationItems = [
-  { id: APP_ID.OVERVIEW, label: "Overview", live: false },
+export type NavigationStatus = "active" | "inactive" | "unknown";
+
+export type NavigationItem = {
+  id: AppId;
+  label: string;
+  live: boolean;
+  status: NavigationStatus;
+  statusCheckUrl?: string;
+};
+
+export const navigationItems: NavigationItem[] = [
+  { id: APP_ID.OVERVIEW, label: "Overview", live: false, status: "active" },
   {
     id: APP_ID.MICRO_FRONTEND,
     label: "Micro Frontend",
-    live: false
+    live: false,
+    status: "inactive"
   },
-  { id: APP_ID.AX, label: "AX (AI Transformation)", live: true },
+  {
+    id: APP_ID.AX,
+    label: "AX (AI Transformation)",
+    live: false,
+    status: "unknown",
+    statusCheckUrl: axRemoteEntryUrl
+  },
   {
     id: APP_ID.PERFORMANCE_OPTIMIZATION,
     label: "Performance Optimization",
-    live: false
+    live: false,
+    status: "inactive"
   },
   {
     id: APP_ID.DESIGN_SYSTEM,
     label: "Design System",
-    live: true
+    live: false,
+    status: "unknown",
+    statusCheckUrl: designSystemUrl
   },
   {
     id: APP_ID.GRAPHICS_INTEGRATION,
     label: "Graphics Integration",
-    live: false
+    live: false,
+    status: "inactive"
   },
-  { id: APP_ID.APP, label: "APP", live: false }
-] as const;
+  { id: APP_ID.APP, label: "APP", live: false, status: "inactive" }
+];
 
-export type ActiveNav = (typeof navigationItems)[number]["id"];
+export type ActiveNav = NavigationItem["id"];

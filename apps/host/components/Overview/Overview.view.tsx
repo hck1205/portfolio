@@ -1,18 +1,27 @@
-import { overviewClassNames } from "./Overview.styled";
+import {
+  OverviewItem,
+  OverviewItemLabel,
+  OverviewItemValue,
+  OverviewList,
+  OverviewRoot,
+  OverviewTitle
+} from "./Overview.styles";
 import type { OverviewViewProps } from "./Overview.types";
 
-export function OverviewView({ items, title }: OverviewViewProps) {
+function OverviewView({ items, title }: OverviewViewProps) {
   return (
-    <div className={overviewClassNames.root}>
-      <h2 className={overviewClassNames.title}>{title}</h2>
-      <div className={overviewClassNames.list}>
+    <OverviewRoot>
+      <OverviewTitle>{title}</OverviewTitle>
+      <OverviewList>
         {items.map((item) => (
-          <div className={overviewClassNames.item} key={item.label}>
-            <span className={overviewClassNames.itemLabel}>{item.label}</span>
-            <strong className={overviewClassNames.itemValue}>{item.value}</strong>
-          </div>
+          <OverviewItem key={item.label}>
+            <OverviewItemLabel>{item.label}</OverviewItemLabel>
+            <OverviewItemValue>{item.value}</OverviewItemValue>
+          </OverviewItem>
         ))}
-      </div>
-    </div>
+      </OverviewList>
+    </OverviewRoot>
   );
 }
+
+export default OverviewView;

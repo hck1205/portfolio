@@ -112,6 +112,7 @@ export class DsBadge extends HTMLElement {
     if (this.rootElement) {
       this.rootElement.dataset.standalone = String(standalone);
       this.rootElement.dataset.statusMode = String(statusMode);
+      this.rootElement.dataset.hasText = String(Boolean(this.text));
     }
     this.indicatorElement?.style.setProperty("--ds-badge-offset-x", `${offsetX}px`);
     this.indicatorElement?.style.setProperty("--ds-badge-offset-y", `${offsetY}px`);

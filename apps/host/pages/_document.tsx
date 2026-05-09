@@ -1,7 +1,7 @@
 import { Head, Html, Main, NextScript } from "next/document";
 import Document, { type DocumentContext, type DocumentInitialProps } from "next/document";
 
-export default class HostDocument extends Document {
+class HostDocument extends Document {
   static async getInitialProps(ctx: DocumentContext): Promise<DocumentInitialProps> {
     return Document.getInitialProps(ctx);
   }
@@ -18,3 +18,5 @@ export default class HostDocument extends Document {
     );
   }
 }
+
+export default HostDocument;
