@@ -17,7 +17,7 @@ const nextConfig = {
     if (options.isServer) {
       config.resolve.alias = {
         ...config.resolve.alias,
-        "ax/AXApp": path.resolve(currentDir, "components/AXRemoteFallback.tsx")
+        "ax/AXApp": path.resolve(currentDir, "components/Fallback/Fallback.tsx")
       };
     } else {
       config.plugins.push(

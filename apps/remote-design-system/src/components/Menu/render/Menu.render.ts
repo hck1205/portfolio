@@ -12,6 +12,8 @@ export type MenuItemElements = {
   controlElement: HTMLAnchorElement | HTMLButtonElement;
   dividerElement: HTMLHRElement;
   extraElement: HTMLSpanElement;
+  extraSlotElement: HTMLSlotElement;
+  extraTextNode: Text;
   iconStackElement: HTMLSpanElement;
   groupLabelElement: HTMLDivElement;
   iconSlotElement: HTMLSlotElement;
@@ -28,6 +30,25 @@ function syncMenuItemIconState(elements: MenuItemElements) {
   elements.rootElement.toggleAttribute("data-has-icon", hasIcon);
 
   return hasIcon;
+}
+
+function syncMenuItemExtraState(elements: MenuItemElements, extra: string) {
+  elements.rootElement.dataset.extra = extra;
+
+  const assignedExtraElements = elements.extraSlotElement.assignedElements({
+    flatten: true
+  });
+  const hasSlottedExtra = assignedExtraElements.length > 0;
+  const hasBadgeExtra = assignedExtraElements.some(
+    (element) =>
+      element.localName === "ds-badge" ||
+      Boolean(element.querySelector("ds-badge"))
+  );
+
+  elements.extraTextNode.nodeValue = hasSlottedExtra ? "" : extra;
+  elements.extraElement.hidden = !extra && !hasSlottedExtra;
+  elements.rootElement.toggleAttribute("data-has-extra", Boolean(extra || hasSlottedExtra));
+  elements.rootElement.toggleAttribute("data-badge-extra", hasBadgeExtra);
 }
 
 function syncMenuItemChevronState(elements: MenuItemElements, hasIcon: boolean) {
@@ -168,6 +189,8 @@ export function createMenuItemElements({
   const iconSlotElement = document.createElement("slot");
   const labelElement = document.createElement("span");
   const extraElement = document.createElement("span");
+  const extraTextNode = document.createTextNode("");
+  const extraSlotElement = document.createElement("slot");
   const chevronElement = document.createElement("span");
   const childrenElement = document.createElement("div");
   const groupLabelElement = document.createElement("div");
@@ -182,6 +205,8 @@ export function createMenuItemElements({
   iconSlotElement.hidden = true;
   labelElement.className = "ds-menu-item__label";
   extraElement.className = "ds-menu-item__extra";
+  extraSlotElement.className = "ds-menu-item__extra-slot";
+  extraSlotElement.name = "extra";
   chevronElement.className = "ds-menu-item__chevron";
   chevronElement.setAttribute("aria-hidden", "true");
   chevronElement.append(createChevronIcon());
@@ -193,6 +218,7 @@ export function createMenuItemElements({
 
   controlElement.addEventListener("click", onClick);
   iconStackElement.append(iconSlotElement);
+  extraElement.append(extraTextNode, extraSlotElement);
   childrenElement.append(childrenSlotElement);
   controlElement.append(iconStackElement, labelElement, extraElement, chevronElement);
   rootElement.append(controlElement, groupLabelElement, childrenElement, dividerElement);
@@ -203,6 +229,8 @@ export function createMenuItemElements({
     controlElement,
     dividerElement,
     extraElement,
+    extraSlotElement,
+    extraTextNode,
     groupLabelElement,
     iconStackElement,
     iconSlotElement,
@@ -214,6 +242,9 @@ export function createMenuItemElements({
     const hasIcon = syncMenuItemIconState(elements);
 
     syncMenuItemChevronState(elements, hasIcon);
+  });
+  extraSlotElement.addEventListener("slotchange", () => {
+    syncMenuItemExtraState(elements, elements.rootElement.dataset.extra ?? "");
   });
 
   return elements;
@@ -283,8 +314,7 @@ export function syncMenuItemElements({
 
   const hasIcon = syncMenuItemIconState(nextElements);
   nextElements.labelElement.textContent = label;
-  nextElements.extraElement.textContent = extra;
-  nextElements.extraElement.hidden = !extra;
+  syncMenuItemExtraState(nextElements, extra);
   syncMenuItemChevronState(nextElements, hasIcon);
   nextElements.childrenElement.hidden = collapsed
     ? !isSubmenu || !open

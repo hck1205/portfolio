@@ -91,7 +91,7 @@ export const MENU_ITEM_STYLES = `
     display: grid;
     font: inherit;
     gap: var(--spacing-ds-2);
-    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     line-height: var(--leading-ds-readable);
     min-height: var(--ds-menu-item-height, 38px);
     min-width: 0;
@@ -248,8 +248,34 @@ export const MENU_ITEM_STYLES = `
   }
 
   .ds-menu-item__extra {
+    align-items: center;
+    align-self: center;
     color: var(--ds-menu-muted, var(--color-ds-muted));
+    display: inline-flex;
     font-size: var(--font-size-caption);
+    justify-content: center;
+    justify-self: center;
+    margin: 0;
+    padding: 0;
+  }
+
+  :host([data-type="submenu"]) .ds-menu-item__control {
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+  }
+
+  .ds-menu-item__extra-slot {
+    align-items: center;
+    display: inline-flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ds-menu-item[data-badge-extra] .ds-menu-item__extra,
+  .ds-menu-item[data-badge-extra] .ds-menu-item__extra-slot {
+    block-size: 6px;
+    inline-size: 6px;
+    line-height: 0;
   }
 
   .ds-menu-item__chevron {

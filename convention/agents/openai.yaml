@@ -1,0 +1,4 @@
+interface:
+  display_name: "Convention"
+  short_description: "모든 앱에 적용할 React, Next.js, Node.js 구조와 UI 구현 규칙입니다."
+  default_prompt: "$convention을 사용해 React, Next.js, Node.js 코드를 만들거나 수정하고, 모든 앱이 일관된 구조, 컴포넌트 분리, design system 우선 UI 규칙을 따르게 해주세요."

@@ -13,6 +13,9 @@ const config: StorybookConfig = {
     name: "@storybook/web-components-vite",
     options: {}
   },
+  features: {
+    sidebarOnboardingChecklist: false
+  },
   typescript: {},
   staticDirs: []
 };

@@ -80,6 +80,10 @@ export const BADGE_STYLES = `
     transform: none;
   }
 
+  .ds-badge[data-status-mode="true"][data-has-text="false"] .ds-badge__indicator[data-status]:not([data-status=""]) {
+    margin-inline-end: 0;
+  }
+
   .ds-badge__indicator[data-dot="true"] {
     height: 6px;
     min-width: 6px;
