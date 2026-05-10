@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { APP_ID } from "../../../LiveApp/LiveApp.const";
 import { navigationItems, type ActiveNav } from "../../../../lib/navigation";
+import {
+  ACCOUNT_PROFILE_TEXT_REVEAL_DELAY_MS,
+  HOST_SHELL_CUSTOM_ELEMENTS
+} from "../HostShell.constants";
 import type { HostShellController, HostShellProps } from "../HostShell.types";
 
 type UseHostShellOptions = Pick<HostShellProps, "activeNav" | "onActiveNavChange">;
@@ -17,8 +22,11 @@ export function useHostShell({
   onActiveNavChange
 }: UseHostShellOptions): HostShellController {
   const [isAccountProfileTextVisible, setIsAccountProfileTextVisible] =
-    useState(true);
-  const [isSiderCollapsed, setIsSiderCollapsed] = useState(false);
+    useState(activeNav !== APP_ID.GRAPHICS_INTEGRATION);
+  const [isSiderCollapsed, setIsSiderCollapsed] = useState(
+    activeNav === APP_ID.GRAPHICS_INTEGRATION
+  );
+  const [isMenuReady, setIsMenuReady] = useState(false);
   const accountProfileTextDelayRef = useRef<ReturnType<typeof setTimeout> | null>(
     null
   );
@@ -27,6 +35,11 @@ export function useHostShell({
   const siderRef = useRef<HTMLElement | null>(null);
   const handleActiveNavChange = useCallback(
     (activeNav: ActiveNav) => {
+      if (activeNav === APP_ID.GRAPHICS_INTEGRATION) {
+        setIsSiderCollapsed(true);
+        setIsAccountProfileTextVisible(false);
+      }
+
       onActiveNavChange(activeNav);
     },
     [onActiveNavChange]
@@ -89,6 +102,10 @@ export function useHostShell({
   }, [syncActiveMenuState]);
 
   useEffect(() => {
+    if (!isMenuReady) {
+      return undefined;
+    }
+
     const sider = siderRef.current;
 
     if (!sider) {
@@ -110,7 +127,7 @@ export function useHostShell({
         setIsAccountProfileTextVisible(false);
         accountProfileTextDelayRef.current = setTimeout(() => {
           setIsAccountProfileTextVisible(true);
-        }, 190);
+        }, ACCOUNT_PROFILE_TEXT_REVEAL_DELAY_MS);
       } else {
         setIsAccountProfileTextVisible(true);
       }
@@ -132,6 +149,33 @@ export function useHostShell({
 
       observer.disconnect();
     };
+  }, [isMenuReady]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const waitForMenuElements = async () => {
+      if (typeof window === "undefined" || !window.customElements) {
+        return;
+      }
+
+      await import("@portfolio/remote-design-system/register");
+      await Promise.all(
+        HOST_SHELL_CUSTOM_ELEMENTS.map((elementName) =>
+          window.customElements.whenDefined(elementName)
+        )
+      );
+
+      if (!cancelled) {
+        setIsMenuReady(true);
+      }
+    };
+
+    void waitForMenuElements();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const handleCollapseToggle = () => {
@@ -141,13 +185,21 @@ export function useHostShell({
       return;
     }
 
-    sider.toggleAttribute("collapsed", !sider.hasAttribute("collapsed"));
+    const nextCollapsed = !isSiderCollapsed;
+
+    sider.toggleAttribute("collapsed", nextCollapsed);
+    setIsSiderCollapsed(nextCollapsed);
+
+    if (nextCollapsed) {
+      setIsAccountProfileTextVisible(false);
+    }
   };
 
   return {
     handleActiveNavChange,
     handleCollapseToggle,
     isAccountProfileTextVisible,
+    isMenuReady,
     isSiderCollapsed,
     menuRef,
     siderRef

@@ -9,6 +9,7 @@ import {
   type ColorPickerSize,
   type ColorPickerTrigger
 } from ".";
+import { COLOR_PICKER_PICKER_PLACEMENTS } from "./constants/ColorPicker.constants";
 
 type ColorPickerStoryArgs = {
   allowClear: boolean;
@@ -46,7 +47,7 @@ const storyDescriptions = {
   format:
     "format 속성은 HEX, RGB, HSB 출력 형식을 선택하며 disabled-format으로 형식 선택 UI를 잠글 수 있습니다.",
   pickerPlacement:
-    "picker-placement 속성은 트리거를 기준으로 패널이 열리는 방향을 top, right, bottom, left 중에서 선택합니다.",
+    "picker-placement 속성은 트리거를 기준으로 패널이 열리는 방향과 정렬을 선택합니다.",
   presets:
     "presets 속성 또는 property로 자주 쓰는 색상 묶음을 패널에 표시합니다."
 };
@@ -292,7 +293,7 @@ function renderPickerPlacementStory() {
 
   const frame = createFrame([
     createRow(
-      (["top", "right", "bottom", "left"] as ColorPickerPickerPlacement[]).map((pickerPlacement) =>
+      COLOR_PICKER_PICKER_PLACEMENTS.map((pickerPlacement) =>
         createLabeled(
           pickerPlacement,
           createColorPicker({
@@ -350,7 +351,7 @@ const meta: Meta<ColorPickerStoryArgs> = {
     },
     pickerPlacement: {
       control: "inline-radio",
-      options: ["top", "right", "bottom", "left"]
+      options: COLOR_PICKER_PICKER_PLACEMENTS
     },
     size: {
       control: "inline-radio",

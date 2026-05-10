@@ -80,6 +80,14 @@ export class DsTabs extends HTMLElement {
     this.toggleAttribute("editable", value);
   }
 
+  get fullWidth() {
+    return normalizeBooleanAttribute(this, "full-width", false);
+  }
+
+  set fullWidth(value: boolean) {
+    this.toggleAttribute("full-width", value);
+  }
+
   get hideAdd() {
     return normalizeBooleanAttribute(this, "hide-add", false);
   }
@@ -247,6 +255,7 @@ export class DsTabs extends HTMLElement {
       centered: this.centered,
       editable: this.editable,
       elements: this.elements,
+      fullWidth: this.fullWidth,
       hideAdd: this.hideAdd,
       items,
       placement: this.tabPlacement,
@@ -310,8 +319,10 @@ export class DsTabs extends HTMLElement {
         disabled: tab.disabled,
         closable: tab.closable,
         icon: tab.icon,
+        iconOnly: tab.iconOnly,
         key: tab.itemKey,
-        label: tab.label || `Tab ${index + 1}`
+        label: tab.label || `Tab ${index + 1}`,
+        tooltip: tab.tooltip
       };
     });
   }

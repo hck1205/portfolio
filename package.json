@@ -4,13 +4,14 @@
   "packageManager": "pnpm@10.9.0",
   "scripts": {
     "setup": "corepack pnpm install",
-    "dev": "corepack pnpm --filter @portfolio/remote-design-system build:lib && corepack pnpm --parallel --filter @portfolio/host --filter @portfolio/remote-design-system --filter @portfolio/remote-ax dev",
-    "dev:all": "corepack pnpm --filter @portfolio/remote-design-system build:lib && corepack pnpm --parallel --filter @portfolio/host --filter @portfolio/remote-design-system --filter @portfolio/remote-ax dev",
+    "dev": "corepack pnpm --filter @portfolio/remote-design-system build:lib && corepack pnpm --parallel --filter @portfolio/host --filter @portfolio/remote-design-system --filter @portfolio/remote-ax --filter @portfolio/remote-graphic-integration dev",
+    "dev:all": "corepack pnpm --filter @portfolio/remote-design-system build:lib && corepack pnpm --parallel --filter @portfolio/host --filter @portfolio/remote-design-system --filter @portfolio/remote-ax --filter @portfolio/remote-graphic-integration dev",
     "dev:host": "corepack pnpm --filter @portfolio/host dev",
     "dev:shell": "corepack pnpm --filter @portfolio/host dev",
     "dev:storybook": "corepack pnpm --filter @portfolio/remote-design-system dev",
     "dev:remote-design-system": "corepack pnpm --filter @portfolio/remote-design-system dev",
     "dev:remote-design-system-lib": "corepack pnpm --filter @portfolio/remote-design-system dev:lib",
+    "dev:graphic-integration": "corepack pnpm --filter @portfolio/remote-graphic-integration dev",
     "dev:ax": "corepack pnpm --filter @portfolio/remote-ax dev",
     "build": "corepack pnpm -r --if-present build",
     "typecheck": "corepack pnpm -r --if-present typecheck"

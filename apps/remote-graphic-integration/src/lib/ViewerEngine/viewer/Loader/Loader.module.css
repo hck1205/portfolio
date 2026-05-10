@@ -1,0 +1,8 @@
+.loading {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #4d555c;
+  font-size: 12px;
+  font-weight: 700;
+}

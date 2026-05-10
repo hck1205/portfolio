@@ -249,12 +249,22 @@ const tokenScaleGroups = [
       "Normal/Body/2/Normal",
       "Normal/Body/3/Normal",
       "Normal/Body/4/Normal",
-      "Normal/Body/5/Normal"
+      "Normal/Body/5/Normal",
+      "UI/Body/6/Normal",
+      "UI/Body/7/Normal"
     ],
     title: "Body"
   },
   {
-    tokens: ["Normal/Label/1/Normal", "Normal/Label/2/Normal", "Normal/Label/3/Normal", "Normal/Label/4/Normal"],
+    tokens: [
+      "Normal/Label/1/Normal",
+      "Normal/Label/2/Normal",
+      "Normal/Label/3/Normal",
+      "Normal/Label/4/Normal",
+      "UI/Label/5/Normal",
+      "UI/Label/6/Normal",
+      "UI/Label/7/Normal"
+    ],
     title: "Label"
   },
   {
@@ -270,11 +280,24 @@ const tokenScaleGroups = [
     title: "Callout"
   },
   {
-    tokens: ["Normal/Footnote/1/Normal", "Normal/Footnote/2/Normal"],
+    tokens: [
+      "Normal/Footnote/1/Normal",
+      "Normal/Footnote/2/Normal",
+      "UI/Footnote/3/Normal",
+      "UI/Footnote/4/Normal",
+      "UI/Footnote/5/Normal"
+    ],
     title: "Footnote"
   },
   {
-    tokens: ["UI/Button/1/Normal", "UI/Button/2/Normal", "UI/Button/3/Normal", "UI/Button/4/Normal"],
+    tokens: [
+      "UI/Button/1/Normal",
+      "UI/Button/2/Normal",
+      "UI/Button/3/Normal",
+      "UI/Button/4/Normal",
+      "UI/Button/5/Normal",
+      "UI/Button/6/Normal"
+    ],
     title: "Button"
   }
 ] as const;

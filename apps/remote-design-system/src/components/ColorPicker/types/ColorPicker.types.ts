@@ -1,5 +1,8 @@
+import type { COLOR_PICKER_PICKER_PLACEMENTS } from "../constants/ColorPicker.constants";
+
 export type ColorPickerFormat = "hex" | "rgb" | "hsb";
-export type ColorPickerPickerPlacement = "bottom" | "left" | "right" | "top";
+export type ColorPickerPickerPlacement =
+  (typeof COLOR_PICKER_PICKER_PLACEMENTS)[number];
 export type ColorPickerPlacement = "bottomLeft" | "bottomRight" | "topLeft" | "topRight";
 export type ColorPickerSize = "large" | "middle" | "small";
 export type ColorPickerTrigger = "click" | "hover";

@@ -13,6 +13,7 @@ export type HostShellController = {
   handleActiveNavChange: (activeNav: ActiveNav) => void;
   handleCollapseToggle: () => void;
   isAccountProfileTextVisible: boolean;
+  isMenuReady: boolean;
   isSiderCollapsed: boolean;
   menuRef: RefObject<HTMLElement | null>;
   siderRef: RefObject<HTMLElement | null>;

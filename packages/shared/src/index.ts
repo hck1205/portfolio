@@ -3,3 +3,19 @@ export {
   type SvgAttributes,
   type SvgAttributeValue
 } from "./utils/images";
+
+export {
+  IndexedDBClient,
+  IndexedDBTransactionError,
+  IndexedDBUnavailableError,
+  type IndexedDBClientConfig,
+  type IndexedDBIndexDefinition,
+  type IndexedDBObjectStoreCallback,
+  type IndexedDBSchema,
+  type IndexedDBStoreDefinition,
+  type IndexedDBStoreKey,
+  type IndexedDBStoreName,
+  type IndexedDBStoreValue,
+  type IndexedDBTransactionMode,
+  type IndexedDBUpgradeContext
+} from "./lib/indexedDB";

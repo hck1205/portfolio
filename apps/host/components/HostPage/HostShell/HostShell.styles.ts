@@ -6,9 +6,26 @@ const dsLayout = createStyledIntrinsicElement("ds-layout");
 const dsLayoutContent = createStyledIntrinsicElement("ds-layout-content");
 
 export const HostRoot = styled(dsLayout)`
+  display: flex;
+  align-items: stretch;
+  flex-direction: row;
   min-height: 100vh;
   height: 100vh;
+  width: 100vw;
+  overflow: hidden;
   background: #f3f3ef;
+
+  > ds-layout-sider {
+    --host-sider-current-width: 290px;
+    flex: 0 0 var(--host-sider-current-width);
+    width: var(--host-sider-current-width);
+    min-width: var(--host-sider-current-width);
+    max-width: var(--host-sider-current-width);
+  }
+
+  > ds-layout-sider[collapsed] {
+    --host-sider-current-width: 64px;
+  }
 `;
 
 export const HostSiderShell = styled.div`

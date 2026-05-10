@@ -10,10 +10,19 @@ export const TABS_OBSERVED_ATTRIBUTES = [
   "centered",
   "default-active-key",
   "editable",
+  "full-width",
   "hide-add",
   "size",
   "tab-placement",
   "type"
 ] as const;
 
-export const TAB_OBSERVED_ATTRIBUTES = ["closable", "disabled", "icon", "item-key", "label"] as const;
+export const TAB_OBSERVED_ATTRIBUTES = [
+  "closable",
+  "disabled",
+  "icon",
+  "icon-only",
+  "item-key",
+  "label",
+  "tooltip"
+] as const;

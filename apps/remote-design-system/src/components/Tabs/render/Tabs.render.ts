@@ -5,6 +5,7 @@ export type TabsElements = {
   listElement: HTMLElement;
   panelElement: HTMLElement;
   rootElement: HTMLElement;
+  tooltipElement: HTMLElement;
 };
 
 type CreateTabsElementsOptions = {
@@ -19,6 +20,7 @@ type SyncTabsElementsOptions = {
   centered: boolean;
   editable: boolean;
   elements: TabsElements;
+  fullWidth: boolean;
   hideAdd: boolean;
   items: TabItemData[];
   placement: TabsPlacement;
@@ -37,11 +39,14 @@ export function createTabsElements({
   const listElement = document.createElement("div");
   const panelElement = document.createElement("div");
   const slotElement = document.createElement("slot");
+  const tooltipElement = document.createElement("div");
 
   rootElement.className = "ds-tabs";
   navElement.className = "ds-tabs__nav";
   listElement.className = "ds-tabs__list";
   panelElement.className = "ds-tabs__panel";
+  tooltipElement.className = "ds-tabs__tooltip";
+  tooltipElement.setAttribute("aria-hidden", "true");
   navElement.setAttribute("role", "tablist");
   listElement.addEventListener("click", (event) => {
     const closeElement = (event.target as Element | null)?.closest<HTMLButtonElement>("[data-close-tab-key]");
@@ -67,15 +72,48 @@ export function createTabsElements({
 
     onTabClick(tabElement.dataset.tabKey ?? "");
   });
+  listElement.addEventListener("pointerover", (event) => {
+    const tabElement = (event.target as Element | null)?.closest<HTMLButtonElement>("[data-tab-key]");
+
+    if (tabElement?.dataset.tooltip) {
+      showTabTooltip(rootElement, tooltipElement, tabElement);
+    }
+  });
+  listElement.addEventListener("pointerout", (event) => {
+    const tabElement = (event.target as Element | null)?.closest<HTMLButtonElement>("[data-tab-key]");
+
+    if (!tabElement?.dataset.tooltip) {
+      return;
+    }
+
+    const relatedTarget = event.relatedTarget as Node | null;
+
+    if (relatedTarget && tabElement.contains(relatedTarget)) {
+      return;
+    }
+
+    hideTabTooltip(tooltipElement);
+  });
+  listElement.addEventListener("focusin", (event) => {
+    const tabElement = (event.target as Element | null)?.closest<HTMLButtonElement>("[data-tab-key]");
+
+    if (tabElement?.dataset.tooltip) {
+      showTabTooltip(rootElement, tooltipElement, tabElement);
+    }
+  });
+  listElement.addEventListener("focusout", () => {
+    hideTabTooltip(tooltipElement);
+  });
   listElement.addEventListener("keydown", onKeyDown);
   panelElement.append(slotElement);
   navElement.append(listElement);
-  rootElement.append(navElement, panelElement);
+  rootElement.append(navElement, panelElement, tooltipElement);
 
   return {
     listElement,
     panelElement,
-    rootElement
+    rootElement,
+    tooltipElement
   };
 }
 
@@ -84,6 +122,7 @@ export function syncTabsElements({
   centered,
   editable,
   elements,
+  fullWidth,
   hideAdd,
   items,
   placement,
@@ -92,6 +131,7 @@ export function syncTabsElements({
 }: SyncTabsElementsOptions) {
   elements.rootElement.dataset.centered = String(centered);
   elements.rootElement.dataset.editable = String(editable);
+  elements.rootElement.dataset.fullWidth = String(fullWidth);
   elements.rootElement.dataset.placement = placement;
   elements.rootElement.dataset.size = size;
   elements.rootElement.dataset.type = type;
@@ -139,9 +179,20 @@ function createTabButton({ activeKey, item }: { activeKey: string; item: TabItem
   buttonElement.setAttribute("aria-controls", getTabPanelId(item.key));
   buttonElement.setAttribute("aria-disabled", String(item.disabled));
   buttonElement.setAttribute("aria-selected", String(item.key === activeKey));
+  buttonElement.setAttribute("aria-label", item.label);
   buttonElement.setAttribute("role", "tab");
   buttonElement.tabIndex = item.key === activeKey && !item.disabled ? 0 : -1;
+
+  if (item.tooltip) {
+    buttonElement.dataset.tooltip = item.tooltip;
+  }
+
+  labelElement.className = "ds-tabs__label";
   labelElement.textContent = item.label;
+
+  if (item.iconOnly && item.icon) {
+    labelElement.classList.add("ds-tabs__label--hidden");
+  }
 
   if (item.icon) {
     const iconElement = document.createElement("span");
@@ -187,4 +238,25 @@ export function getTabButtonId(key: string) {
 
 export function getTabPanelId(key: string) {
   return `ds-tab-panel-${key}`;
+}
+
+function showTabTooltip(rootElement: HTMLElement, tooltipElement: HTMLElement, tabElement: HTMLElement) {
+  const tooltip = tabElement.dataset.tooltip;
+
+  if (!tooltip) {
+    hideTabTooltip(tooltipElement);
+    return;
+  }
+
+  const rootRect = rootElement.getBoundingClientRect();
+  const tabRect = tabElement.getBoundingClientRect();
+
+  tooltipElement.textContent = tooltip;
+  tooltipElement.dataset.open = "true";
+  tooltipElement.style.left = `${tabRect.left - rootRect.left + tabRect.width / 2}px`;
+  tooltipElement.style.top = `${tabRect.top - rootRect.top}px`;
+}
+
+function hideTabTooltip(tooltipElement: HTMLElement) {
+  tooltipElement.dataset.open = "false";
 }

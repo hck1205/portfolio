@@ -1,3 +1,4 @@
+import { Fallback } from "../../Fallback";
 import { AccountProfile } from "./AccountProfile";
 import { CollapseAction } from "./CollapseAction";
 import {
@@ -15,16 +16,22 @@ function HostShellView({
   handleActiveNavChange,
   handleCollapseToggle,
   isAccountProfileTextVisible,
+  isMenuReady,
   isSiderCollapsed,
   menuRef,
   navigationItems,
   siderRef
 }: HostShellViewProps) {
+  if (!isMenuReady) {
+    return <Fallback>Loading menu...</Fallback>;
+  }
+
   return (
-    <HostRoot>
+    <HostRoot has-sider="">
       <ds-layout-sider
         aria-label="Portfolio navigation"
         breakpoint="md"
+        collapsed={isSiderCollapsed}
         collapsed-width="64"
         collapsible=""
         ref={siderRef}
