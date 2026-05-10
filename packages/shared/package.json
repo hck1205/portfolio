@@ -11,8 +11,13 @@
     "./utils/images": {
       "types": "./src/utils/images/index.ts",
       "import": "./src/utils/images/index.ts"
+    },
+    "./styles/reset.css": {
+      "style": "./src/styles/reset.css",
+      "default": "./src/styles/reset.css"
     }
   },
+  "sideEffects": ["**/*.css"],
   "scripts": {
     "typecheck": "tsc --noEmit"
   },
