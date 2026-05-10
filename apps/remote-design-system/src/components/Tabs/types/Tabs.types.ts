@@ -8,8 +8,10 @@ export type TabItemData = {
   closable: boolean;
   disabled: boolean;
   icon: string;
+  iconOnly: boolean;
   key: string;
   label: string;
+  tooltip: string;
 };
 
 export type TabsChangeDetail = {

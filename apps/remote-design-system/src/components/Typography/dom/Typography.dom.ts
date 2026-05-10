@@ -222,13 +222,13 @@ export function colorTokenToCssVariable(colorToken: string) {
 
 function getTypographySize(scale: string, level: number) {
   const sizeMap: Record<string, Record<number, string>> = {
-    Button: { 1: "var(--spacing-s4)", 2: "var(--spacing-s3)", 3: "var(--spacing-s2)", 4: "var(--spacing-s1)" },
-    Body: { 1: "var(--spacing-m1)", 2: "var(--spacing-s4)", 3: "var(--spacing-s3)", 4: "var(--spacing-s2)", 5: "var(--spacing-s1)" },
+    Button: { 1: "var(--spacing-s4)", 2: "var(--spacing-s3)", 3: "var(--spacing-s2)", 4: "var(--spacing-s1)", 5: "var(--text-ds-2)", 6: "var(--text-ds-1)" },
+    Body: { 1: "var(--spacing-m1)", 2: "var(--spacing-s4)", 3: "var(--spacing-s3)", 4: "var(--spacing-s2)", 5: "var(--spacing-s1)", 6: "var(--text-ds-2)", 7: "var(--text-ds-1)" },
     Callout: { 1: "var(--spacing-m3)", 2: "var(--spacing-m2)", 3: "var(--spacing-m1)", 4: "var(--spacing-s4)", 5: "var(--spacing-s3)", 6: "var(--spacing-s2)", 7: "var(--spacing-s1)" },
     Display: { 1: "16rem", 2: "var(--spacing-xl4)", 3: "var(--spacing-xl3)", 4: "var(--spacing-xl1)", 5: "var(--spacing-l3)" },
-    Footnote: { 1: "var(--spacing-s2)", 2: "var(--spacing-s1)" },
+    Footnote: { 1: "var(--spacing-s2)", 2: "var(--spacing-s1)", 3: "var(--text-ds-1)", 4: "var(--text-ds-0)", 5: "var(--text-ds-00)" },
     Headline: { 1: "var(--spacing-l2)", 2: "var(--spacing-l1)", 3: "var(--spacing-m4)", 4: "var(--spacing-m3)" },
-    Label: { 1: "var(--spacing-s4)", 2: "var(--spacing-s3)", 3: "var(--spacing-s2)", 4: "var(--spacing-s1)" },
+    Label: { 1: "var(--spacing-s4)", 2: "var(--spacing-s3)", 3: "var(--spacing-s2)", 4: "var(--spacing-s1)", 5: "var(--text-ds-2)", 6: "var(--text-ds-1)", 7: "var(--text-ds-0)" },
     LargeTitle: { 1: "var(--spacing-l3)" },
     Subtitle: { 1: "var(--spacing-m3)", 2: "var(--spacing-m2)", 3: "var(--spacing-m1)", 4: "var(--spacing-s4)", 5: "var(--spacing-s3)", 6: "var(--spacing-s2)" },
     Title: { 1: "var(--spacing-l1)", 2: "var(--spacing-m4)", 3: "var(--spacing-m3)", 4: "var(--spacing-m2)", 5: "var(--spacing-m1)" }

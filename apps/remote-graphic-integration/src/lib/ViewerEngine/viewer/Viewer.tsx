@@ -10,9 +10,14 @@ import styles from "./Viewer.module.css";
 import type { ViewerProps } from "./Viewer.types";
 
 export function Viewer({
+  autoRotate = false,
+  canZoom = true,
   className,
+  materialTint = "#ffffff",
   modelUrl,
-  showGrid = true
+  showEnvironment = true,
+  showGrid = true,
+  useDamping = true
 }: ViewerProps) {
   const rootClassName = className
     ? `${styles.viewer} ${className}`
@@ -31,12 +36,12 @@ export function Viewer({
         <Suspense fallback={<Loader />}>
           {modelUrl ? (
             <Bounds fit clip observe margin={1.2}>
-              <Model modelUrl={modelUrl} />
+              <Model materialTint={materialTint} modelUrl={modelUrl} />
             </Bounds>
           ) : (
             <EmptyModel />
           )}
-          <Environment preset="city" />
+          {showEnvironment ? <Environment preset="city" /> : null}
           {showGrid ? (
             <Grid
               cellColor="#c5cbd1"
@@ -51,8 +56,10 @@ export function Viewer({
         </Suspense>
         <OrbitControls
           makeDefault
+          autoRotate={autoRotate}
           dampingFactor={0.08}
-          enableDamping
+          enableZoom={canZoom}
+          enableDamping={useDamping}
           mouseButtons={{
             LEFT: MOUSE.PAN,
             MIDDLE: MOUSE.DOLLY,

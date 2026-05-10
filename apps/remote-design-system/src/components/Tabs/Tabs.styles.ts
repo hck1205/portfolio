@@ -18,6 +18,7 @@ export const TABS_STYLES = `
     font-size: var(--text-ds-2);
     gap: var(--spacing-ds-4);
     max-width: 100%;
+    position: relative;
   }
 
   .ds-tabs[data-size="large"] {
@@ -86,6 +87,25 @@ export const TABS_STYLES = `
   .ds-tabs[data-centered="true"] .ds-tabs__list {
     justify-content: center;
     min-width: 0;
+  }
+
+  .ds-tabs[data-full-width="true"][data-placement="top"] .ds-tabs__list,
+  .ds-tabs[data-full-width="true"][data-placement="bottom"] .ds-tabs__list {
+    gap: 0;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .ds-tabs[data-full-width="true"][data-placement="top"] .ds-tabs__tab-item,
+  .ds-tabs[data-full-width="true"][data-placement="bottom"] .ds-tabs__tab-item {
+    flex: 1 1 0;
+    justify-content: center;
+  }
+
+  .ds-tabs[data-full-width="true"][data-placement="top"] .ds-tabs__tab,
+  .ds-tabs[data-full-width="true"][data-placement="bottom"] .ds-tabs__tab {
+    justify-content: center;
+    width: 100%;
   }
 
   .ds-tabs[data-placement="start"] .ds-tabs__list,
@@ -183,6 +203,30 @@ export const TABS_STYLES = `
     background: var(--color-ds-primary);
   }
 
+  .ds-tabs__tooltip {
+    background: var(--color-neutral-alpha-n10, rgb(15 23 42 / 92%));
+    border-radius: var(--radius-ds-sm);
+    color: var(--color-ds-surface, #fff);
+    font-size: var(--text-ds-1);
+    font-weight: var(--font-weight-ds-default);
+    line-height: 1.4;
+    opacity: 0;
+    padding: var(--spacing-ds-1) var(--spacing-ds-2);
+    pointer-events: none;
+    position: absolute;
+    transform: translate(-50%, calc(-100% - var(--spacing-ds-2)));
+    transition:
+      opacity 120ms ease,
+      transform 120ms ease;
+    white-space: nowrap;
+    z-index: 10;
+  }
+
+  .ds-tabs__tooltip[data-open="true"] {
+    opacity: 1;
+    transform: translate(-50%, calc(-100% - var(--spacing-ds-3)));
+  }
+
   .ds-tabs__icon {
     align-items: center;
     display: inline-flex;
@@ -198,6 +242,18 @@ export const TABS_STYLES = `
     display: block;
     height: var(--ds-icon-size-md);
     width: var(--ds-icon-size-md);
+  }
+
+  .ds-tabs__label--hidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
   }
 
   .ds-tabs__close,

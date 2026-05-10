@@ -12,6 +12,14 @@
       "types": "./src/utils/images/index.ts",
       "import": "./src/utils/images/index.ts"
     },
+    "./lib/indexedDB": {
+      "types": "./src/lib/indexedDB/index.ts",
+      "import": "./src/lib/indexedDB/index.ts"
+    },
+    "./indexedDB": {
+      "types": "./src/lib/indexedDB/index.ts",
+      "import": "./src/lib/indexedDB/index.ts"
+    },
     "./styles/reset.css": {
       "style": "./src/styles/reset.css",
       "default": "./src/styles/reset.css"

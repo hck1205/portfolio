@@ -3,7 +3,10 @@ import {
   Bot,
   Chrome,
   Gauge,
+  Highlighter,
+  MessageSquare,
   Plus,
+  SlidersHorizontal,
   type IconNode,
   ShieldCheck,
   X,
@@ -15,7 +18,10 @@ const tabIcons = {
   bot: Bot,
   chrome: Chrome,
   gauge: Gauge,
-  shield: ShieldCheck
+  highlighter: Highlighter,
+  "message-square": MessageSquare,
+  shield: ShieldCheck,
+  "sliders-horizontal": SlidersHorizontal
 } as const satisfies Record<string, IconNode>;
 
 export type TabIconName = keyof typeof tabIcons;

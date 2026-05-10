@@ -8,7 +8,6 @@ export const AccountProfileRoot = styled.div`
   padding: 0 16px 20px;
 
   ds-layout-sider[collapsed] & {
-    justify-content: center;
     padding-inline: 12px;
   }
 `;

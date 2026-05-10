@@ -37,6 +37,14 @@ export class DsTab extends HTMLElement {
     this.syncNullableAttribute("icon", value);
   }
 
+  get iconOnly() {
+    return normalizeBooleanAttribute(this, "icon-only", false);
+  }
+
+  set iconOnly(value: boolean) {
+    this.toggleAttribute("icon-only", value);
+  }
+
   get itemKey() {
     return this.getAttribute("item-key") ?? "";
   }
@@ -51,6 +59,14 @@ export class DsTab extends HTMLElement {
 
   set label(value: string) {
     this.syncNullableAttribute("label", value);
+  }
+
+  get tooltip() {
+    return this.getAttribute("tooltip") ?? "";
+  }
+
+  set tooltip(value: string) {
+    this.syncNullableAttribute("tooltip", value);
   }
 
   syncFromParent({ active, buttonId, panelId }: { active: boolean; buttonId: string; panelId: string }) {

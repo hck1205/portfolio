@@ -1,4 +1,8 @@
-import { COLOR_PICKER_DEFAULT_COLOR } from "../constants/ColorPicker.constants";
+import {
+  COLOR_PICKER_DEFAULT_COLOR,
+  COLOR_PICKER_LEGACY_PICKER_PLACEMENT_BY_VALUE,
+  COLOR_PICKER_PICKER_PLACEMENTS
+} from "../constants/ColorPicker.constants";
 import type {
   ColorPickerFormat,
   ColorPickerPickerPlacement,
@@ -57,8 +61,14 @@ export function getColorPickerPlacement(element: HTMLElement): ColorPickerPlacem
 export function getColorPickerPickerPlacement(element: HTMLElement): ColorPickerPickerPlacement {
   const value = element.getAttribute("picker-placement");
 
-  if (value === "top" || value === "right" || value === "left") {
-    return value;
+  if (value && value in COLOR_PICKER_LEGACY_PICKER_PLACEMENT_BY_VALUE) {
+    return COLOR_PICKER_LEGACY_PICKER_PLACEMENT_BY_VALUE[
+      value as keyof typeof COLOR_PICKER_LEGACY_PICKER_PLACEMENT_BY_VALUE
+    ];
+  }
+
+  if (COLOR_PICKER_PICKER_PLACEMENTS.includes(value as ColorPickerPickerPlacement)) {
+    return value as ColorPickerPickerPlacement;
   }
 
   return "bottom";

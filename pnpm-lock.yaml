@@ -202,6 +202,9 @@ importers:
 
   apps/remote-graphic-integration:
     dependencies:
+      '@portfolio/remote-design-system':
+        specifier: workspace:*
+        version: link:../remote-design-system
       '@portfolio/shared':
         specifier: workspace:*
         version: link:../../packages/shared
