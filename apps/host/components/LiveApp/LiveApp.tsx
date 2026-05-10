@@ -1,7 +1,10 @@
 import dynamic from "next/dynamic";
 
 import { Fallback } from "../Fallback";
-import { designSystemUrl } from "../../lib/urls";
+import {
+  designSystemUrl,
+  graphicIntegrationRemoteUrl
+} from "../../lib/urls";
 import { APP_ID, type AppId } from "./LiveApp.const";
 import { AppFrame } from "./LiveApp.styles";
 
@@ -19,6 +22,13 @@ function LiveApp({ id }: { id: AppId }) {
       return <AXApp />;
     case APP_ID.DESIGN_SYSTEM:
       return <AppFrame src={designSystemUrl} title="Design System" />;
+    case APP_ID.GRAPHICS_INTEGRATION:
+      return (
+        <AppFrame
+          src={graphicIntegrationRemoteUrl}
+          title="Graphics Integration"
+        />
+      );
     default:
       return <Fallback>Not live</Fallback>;
   }

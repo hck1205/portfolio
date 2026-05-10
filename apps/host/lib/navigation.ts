@@ -1,5 +1,9 @@
 import { APP_ID, type AppId } from "../components/LiveApp/LiveApp.const";
-import { axRemoteEntryUrl, designSystemUrl } from "./urls";
+import {
+  axRemoteEntryUrl,
+  designSystemUrl,
+  graphicIntegrationRemoteUrl
+} from "./urls";
 
 export type NavigationStatus = "active" | "inactive" | "unknown";
 
@@ -43,7 +47,8 @@ export const navigationItems: NavigationItem[] = [
     id: APP_ID.GRAPHICS_INTEGRATION,
     label: "Graphics Integration",
     live: false,
-    status: "inactive"
+    status: "unknown",
+    statusCheckUrl: graphicIntegrationRemoteUrl
   },
   { id: APP_ID.APP, label: "APP", live: false, status: "inactive" }
 ];
