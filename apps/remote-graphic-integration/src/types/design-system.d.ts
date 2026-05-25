@@ -73,6 +73,68 @@ declare module "react" {
         trigger?: "click" | "hover";
         value?: string;
       };
+      "ds-slider": DesignSystemElementProps & {
+        "default-value"?: number | string;
+        disabled?: boolean | string;
+        dots?: boolean | string;
+        included?: boolean | string;
+        marks?: string;
+        max?: number | string;
+        min?: number | string;
+        range?: boolean | string;
+        reverse?: boolean | string;
+        step?: number | string;
+        tooltip?: "auto" | "open" | "closed";
+        value?: number | string;
+        vertical?: boolean | string;
+      };
+      "ds-select": DesignSystemElementProps & {
+        "allow-clear"?: boolean | string;
+        disabled?: boolean | string;
+        "filter-option"?: boolean | string;
+        mode?: "multiple" | "single" | "tags";
+        "not-found-content"?: string;
+        open?: boolean | string;
+        options?: string;
+        placeholder?: string;
+        placement?: "bottomLeft" | "bottomRight" | "topLeft" | "topRight";
+        "show-search"?: boolean | string;
+        "show-selected-icon"?: boolean | string;
+        size?: "large" | "middle" | "small";
+        status?: "error" | "warning";
+        value?: string;
+        variant?: "borderless" | "filled" | "outlined" | "underlined";
+      };
+      "ds-collapse": DesignSystemElementProps & {
+        accordion?: boolean | string;
+        "active-key"?: string;
+        bordered?: boolean | string;
+        "default-active-key"?: string;
+        "expand-icon-placement"?: "start" | "end";
+        ghost?: boolean | string;
+        size?: "large" | "middle" | "small";
+      };
+      "ds-collapse-item": DesignSystemElementProps & {
+        collapsible?: "header" | "icon" | "disabled";
+        disabled?: boolean | string;
+        extra?: string;
+        "heading-level"?: 1 | 2 | 3 | 4 | 5 | 6 | string;
+        "item-key"?: string;
+        label?: string;
+        "show-arrow"?: boolean | string;
+      };
+      "ds-divider": DesignSystemElementProps & {
+        color?: string;
+        "color-token"?: string;
+        dashed?: boolean | string;
+        orientation?: "horizontal" | "vertical";
+        "orientation-margin"?: string;
+        plain?: boolean | string;
+        size?: "small" | "medium" | "large";
+        "title-placement"?: "start" | "center" | "end";
+        variant?: "solid" | "dashed" | "dotted";
+        vertical?: boolean | string;
+      };
       "ds-icon": DesignSystemElementProps & {
         decorative?: boolean | string;
         icon?: string;

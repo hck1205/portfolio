@@ -1,56 +1,72 @@
-import { useEffect } from "react";
+import { lazy, Suspense } from "react";
 import { useGLTF } from "@react-three/drei";
-import { Color, Material, Mesh, Object3D } from "three";
 
+import { usePartVisibilityMode } from "../Display/parts/usePartVisibilityMode";
+import { useModelMaterialControls } from "./material";
 import type { ModelProps } from "./Model.types";
 
-type TintableMaterial = Material & {
-  color: Color;
-};
+const LazyBoundingBoxOverlay = lazy(() =>
+  import("../Display/overlays/BoundingBoxOverlay").then((module) => ({
+    default: module.BoundingBoxOverlay
+  }))
+);
 
-const baseMaterialColors = new WeakMap<TintableMaterial, Color>();
+const LazyLogoDecalOverlay = lazy(() =>
+  import("./overlays/LogoDecalOverlay").then((module) => ({
+    default: module.LogoDecalOverlay
+  }))
+);
 
-export function Model({ materialTint, modelUrl }: ModelProps) {
+const LazyPatternOverlay = lazy(() =>
+  import("./overlays/PatternOverlay").then((module) => ({
+    default: module.PatternOverlay
+  }))
+);
+
+export function Model({
+  materialMetalness,
+  materialOpacity,
+  materialRoughness,
+  materialTint,
+  modelUrl,
+  partVisibilityMode,
+  showBoundingBox,
+  showLogoDecal,
+  showPatternOverlay,
+  textureNormalIntensity,
+  textureRepeat
+}: ModelProps) {
   const gltf = useGLTF(modelUrl);
 
-  useEffect(() => {
-    const tintColor = new Color(materialTint);
+  useModelMaterialControls(gltf.scene, {
+    materialMetalness,
+    materialOpacity,
+    materialRoughness,
+    materialTint,
+    textureNormalIntensity,
+    textureRepeat
+  });
+  usePartVisibilityMode(gltf.scene, partVisibilityMode);
 
-    gltf.scene.traverse((object) => {
-      if (!isMesh(object)) {
-        return;
-      }
+  const shouldRenderSurfaceOverlays = partVisibilityMode !== "hidden";
 
-      const materials = Array.isArray(object.material)
-        ? object.material
-        : [object.material];
-
-      materials.forEach((material) => {
-        if (!isTintableMaterial(material)) {
-          return;
-        }
-
-        if (!baseMaterialColors.has(material)) {
-          baseMaterialColors.set(material, material.color.clone());
-        }
-
-        const baseColor = baseMaterialColors.get(material);
-
-        if (baseColor) {
-          material.color.copy(baseColor).multiply(tintColor);
-          material.needsUpdate = true;
-        }
-      });
-    });
-  }, [gltf.scene, materialTint]);
-
-  return <primitive object={gltf.scene} />;
-}
-
-function isMesh(object: Object3D): object is Mesh {
-  return object instanceof Mesh;
-}
-
-function isTintableMaterial(material: Material): material is TintableMaterial {
-  return "color" in material && material.color instanceof Color;
+  return (
+    <>
+      <primitive object={gltf.scene} />
+      <Suspense fallback={null}>
+        {showBoundingBox ? (
+          <LazyBoundingBoxOverlay scene={gltf.scene} />
+        ) : null}
+        {showPatternOverlay && shouldRenderSurfaceOverlays ? (
+          <LazyPatternOverlay
+            scene={gltf.scene}
+            textureRepeat={textureRepeat}
+          />
+        ) : null}
+        {showLogoDecal && shouldRenderSurfaceOverlays ? (
+          <LazyLogoDecalOverlay scene={gltf.scene} />
+        ) : null}
+      </Suspense>
+    </>
+  );
 }
