@@ -13,6 +13,9 @@ export function Viewer({
   autoRotate = false,
   canZoom = true,
   className,
+  materialMetalness = 0.15,
+  materialOpacity = 1,
+  materialRoughness = 0.55,
   materialTint = "#ffffff",
   modelUrl,
   showEnvironment = true,
@@ -36,7 +39,13 @@ export function Viewer({
         <Suspense fallback={<Loader />}>
           {modelUrl ? (
             <Bounds fit clip observe margin={1.2}>
-              <Model materialTint={materialTint} modelUrl={modelUrl} />
+              <Model
+                materialMetalness={materialMetalness}
+                materialOpacity={materialOpacity}
+                materialRoughness={materialRoughness}
+                materialTint={materialTint}
+                modelUrl={modelUrl}
+              />
             </Bounds>
           ) : (
             <EmptyModel />

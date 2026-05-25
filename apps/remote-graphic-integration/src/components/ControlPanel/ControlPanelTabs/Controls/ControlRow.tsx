@@ -1,9 +1,19 @@
-import styles from "../InspectorTabs.module.css";
-import type { ControlRowProps } from "../InspectorTabs.types";
+import styles from "../ControlPanelTabs.module.css";
+import type { ControlRowProps } from "../ControlPanelTabs.types";
 
-export function ControlRow({ children, description, label }: ControlRowProps) {
+export function ControlRow({
+  children,
+  description,
+  label,
+  layout = "inline"
+}: ControlRowProps) {
+  const rowClassName =
+    layout === "stacked"
+      ? `${styles.controlRow} ${styles.controlRowStacked}`
+      : styles.controlRow;
+
   return (
-    <div className={styles.controlRow}>
+    <div className={rowClassName}>
       <div className={styles.controlText}>
         <ds-typography
           className={styles.controlLabel}

@@ -1,19 +1,26 @@
-import { inspectorTabs } from "./InspectorTabs.constants";
-import styles from "./InspectorTabs.module.css";
+import { controlPanelTabs } from "./ControlPanelTabs.constants";
+import styles from "./ControlPanelTabs.module.css";
 import { ConfigPanel, PlaceholderPanel } from "./Panels";
-import type { InspectorTabId, InspectorTabsProps } from "./InspectorTabs.types";
+import type {
+  ControlPanelTabId,
+  ControlPanelTabsProps
+} from "./ControlPanelTabs.types";
 
-export function InspectorTabs({
+export function ControlPanelTabs({
+  onMaterialPresetChange,
   onMaterialTintChange,
   onViewerConfigChange,
+  onViewerNumberConfigChange,
   viewerConfig
-}: InspectorTabsProps) {
-  const renderPanel = (tabId: InspectorTabId) => {
+}: ControlPanelTabsProps) {
+  const renderPanel = (tabId: ControlPanelTabId) => {
     if (tabId === "config") {
       return (
         <ConfigPanel
+          onMaterialPresetChange={onMaterialPresetChange}
           onMaterialTintChange={onMaterialTintChange}
           onViewerConfigChange={onViewerConfigChange}
+          onViewerNumberConfigChange={onViewerNumberConfigChange}
           viewerConfig={viewerConfig}
         />
       );
@@ -31,7 +38,7 @@ export function InspectorTabs({
       size="medium"
       type="line"
     >
-      {inspectorTabs.map((tab) => (
+      {controlPanelTabs.map((tab) => (
         <ds-tab
           icon={tab.icon}
           icon-only=""

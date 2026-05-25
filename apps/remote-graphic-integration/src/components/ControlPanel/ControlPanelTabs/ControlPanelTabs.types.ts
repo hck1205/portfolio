@@ -4,14 +4,18 @@ import type {
   ViewerBooleanControlKey,
   ViewerControlChangeHandler,
   ViewerControlConfig,
-  ViewerMaterialTintChangeHandler
+  ViewerMaterialPresetChangeHandler,
+  MaterialPresetId,
+  ViewerMaterialTintChangeHandler,
+  ViewerNumberControlChangeHandler,
+  ViewerNumberControlKey
 } from "../../GraphicIntegrationWorkspace/GraphicIntegrationWorkspace.types";
 
-export type InspectorTabId = "config" | "annotation" | "comment";
+export type ControlPanelTabId = "config" | "annotation" | "comment";
 
-export type InspectorTab = {
+export type ControlPanelTab = {
   icon: string;
-  id: InspectorTabId;
+  id: ControlPanelTabId;
   label: string;
 };
 
@@ -35,6 +39,22 @@ export type ImplementedColorControl = {
   description: string;
 };
 
+export type ImplementedNumberControl = {
+  type: "number";
+  key: ViewerNumberControlKey;
+  label: string;
+  description: string;
+  max: number;
+  min: number;
+  step: number;
+};
+
+export type ImplementedPresetControl = {
+  type: "preset";
+  label: string;
+  description: string;
+};
+
 export type PendingConfigControl = {
   type: "pending";
   label: string;
@@ -44,6 +64,8 @@ export type PendingConfigControl = {
 export type ConfigControl =
   | ImplementedBooleanControl
   | ImplementedColorControl
+  | ImplementedNumberControl
+  | ImplementedPresetControl
   | PendingConfigControl;
 
 export type ConfigControlSection = {
@@ -53,13 +75,15 @@ export type ConfigControlSection = {
   controls: ConfigControl[];
 };
 
-export type InspectorTabsProps = {
+export type ControlPanelTabsProps = {
+  onMaterialPresetChange: ViewerMaterialPresetChangeHandler;
   onMaterialTintChange: ViewerMaterialTintChangeHandler;
   onViewerConfigChange: ViewerControlChangeHandler;
+  onViewerNumberConfigChange: ViewerNumberControlChangeHandler;
   viewerConfig: ViewerControlConfig;
 };
 
-export type ConfigPanelProps = InspectorTabsProps;
+export type ConfigPanelProps = ControlPanelTabsProps;
 
 export type SwitchControlProps = {
   checked: boolean;
@@ -74,8 +98,30 @@ export type ColorControlProps = {
   value: string;
 };
 
+export type SliderControlProps = {
+  label: string;
+  max: number;
+  min: number;
+  onChange: (value: number) => void;
+  step: number;
+  value: number;
+};
+
+export type MaterialPresetOption = {
+  label: string;
+  value: MaterialPresetId;
+};
+
+export type SelectControlProps = {
+  label: string;
+  onChange: (value: MaterialPresetId) => void;
+  options: MaterialPresetOption[];
+  value: MaterialPresetId;
+};
+
 export type ControlRowProps = {
   children: ReactNode;
   description: string;
   label: string;
+  layout?: "inline" | "stacked";
 };

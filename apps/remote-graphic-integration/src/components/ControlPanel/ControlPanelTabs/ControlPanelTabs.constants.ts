@@ -1,6 +1,32 @@
-import type { ConfigControlSection, InspectorTab } from "./InspectorTabs.types";
+import type {
+  ConfigControlSection,
+  ConfigControlSectionId,
+  ControlPanelTab
+} from "./ControlPanelTabs.types";
 
-export const inspectorTabs: InspectorTab[] = [
+export const DEFAULT_ACTIVE_CONFIG_SECTION_ID: ConfigControlSectionId =
+  "material";
+
+export const materialPresetOptions = [
+  {
+    label: "Leather",
+    value: "leather"
+  },
+  {
+    label: "Suede",
+    value: "suede"
+  },
+  {
+    label: "Nylon",
+    value: "nylon"
+  },
+  {
+    label: "Rubber",
+    value: "rubber"
+  }
+] as const;
+
+export const controlPanelTabs: ControlPanelTab[] = [
   {
     icon: "sliders-horizontal",
     id: "config",
@@ -30,24 +56,36 @@ export const configControlSections: ConfigControlSection[] = [
         description: "Apply a tint over the current material."
       },
       {
-        type: "pending",
+        type: "number",
+        key: "materialRoughness",
         label: "Roughness",
-        description: "Control how matte or glossy the leather appears."
+        description: "Control how matte or glossy the leather appears.",
+        min: 0,
+        max: 1,
+        step: 0.05
       },
       {
-        type: "pending",
+        type: "number",
+        key: "materialMetalness",
         label: "Metalness",
-        description: "Tune reflective highlights for hardware or trims."
+        description: "Tune reflective highlights for hardware or trims.",
+        min: 0,
+        max: 1,
+        step: 0.05
       },
       {
-        type: "pending",
+        type: "number",
+        key: "materialOpacity",
         label: "Opacity",
-        description: "Adjust material transparency for inspection modes."
+        description: "Adjust material transparency for inspection modes.",
+        min: 0,
+        max: 1,
+        step: 0.05
       },
       {
-        type: "pending",
+        type: "preset",
         label: "Material preset",
-        description: "Switch between leather, suede, cotton, or nylon looks."
+        description: "Switch between leather, suede, nylon, or rubber looks."
       }
     ]
   },

@@ -1,30 +1,44 @@
 import { useState } from "react";
 
-import { RightInspector } from "../RightInspector";
+import { ControlPanel } from "../ControlPanel";
 import { Viewer } from "../../lib/ViewerEngine/viewer";
-import { DEFAULT_VIEWER_CONTROL_CONFIG } from "./GraphicIntegrationWorkspace.constants";
+import {
+  DEFAULT_VIEWER_CONTROL_CONFIG,
+  MATERIAL_PRESETS
+} from "./GraphicIntegrationWorkspace.constants";
 import styles from "./GraphicIntegrationWorkspace.module.css";
 import type {
   GraphicIntegrationWorkspaceProps,
   ViewerControlChangeHandler,
   ViewerControlConfig,
+  ViewerMaterialPresetChangeHandler,
+  ViewerNumberControlChangeHandler,
   ViewerMaterialTintChangeHandler
 } from "./GraphicIntegrationWorkspace.types";
 
 export function GraphicIntegrationWorkspace({
   modelUrl
 }: GraphicIntegrationWorkspaceProps) {
-  const [isInspectorCollapsed, setIsInspectorCollapsed] = useState(true);
+  const [isControlPanelCollapsed, setIsControlPanelCollapsed] = useState(true);
   const [viewerConfig, setViewerConfig] = useState<ViewerControlConfig>(
     DEFAULT_VIEWER_CONTROL_CONFIG
   );
   const viewerClassName = `${styles.viewerSurface} ${
-    isInspectorCollapsed ? "" : styles.viewerSurfaceInspectorOpen
+    isControlPanelCollapsed ? "" : styles.viewerSurfaceControlPanelOpen
   }`;
-  const toggleClassName = `${styles.inspectorToggle} ${
-    isInspectorCollapsed ? styles.inspectorToggleCollapsed : ""
+  const toggleClassName = `${styles.controlPanelToggle} ${
+    isControlPanelCollapsed ? styles.controlPanelToggleCollapsed : ""
   }`;
   const handleViewerConfigChange: ViewerControlChangeHandler = (key, value) => {
+    setViewerConfig((currentConfig) => ({
+      ...currentConfig,
+      [key]: value
+    }));
+  };
+  const handleViewerNumberConfigChange: ViewerNumberControlChangeHandler = (
+    key,
+    value
+  ) => {
     setViewerConfig((currentConfig) => ({
       ...currentConfig,
       [key]: value
@@ -36,6 +50,15 @@ export function GraphicIntegrationWorkspace({
       materialTint: value
     }));
   };
+  const handleMaterialPresetChange: ViewerMaterialPresetChangeHandler = (
+    value
+  ) => {
+    setViewerConfig((currentConfig) => ({
+      ...currentConfig,
+      ...MATERIAL_PRESETS[value],
+      materialPreset: value
+    }));
+  };
 
   return (
     <ds-layout className={styles.workspace} has-sider="">
@@ -44,6 +67,9 @@ export function GraphicIntegrationWorkspace({
           autoRotate={viewerConfig.autoRotate}
           canZoom={viewerConfig.canZoom}
           className={viewerClassName}
+          materialMetalness={viewerConfig.materialMetalness}
+          materialOpacity={viewerConfig.materialOpacity}
+          materialRoughness={viewerConfig.materialRoughness}
           materialTint={viewerConfig.materialTint}
           modelUrl={modelUrl}
           showEnvironment={viewerConfig.showEnvironment}
@@ -53,20 +79,24 @@ export function GraphicIntegrationWorkspace({
       </ds-layout-content>
       <ds-button
         aria-label={
-          isInspectorCollapsed ? "Open model inspector" : "Close model inspector"
+          isControlPanelCollapsed
+            ? "Open model control panel"
+            : "Close model control panel"
         }
         className={toggleClassName}
-        onClick={() => setIsInspectorCollapsed((collapsed) => !collapsed)}
+        onClick={() => setIsControlPanelCollapsed((collapsed) => !collapsed)}
         shape="circle"
         size="middle"
         type="text"
       >
         <ds-icon icon="settings" size="18" />
       </ds-button>
-      <RightInspector
-        collapsed={isInspectorCollapsed}
+      <ControlPanel
+        collapsed={isControlPanelCollapsed}
+        onMaterialPresetChange={handleMaterialPresetChange}
         onMaterialTintChange={handleMaterialTintChange}
         onViewerConfigChange={handleViewerConfigChange}
+        onViewerNumberConfigChange={handleViewerNumberConfigChange}
         viewerConfig={viewerConfig}
       />
     </ds-layout>

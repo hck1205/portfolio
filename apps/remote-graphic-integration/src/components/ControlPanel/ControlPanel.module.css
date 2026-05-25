@@ -1,4 +1,4 @@
-.inspector {
+.controlPanel {
   --ds-layout-sider-bg: #ffffff;
   --ds-layout-sider-color: #151719;
   position: absolute;
@@ -11,7 +11,7 @@
   height: 100%;
 }
 
-.inspectorShell {
+.controlPanelShell {
   display: flex;
   min-width: 0;
   min-height: 0;

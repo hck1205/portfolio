@@ -8,9 +8,28 @@ type TintableMaterial = Material & {
   color: Color;
 };
 
+type RoughnessMaterial = Material & {
+  roughness: number;
+};
+
+type MetalnessMaterial = Material & {
+  metalness: number;
+};
+
+type OpacityMaterial = Material & {
+  opacity: number;
+  transparent: boolean;
+};
+
 const baseMaterialColors = new WeakMap<TintableMaterial, Color>();
 
-export function Model({ materialTint, modelUrl }: ModelProps) {
+export function Model({
+  materialMetalness,
+  materialOpacity,
+  materialRoughness,
+  materialTint,
+  modelUrl
+}: ModelProps) {
   const gltf = useGLTF(modelUrl);
 
   useEffect(() => {
@@ -27,6 +46,19 @@ export function Model({ materialTint, modelUrl }: ModelProps) {
 
       materials.forEach((material) => {
         if (!isTintableMaterial(material)) {
+          if (isRoughnessMaterial(material)) {
+            material.roughness = materialRoughness;
+          }
+
+          if (isMetalnessMaterial(material)) {
+            material.metalness = materialMetalness;
+          }
+
+          if (isOpacityMaterial(material)) {
+            applyMaterialOpacity(material, materialOpacity);
+          }
+
+          material.needsUpdate = true;
           return;
         }
 
@@ -38,11 +70,30 @@ export function Model({ materialTint, modelUrl }: ModelProps) {
 
         if (baseColor) {
           material.color.copy(baseColor).multiply(tintColor);
-          material.needsUpdate = true;
         }
+
+        if (isRoughnessMaterial(material)) {
+          material.roughness = materialRoughness;
+        }
+
+        if (isMetalnessMaterial(material)) {
+          material.metalness = materialMetalness;
+        }
+
+        if (isOpacityMaterial(material)) {
+          applyMaterialOpacity(material, materialOpacity);
+        }
+
+        material.needsUpdate = true;
       });
     });
-  }, [gltf.scene, materialTint]);
+  }, [
+    gltf.scene,
+    materialMetalness,
+    materialOpacity,
+    materialRoughness,
+    materialTint
+  ]);
 
   return <primitive object={gltf.scene} />;
 }
@@ -53,4 +104,29 @@ function isMesh(object: Object3D): object is Mesh {
 
 function isTintableMaterial(material: Material): material is TintableMaterial {
   return "color" in material && material.color instanceof Color;
+}
+
+function isRoughnessMaterial(material: Material): material is RoughnessMaterial {
+  return "roughness" in material && typeof material.roughness === "number";
+}
+
+function isMetalnessMaterial(material: Material): material is MetalnessMaterial {
+  return "metalness" in material && typeof material.metalness === "number";
+}
+
+function isOpacityMaterial(material: Material): material is OpacityMaterial {
+  return (
+    "opacity" in material &&
+    typeof material.opacity === "number" &&
+    "transparent" in material &&
+    typeof material.transparent === "boolean"
+  );
+}
+
+function applyMaterialOpacity(
+  material: OpacityMaterial,
+  materialOpacity: number
+) {
+  material.opacity = materialOpacity;
+  material.transparent = materialOpacity < 1;
 }

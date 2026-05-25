@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 
 import { DS_SWITCH_CHANGE_EVENT } from "./Controls.constants";
 import type { SwitchChangeEvent, SwitchElement } from "./Controls.types";
-import type { SwitchControlProps } from "../InspectorTabs.types";
+import type { SwitchControlProps } from "../ControlPanelTabs.types";
 
 export function SwitchControl({
   checked,

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import {
   COAT_COLOR_PICKER_PLACEMENT,
@@ -8,7 +8,8 @@ import type {
   ColorPickerChangeEvent,
   ColorPickerElement
 } from "./Controls.types";
-import type { ColorControlProps } from "../InspectorTabs.types";
+import styles from "../ControlPanelTabs.module.css";
+import type { ColorControlProps } from "../ControlPanelTabs.types";
 
 export function ColorControl({
   className,
@@ -17,11 +18,14 @@ export function ColorControl({
   value
 }: ColorControlProps) {
   const colorPickerRef = useRef<ColorPickerElement | null>(null);
+  const [displayValue, setDisplayValue] = useState(value);
 
   useEffect(() => {
     if (colorPickerRef.current) {
       colorPickerRef.current.value = value;
     }
+
+    setDisplayValue(value);
   }, [value]);
 
   useEffect(() => {
@@ -33,8 +37,10 @@ export function ColorControl({
 
     const handleChange = (event: Event) => {
       const colorPickerEvent = event as ColorPickerChangeEvent;
+      const nextValue = colorPickerEvent.detail.value;
 
-      onChange(colorPickerEvent.detail.value);
+      setDisplayValue(nextValue);
+      onChange(nextValue);
     };
 
     colorPickerElement.addEventListener(
@@ -51,15 +57,23 @@ export function ColorControl({
   }, [onChange]);
 
   return (
-    <ds-color-picker
-      aria-label={label}
-      className={className}
-      disabled-alpha=""
-      format="hex"
-      picker-placement={COAT_COLOR_PICKER_PLACEMENT}
-      ref={colorPickerRef}
-      size="small"
-      value={value}
-    />
+    <div className={className}>
+      <ds-color-picker
+        aria-label={label}
+        disabled-alpha=""
+        format="hex"
+        picker-placement={COAT_COLOR_PICKER_PLACEMENT}
+        ref={colorPickerRef}
+        size="small"
+        value={value}
+      />
+      <ds-typography
+        className={styles.colorValue}
+        color="#4b5560"
+        typo-name="UI/Footnote/4/Bold"
+      >
+        {displayValue.toUpperCase()}
+      </ds-typography>
+    </div>
   );
 }

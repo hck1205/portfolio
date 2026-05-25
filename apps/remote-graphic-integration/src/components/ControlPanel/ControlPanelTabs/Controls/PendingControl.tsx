@@ -1,4 +1,4 @@
-import styles from "../InspectorTabs.module.css";
+import styles from "../ControlPanelTabs.module.css";
 
 export function PendingControl() {
   return (
