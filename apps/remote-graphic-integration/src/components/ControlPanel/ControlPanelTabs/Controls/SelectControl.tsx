@@ -3,10 +3,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { DS_SELECT_CHANGE_EVENT } from "./Controls.constants";
 import type { SelectChangeEvent, SelectElement } from "./Controls.types";
 import styles from "../ControlPanelTabs.module.css";
-import type {
-  MaterialPresetOption,
-  SelectControlProps
-} from "../ControlPanelTabs.types";
+import type { SelectControlProps } from "../ControlPanelTabs.types";
 
 export function SelectControl({
   label,
@@ -35,7 +32,7 @@ export function SelectControl({
       const selectEvent = event as SelectChangeEvent;
       const nextValue = selectEvent.detail.value;
 
-      if (typeof nextValue === "string" && isMaterialPresetValue(nextValue)) {
+      if (typeof nextValue === "string") {
         onChange(nextValue);
       }
     };
@@ -58,16 +55,5 @@ export function SelectControl({
       size="small"
       value={value}
     />
-  );
-}
-
-function isMaterialPresetValue(
-  value: string
-): value is MaterialPresetOption["value"] {
-  return (
-    value === "leather" ||
-    value === "suede" ||
-    value === "nylon" ||
-    value === "rubber"
   );
 }

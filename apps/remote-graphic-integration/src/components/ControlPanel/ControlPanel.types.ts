@@ -3,7 +3,8 @@ import type {
   ViewerMaterialTintChangeHandler,
   ViewerControlChangeHandler,
   ViewerControlConfig,
-  ViewerNumberControlChangeHandler
+  ViewerNumberControlChangeHandler,
+  ViewerOptionControlChangeHandler
 } from "../GraphicIntegrationWorkspace/GraphicIntegrationWorkspace.types";
 
 export type ControlPanelProps = {
@@ -12,5 +13,7 @@ export type ControlPanelProps = {
   onMaterialTintChange: ViewerMaterialTintChangeHandler;
   onViewerConfigChange: ViewerControlChangeHandler;
   onViewerNumberConfigChange: ViewerNumberControlChangeHandler;
+  onViewerOptionConfigChange: ViewerOptionControlChangeHandler;
+  onViewerScreenshot: () => void;
   viewerConfig: ViewerControlConfig;
 };

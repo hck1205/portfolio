@@ -1,3 +1,4 @@
+export { ActionControl } from "./ActionControl";
 export { ColorControl } from "./ColorControl";
 export { ControlRow } from "./ControlRow";
 export { PendingControl } from "./PendingControl";

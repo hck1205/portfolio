@@ -1,3 +1,8 @@
+import type {
+  CameraPresetId,
+  PartVisibilityMode
+} from "../../lib/ViewerEngine/viewer/Display";
+
 export type GraphicIntegrationWorkspaceProps = {
   modelUrl: string;
 };
@@ -7,13 +12,23 @@ export type MaterialPresetId = "leather" | "suede" | "nylon" | "rubber";
 export type ViewerControlConfig = {
   autoRotate: boolean;
   canZoom: boolean;
+  cameraPreset: CameraPresetId;
+  directionalLightIntensity: number;
+  environmentIntensity: number;
+  exposure: number;
   materialMetalness: number;
   materialOpacity: number;
   materialPreset: MaterialPresetId;
   materialRoughness: number;
   materialTint: string;
+  partVisibilityMode: PartVisibilityMode;
+  showBoundingBox: boolean;
   showEnvironment: boolean;
   showGrid: boolean;
+  showLogoDecal: boolean;
+  showPatternOverlay: boolean;
+  textureNormalIntensity: number;
+  textureRepeat: number;
   useDamping: boolean;
 };
 
@@ -31,6 +46,8 @@ export type ViewerNumberControlKey = {
     : never;
 }[ViewerControlKey];
 
+export type ViewerOptionControlKey = "cameraPreset" | "partVisibilityMode";
+
 export type ViewerControlChangeHandler = (
   key: ViewerBooleanControlKey,
   value: boolean
@@ -39,6 +56,13 @@ export type ViewerControlChangeHandler = (
 export type ViewerNumberControlChangeHandler = (
   key: ViewerNumberControlKey,
   value: number
+) => void;
+
+export type ViewerOptionControlChangeHandler = <
+  Key extends ViewerOptionControlKey
+>(
+  key: Key,
+  value: ViewerControlConfig[Key]
 ) => void;
 
 export type ViewerMaterialTintChangeHandler = (value: string) => void;

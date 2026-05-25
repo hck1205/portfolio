@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import {
+  ActionControl,
   ColorControl,
   ControlRow,
   PendingControl,
@@ -17,8 +18,13 @@ import styles from "../ControlPanelTabs.module.css";
 import type {
   ConfigControlSectionId,
   ConfigControl,
-  ConfigPanelProps
+  ConfigPanelProps,
+  MaterialPresetOption
 } from "../ControlPanelTabs.types";
+import {
+  isCameraPresetId,
+  isPartVisibilityMode
+} from "../../../../lib/ViewerEngine/viewer/Display";
 
 type CollapseToggleEvent = CustomEvent<{
   itemKey: ConfigControlSectionId;
@@ -30,6 +36,8 @@ export function ConfigPanel({
   onMaterialTintChange,
   onViewerConfigChange,
   onViewerNumberConfigChange,
+  onViewerOptionConfigChange,
+  onViewerScreenshot,
   viewerConfig
 }: ConfigPanelProps) {
   const collapseRef = useRef<HTMLElement | null>(null);
@@ -105,9 +113,45 @@ export function ConfigPanel({
       return (
         <SelectControl
           label={control.label}
-          onChange={onMaterialPresetChange}
+          onChange={(nextValue) => {
+            if (isMaterialPresetValue(nextValue)) {
+              onMaterialPresetChange(nextValue);
+            }
+          }}
           options={[...materialPresetOptions]}
           value={viewerConfig.materialPreset}
+        />
+      );
+    }
+
+    if (control.type === "option") {
+      return (
+        <SelectControl
+          label={control.label}
+          onChange={(nextValue) => {
+            if (control.key === "cameraPreset" && isCameraPresetId(nextValue)) {
+              onViewerOptionConfigChange(control.key, nextValue);
+            }
+
+            if (
+              control.key === "partVisibilityMode" &&
+              isPartVisibilityMode(nextValue)
+            ) {
+              onViewerOptionConfigChange(control.key, nextValue);
+            }
+          }}
+          options={[...control.options]}
+          value={viewerConfig[control.key]}
+        />
+      );
+    }
+
+    if (control.type === "action") {
+      return (
+        <ActionControl
+          icon={control.icon}
+          label={control.label}
+          onClick={onViewerScreenshot}
         />
       );
     }
@@ -161,4 +205,10 @@ export function ConfigPanel({
       </ds-collapse>
     </section>
   );
+}
+
+function isMaterialPresetValue(
+  value: string
+): value is MaterialPresetOption["value"] {
+  return materialPresetOptions.some((option) => option.value === value);
 }

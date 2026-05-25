@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { ControlPanel } from "../ControlPanel";
 import { Viewer } from "../../lib/ViewerEngine/viewer";
+import {
+  downloadScreenshot,
+  type ViewerScreenshotHandle
+} from "../../lib/ViewerEngine/viewer/Screenshot";
 import {
   DEFAULT_VIEWER_CONTROL_CONFIG,
   MATERIAL_PRESETS
@@ -13,12 +17,14 @@ import type {
   ViewerControlConfig,
   ViewerMaterialPresetChangeHandler,
   ViewerNumberControlChangeHandler,
-  ViewerMaterialTintChangeHandler
+  ViewerMaterialTintChangeHandler,
+  ViewerOptionControlChangeHandler
 } from "./GraphicIntegrationWorkspace.types";
 
 export function GraphicIntegrationWorkspace({
   modelUrl
 }: GraphicIntegrationWorkspaceProps) {
+  const viewerRef = useRef<ViewerScreenshotHandle | null>(null);
   const [isControlPanelCollapsed, setIsControlPanelCollapsed] = useState(true);
   const [viewerConfig, setViewerConfig] = useState<ViewerControlConfig>(
     DEFAULT_VIEWER_CONTROL_CONFIG
@@ -44,6 +50,15 @@ export function GraphicIntegrationWorkspace({
       [key]: value
     }));
   };
+  const handleViewerOptionConfigChange: ViewerOptionControlChangeHandler = (
+    key,
+    value
+  ) => {
+    setViewerConfig((currentConfig) => ({
+      ...currentConfig,
+      [key]: value
+    }));
+  };
   const handleMaterialTintChange: ViewerMaterialTintChangeHandler = (value) => {
     setViewerConfig((currentConfig) => ({
       ...currentConfig,
@@ -59,6 +74,13 @@ export function GraphicIntegrationWorkspace({
       materialPreset: value
     }));
   };
+  const handleViewerScreenshot = () => {
+    const dataUrl = viewerRef.current?.captureScreenshot() ?? null;
+
+    if (dataUrl) {
+      downloadScreenshot(dataUrl);
+    }
+  };
 
   return (
     <ds-layout className={styles.workspace} has-sider="">
@@ -66,15 +88,26 @@ export function GraphicIntegrationWorkspace({
         <Viewer
           autoRotate={viewerConfig.autoRotate}
           canZoom={viewerConfig.canZoom}
+          cameraPreset={viewerConfig.cameraPreset}
           className={viewerClassName}
+          directionalLightIntensity={viewerConfig.directionalLightIntensity}
+          environmentIntensity={viewerConfig.environmentIntensity}
+          exposure={viewerConfig.exposure}
           materialMetalness={viewerConfig.materialMetalness}
           materialOpacity={viewerConfig.materialOpacity}
           materialRoughness={viewerConfig.materialRoughness}
           materialTint={viewerConfig.materialTint}
           modelUrl={modelUrl}
+          partVisibilityMode={viewerConfig.partVisibilityMode}
+          showBoundingBox={viewerConfig.showBoundingBox}
           showEnvironment={viewerConfig.showEnvironment}
           showGrid={viewerConfig.showGrid}
+          showLogoDecal={viewerConfig.showLogoDecal}
+          showPatternOverlay={viewerConfig.showPatternOverlay}
+          textureNormalIntensity={viewerConfig.textureNormalIntensity}
+          textureRepeat={viewerConfig.textureRepeat}
           useDamping={viewerConfig.useDamping}
+          ref={viewerRef}
         />
       </ds-layout-content>
       <ds-button
@@ -97,6 +130,8 @@ export function GraphicIntegrationWorkspace({
         onMaterialTintChange={handleMaterialTintChange}
         onViewerConfigChange={handleViewerConfigChange}
         onViewerNumberConfigChange={handleViewerNumberConfigChange}
+        onViewerOptionConfigChange={handleViewerOptionConfigChange}
+        onViewerScreenshot={handleViewerScreenshot}
         viewerConfig={viewerConfig}
       />
     </ds-layout>

@@ -8,6 +8,8 @@ export function ControlPanel({
   onMaterialTintChange,
   onViewerConfigChange,
   onViewerNumberConfigChange,
+  onViewerOptionConfigChange,
+  onViewerScreenshot,
   viewerConfig
 }: ControlPanelProps) {
   return (
@@ -44,6 +46,8 @@ export function ControlPanel({
             onMaterialTintChange={onMaterialTintChange}
             onViewerConfigChange={onViewerConfigChange}
             onViewerNumberConfigChange={onViewerNumberConfigChange}
+            onViewerOptionConfigChange={onViewerOptionConfigChange}
+            onViewerScreenshot={onViewerScreenshot}
             viewerConfig={viewerConfig}
           />
         </div>

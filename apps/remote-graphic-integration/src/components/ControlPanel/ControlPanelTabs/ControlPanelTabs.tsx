@@ -11,6 +11,8 @@ export function ControlPanelTabs({
   onMaterialTintChange,
   onViewerConfigChange,
   onViewerNumberConfigChange,
+  onViewerOptionConfigChange,
+  onViewerScreenshot,
   viewerConfig
 }: ControlPanelTabsProps) {
   const renderPanel = (tabId: ControlPanelTabId) => {
@@ -21,6 +23,8 @@ export function ControlPanelTabs({
           onMaterialTintChange={onMaterialTintChange}
           onViewerConfigChange={onViewerConfigChange}
           onViewerNumberConfigChange={onViewerNumberConfigChange}
+          onViewerOptionConfigChange={onViewerOptionConfigChange}
+          onViewerScreenshot={onViewerScreenshot}
           viewerConfig={viewerConfig}
         />
       );

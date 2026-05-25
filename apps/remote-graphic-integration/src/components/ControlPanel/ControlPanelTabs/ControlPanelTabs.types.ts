@@ -8,7 +8,9 @@ import type {
   MaterialPresetId,
   ViewerMaterialTintChangeHandler,
   ViewerNumberControlChangeHandler,
-  ViewerNumberControlKey
+  ViewerNumberControlKey,
+  ViewerOptionControlChangeHandler,
+  ViewerOptionControlKey
 } from "../../GraphicIntegrationWorkspace/GraphicIntegrationWorkspace.types";
 
 export type ControlPanelTabId = "config" | "annotation" | "comment";
@@ -55,6 +57,22 @@ export type ImplementedPresetControl = {
   description: string;
 };
 
+export type ImplementedOptionControl = {
+  type: "option";
+  key: ViewerOptionControlKey;
+  label: string;
+  description: string;
+  options: SelectControlOption[];
+};
+
+export type ImplementedActionControl = {
+  type: "action";
+  action: "screenshot";
+  icon: string;
+  label: string;
+  description: string;
+};
+
 export type PendingConfigControl = {
   type: "pending";
   label: string;
@@ -64,7 +82,9 @@ export type PendingConfigControl = {
 export type ConfigControl =
   | ImplementedBooleanControl
   | ImplementedColorControl
+  | ImplementedActionControl
   | ImplementedNumberControl
+  | ImplementedOptionControl
   | ImplementedPresetControl
   | PendingConfigControl;
 
@@ -80,6 +100,8 @@ export type ControlPanelTabsProps = {
   onMaterialTintChange: ViewerMaterialTintChangeHandler;
   onViewerConfigChange: ViewerControlChangeHandler;
   onViewerNumberConfigChange: ViewerNumberControlChangeHandler;
+  onViewerOptionConfigChange: ViewerOptionControlChangeHandler;
+  onViewerScreenshot: () => void;
   viewerConfig: ViewerControlConfig;
 };
 
@@ -112,11 +134,22 @@ export type MaterialPresetOption = {
   value: MaterialPresetId;
 };
 
+export type SelectControlOption = {
+  label: string;
+  value: string;
+};
+
 export type SelectControlProps = {
   label: string;
-  onChange: (value: MaterialPresetId) => void;
-  options: MaterialPresetOption[];
-  value: MaterialPresetId;
+  onChange: (value: string) => void;
+  options: SelectControlOption[];
+  value: string;
+};
+
+export type ActionControlProps = {
+  icon: string;
+  label: string;
+  onClick: () => void;
 };
 
 export type ControlRowProps = {

@@ -3,6 +3,10 @@ import type {
   ConfigControlSectionId,
   ControlPanelTab
 } from "./ControlPanelTabs.types";
+import {
+  cameraPresetOptions,
+  partVisibilityModeOptions
+} from "../../../lib/ViewerEngine/viewer/Display";
 
 export const DEFAULT_ACTIVE_CONFIG_SECTION_ID: ConfigControlSectionId =
   "material";
@@ -95,22 +99,32 @@ export const configControlSections: ConfigControlSection[] = [
     description: "Texture maps and pattern layers for later editing.",
     controls: [
       {
-        type: "pending",
+        type: "number",
+        key: "textureNormalIntensity",
         label: "Normal intensity",
-        description: "Adjust surface grain and seam depth."
+        description: "Adjust surface grain and seam depth.",
+        min: 0,
+        max: 2,
+        step: 0.05
       },
       {
-        type: "pending",
+        type: "number",
+        key: "textureRepeat",
         label: "Texture repeat",
-        description: "Scale texture tiling across the garment."
+        description: "Scale texture tiling across the garment.",
+        min: 0.5,
+        max: 4,
+        step: 0.25
       },
       {
-        type: "pending",
+        type: "boolean",
+        key: "showLogoDecal",
         label: "Logo / decal",
         description: "Place a graphic layer on selected coat parts."
       },
       {
-        type: "pending",
+        type: "boolean",
+        key: "showPatternOverlay",
         label: "Pattern overlay",
         description: "Preview pattern layers over the base material."
       }
@@ -128,19 +142,31 @@ export const configControlSections: ConfigControlSection[] = [
         description: "Use the studio environment light."
       },
       {
-        type: "pending",
+        type: "number",
+        key: "environmentIntensity",
         label: "Environment intensity",
-        description: "Increase or reduce reflection strength."
+        description: "Increase or reduce reflection strength.",
+        min: 0,
+        max: 2,
+        step: 0.05
       },
       {
-        type: "pending",
+        type: "number",
+        key: "directionalLightIntensity",
         label: "Directional light",
-        description: "Control the key light strength."
+        description: "Control the key light strength.",
+        min: 0,
+        max: 5,
+        step: 0.1
       },
       {
-        type: "pending",
+        type: "number",
+        key: "exposure",
         label: "Exposure",
-        description: "Tune the final tone mapping exposure."
+        description: "Tune the final tone mapping exposure.",
+        min: 0.5,
+        max: 2,
+        step: 0.05
       }
     ]
   },
@@ -156,19 +182,24 @@ export const configControlSections: ConfigControlSection[] = [
         description: "Show the ground reference grid."
       },
       {
-        type: "pending",
+        type: "boolean",
+        key: "showBoundingBox",
         label: "Bounding box",
         description: "Show the model bounds for scale review."
       },
       {
-        type: "pending",
+        type: "option",
+        key: "partVisibilityMode",
         label: "Part visibility",
-        description: "Hide or isolate coat parts when meshes are mapped."
+        description: "Switch between solid, wireframe, or hidden display.",
+        options: [...partVisibilityModeOptions]
       },
       {
-        type: "pending",
+        type: "option",
+        key: "cameraPreset",
         label: "Camera preset",
-        description: "Jump to front, side, back, or detail views."
+        description: "Jump to front, side, back, or detail views.",
+        options: [...cameraPresetOptions]
       }
     ]
   },
@@ -196,7 +227,9 @@ export const configControlSections: ConfigControlSection[] = [
         description: "Smooth orbit movement."
       },
       {
-        type: "pending",
+        type: "action",
+        action: "screenshot",
+        icon: "camera",
         label: "Screenshot",
         description: "Export the current viewer frame."
       }
