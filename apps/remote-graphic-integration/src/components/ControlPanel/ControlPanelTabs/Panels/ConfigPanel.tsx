@@ -24,7 +24,7 @@ import type {
 import {
   isCameraPresetId,
   isPartVisibilityMode
-} from "../../../../lib/ViewerEngine/viewer/Display";
+} from "../../../../lib/ViewerEngine/viewer/Display/Display.constants";
 
 type CollapseToggleEvent = CustomEvent<{
   itemKey: ConfigControlSectionId;

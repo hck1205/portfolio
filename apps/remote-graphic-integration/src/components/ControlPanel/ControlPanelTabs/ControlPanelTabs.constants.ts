@@ -6,7 +6,7 @@ import type {
 import {
   cameraPresetOptions,
   partVisibilityModeOptions
-} from "../../../lib/ViewerEngine/viewer/Display";
+} from "../../../lib/ViewerEngine/viewer/Display/Display.constants";
 
 export const DEFAULT_ACTIVE_CONFIG_SECTION_ID: ConfigControlSectionId =
   "material";

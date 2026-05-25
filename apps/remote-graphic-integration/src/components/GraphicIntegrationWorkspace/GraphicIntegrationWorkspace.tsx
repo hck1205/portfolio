@@ -1,11 +1,6 @@
-import { useRef, useState } from "react";
+import { lazy, Suspense, useRef, useState } from "react";
 
-import { ControlPanel } from "../ControlPanel";
-import { Viewer } from "../../lib/ViewerEngine/viewer";
-import {
-  downloadScreenshot,
-  type ViewerScreenshotHandle
-} from "../../lib/ViewerEngine/viewer/Screenshot";
+import type { ViewerScreenshotHandle } from "../../lib/ViewerEngine/viewer/Screenshot";
 import {
   DEFAULT_VIEWER_CONTROL_CONFIG,
   MATERIAL_PRESETS
@@ -21,11 +16,28 @@ import type {
   ViewerOptionControlChangeHandler
 } from "./GraphicIntegrationWorkspace.types";
 
+const LazyControlPanel = lazy(() =>
+  import("../ControlPanel").then((module) => ({
+    default: module.ControlPanel
+  }))
+);
+
+const LazyViewer = lazy(() =>
+  import("../../lib/ViewerEngine/viewer").then((module) => ({
+    default: module.Viewer
+  }))
+);
+
+function preloadControlPanel() {
+  void import("../ControlPanel");
+}
+
 export function GraphicIntegrationWorkspace({
   modelUrl
 }: GraphicIntegrationWorkspaceProps) {
   const viewerRef = useRef<ViewerScreenshotHandle | null>(null);
   const [isControlPanelCollapsed, setIsControlPanelCollapsed] = useState(true);
+  const [hasOpenedControlPanel, setHasOpenedControlPanel] = useState(false);
   const [viewerConfig, setViewerConfig] = useState<ViewerControlConfig>(
     DEFAULT_VIEWER_CONTROL_CONFIG
   );
@@ -74,41 +86,51 @@ export function GraphicIntegrationWorkspace({
       materialPreset: value
     }));
   };
-  const handleViewerScreenshot = () => {
+  const handleViewerScreenshot = async () => {
     const dataUrl = viewerRef.current?.captureScreenshot() ?? null;
 
     if (dataUrl) {
+      const { downloadScreenshot } = await import(
+        "../../lib/ViewerEngine/viewer/Screenshot"
+      );
+
       downloadScreenshot(dataUrl);
     }
+  };
+  const handleControlPanelToggle = () => {
+    setHasOpenedControlPanel(true);
+    setIsControlPanelCollapsed((collapsed) => !collapsed);
   };
 
   return (
     <ds-layout className={styles.workspace} has-sider="">
       <ds-layout-content className={styles.viewerRegion}>
-        <Viewer
-          autoRotate={viewerConfig.autoRotate}
-          canZoom={viewerConfig.canZoom}
-          cameraPreset={viewerConfig.cameraPreset}
-          className={viewerClassName}
-          directionalLightIntensity={viewerConfig.directionalLightIntensity}
-          environmentIntensity={viewerConfig.environmentIntensity}
-          exposure={viewerConfig.exposure}
-          materialMetalness={viewerConfig.materialMetalness}
-          materialOpacity={viewerConfig.materialOpacity}
-          materialRoughness={viewerConfig.materialRoughness}
-          materialTint={viewerConfig.materialTint}
-          modelUrl={modelUrl}
-          partVisibilityMode={viewerConfig.partVisibilityMode}
-          showBoundingBox={viewerConfig.showBoundingBox}
-          showEnvironment={viewerConfig.showEnvironment}
-          showGrid={viewerConfig.showGrid}
-          showLogoDecal={viewerConfig.showLogoDecal}
-          showPatternOverlay={viewerConfig.showPatternOverlay}
-          textureNormalIntensity={viewerConfig.textureNormalIntensity}
-          textureRepeat={viewerConfig.textureRepeat}
-          useDamping={viewerConfig.useDamping}
-          ref={viewerRef}
-        />
+        <Suspense fallback={<div className={styles.viewerLoadingSurface} />}>
+          <LazyViewer
+            autoRotate={viewerConfig.autoRotate}
+            canZoom={viewerConfig.canZoom}
+            cameraPreset={viewerConfig.cameraPreset}
+            className={viewerClassName}
+            directionalLightIntensity={viewerConfig.directionalLightIntensity}
+            environmentIntensity={viewerConfig.environmentIntensity}
+            exposure={viewerConfig.exposure}
+            materialMetalness={viewerConfig.materialMetalness}
+            materialOpacity={viewerConfig.materialOpacity}
+            materialRoughness={viewerConfig.materialRoughness}
+            materialTint={viewerConfig.materialTint}
+            modelUrl={modelUrl}
+            partVisibilityMode={viewerConfig.partVisibilityMode}
+            ref={viewerRef}
+            showBoundingBox={viewerConfig.showBoundingBox}
+            showEnvironment={viewerConfig.showEnvironment}
+            showGrid={viewerConfig.showGrid}
+            showLogoDecal={viewerConfig.showLogoDecal}
+            showPatternOverlay={viewerConfig.showPatternOverlay}
+            textureNormalIntensity={viewerConfig.textureNormalIntensity}
+            textureRepeat={viewerConfig.textureRepeat}
+            useDamping={viewerConfig.useDamping}
+          />
+        </Suspense>
       </ds-layout-content>
       <ds-button
         aria-label={
@@ -117,23 +139,29 @@ export function GraphicIntegrationWorkspace({
             : "Close model control panel"
         }
         className={toggleClassName}
-        onClick={() => setIsControlPanelCollapsed((collapsed) => !collapsed)}
+        onFocus={preloadControlPanel}
+        onClick={handleControlPanelToggle}
+        onPointerEnter={preloadControlPanel}
         shape="circle"
         size="middle"
         type="text"
       >
         <ds-icon icon="settings" size="18" />
       </ds-button>
-      <ControlPanel
-        collapsed={isControlPanelCollapsed}
-        onMaterialPresetChange={handleMaterialPresetChange}
-        onMaterialTintChange={handleMaterialTintChange}
-        onViewerConfigChange={handleViewerConfigChange}
-        onViewerNumberConfigChange={handleViewerNumberConfigChange}
-        onViewerOptionConfigChange={handleViewerOptionConfigChange}
-        onViewerScreenshot={handleViewerScreenshot}
-        viewerConfig={viewerConfig}
-      />
+      {hasOpenedControlPanel ? (
+        <Suspense fallback={null}>
+          <LazyControlPanel
+            collapsed={isControlPanelCollapsed}
+            onMaterialPresetChange={handleMaterialPresetChange}
+            onMaterialTintChange={handleMaterialTintChange}
+            onViewerConfigChange={handleViewerConfigChange}
+            onViewerNumberConfigChange={handleViewerNumberConfigChange}
+            onViewerOptionConfigChange={handleViewerOptionConfigChange}
+            onViewerScreenshot={handleViewerScreenshot}
+            viewerConfig={viewerConfig}
+          />
+        </Suspense>
+      ) : null}
     </ds-layout>
   );
 }

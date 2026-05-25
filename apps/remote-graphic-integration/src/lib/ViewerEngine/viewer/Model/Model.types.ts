@@ -1,4 +1,4 @@
-import type { PartVisibilityMode } from "../Display";
+import type { PartVisibilityMode } from "../Display/Display.types";
 
 export type ModelProps = {
   materialMetalness: number;

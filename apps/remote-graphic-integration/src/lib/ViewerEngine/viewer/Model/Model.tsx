@@ -1,9 +1,27 @@
+import { lazy, Suspense } from "react";
 import { useGLTF } from "@react-three/drei";
 
-import { BoundingBoxOverlay, usePartVisibilityMode } from "../Display";
+import { usePartVisibilityMode } from "../Display/parts/usePartVisibilityMode";
 import { useModelMaterialControls } from "./material";
-import { LogoDecalOverlay, PatternOverlay } from "./overlays";
 import type { ModelProps } from "./Model.types";
+
+const LazyBoundingBoxOverlay = lazy(() =>
+  import("../Display/overlays/BoundingBoxOverlay").then((module) => ({
+    default: module.BoundingBoxOverlay
+  }))
+);
+
+const LazyLogoDecalOverlay = lazy(() =>
+  import("./overlays/LogoDecalOverlay").then((module) => ({
+    default: module.LogoDecalOverlay
+  }))
+);
+
+const LazyPatternOverlay = lazy(() =>
+  import("./overlays/PatternOverlay").then((module) => ({
+    default: module.PatternOverlay
+  }))
+);
 
 export function Model({
   materialMetalness,
@@ -35,13 +53,20 @@ export function Model({
   return (
     <>
       <primitive object={gltf.scene} />
-      {showBoundingBox ? <BoundingBoxOverlay scene={gltf.scene} /> : null}
-      {showPatternOverlay && shouldRenderSurfaceOverlays ? (
-        <PatternOverlay scene={gltf.scene} textureRepeat={textureRepeat} />
-      ) : null}
-      {showLogoDecal && shouldRenderSurfaceOverlays ? (
-        <LogoDecalOverlay scene={gltf.scene} />
-      ) : null}
+      <Suspense fallback={null}>
+        {showBoundingBox ? (
+          <LazyBoundingBoxOverlay scene={gltf.scene} />
+        ) : null}
+        {showPatternOverlay && shouldRenderSurfaceOverlays ? (
+          <LazyPatternOverlay
+            scene={gltf.scene}
+            textureRepeat={textureRepeat}
+          />
+        ) : null}
+        {showLogoDecal && shouldRenderSurfaceOverlays ? (
+          <LazyLogoDecalOverlay scene={gltf.scene} />
+        ) : null}
+      </Suspense>
     </>
   );
 }

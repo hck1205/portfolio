@@ -4,12 +4,13 @@ import { Bounds, OrbitControls } from "@react-three/drei";
 import { MOUSE } from "three";
 
 import {
-  CameraPresetController,
-  DEFAULT_SCENE_DISPLAY_CONFIG,
-  GridFloor
-} from "./Display";
+  DEFAULT_SCENE_DISPLAY_CONFIG
+} from "./Display/Display.constants";
+import { CameraPresetController } from "./Display/controls/CameraPresetController";
+import { GridFloor } from "./Display/overlays/GridFloor";
 import { EmptyModel } from "./EmptyModel";
-import { DEFAULT_SCENE_LIGHTING_CONFIG, SceneLighting } from "./Lighting";
+import { DEFAULT_SCENE_LIGHTING_CONFIG } from "./Lighting/Lighting.constants";
+import { SceneLighting } from "./Lighting/SceneLighting";
 import { Loader } from "./Loader";
 import { Model } from "./Model";
 import { isPngDataUrl, type ViewerScreenshotHandle } from "./Screenshot";

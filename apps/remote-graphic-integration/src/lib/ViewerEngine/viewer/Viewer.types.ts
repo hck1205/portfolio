@@ -1,7 +1,7 @@
 import type {
   CameraPresetId,
   PartVisibilityMode
-} from "./Display";
+} from "./Display/Display.types";
 
 export type ViewerProps = {
   modelUrl?: string;

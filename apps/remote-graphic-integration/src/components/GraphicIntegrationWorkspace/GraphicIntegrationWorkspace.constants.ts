@@ -2,8 +2,8 @@ import type {
   MaterialPresetId,
   ViewerControlConfig
 } from "./GraphicIntegrationWorkspace.types";
-import { DEFAULT_SCENE_DISPLAY_CONFIG } from "../../lib/ViewerEngine/viewer/Display";
-import { DEFAULT_SCENE_LIGHTING_CONFIG } from "../../lib/ViewerEngine/viewer/Lighting";
+import { DEFAULT_SCENE_DISPLAY_CONFIG } from "../../lib/ViewerEngine/viewer/Display/Display.constants";
+import { DEFAULT_SCENE_LIGHTING_CONFIG } from "../../lib/ViewerEngine/viewer/Lighting/Lighting.constants";
 
 export const MATERIAL_PRESETS: Record<
   MaterialPresetId,

@@ -1,7 +1,7 @@
 import type {
   CameraPresetId,
   PartVisibilityMode
-} from "../../lib/ViewerEngine/viewer/Display";
+} from "../../lib/ViewerEngine/viewer/Display/Display.types";
 
 export type GraphicIntegrationWorkspaceProps = {
   modelUrl: string;
