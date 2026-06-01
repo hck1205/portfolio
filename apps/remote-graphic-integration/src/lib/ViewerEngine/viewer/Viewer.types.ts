@@ -2,8 +2,24 @@ import type {
   CameraPresetId,
   PartVisibilityMode
 } from "./Display/Display.types";
+import type {
+  AnnotationCameraSnapshot,
+  AnnotationSavePayload,
+  AnnotationSnapshotPayload,
+  AnnotationStylePayload,
+  AnnotationTool
+} from "./Annotation";
 
 export type ViewerProps = {
+  annotationClearSignal?: number;
+  annotationMode?: boolean;
+  annotationSaveSignal?: number;
+  annotationStrokeColor?: string;
+  annotationStrokeWidth?: number;
+  annotationTool?: AnnotationTool;
+  annotationRestoreSignal?: number;
+  annotationRestoreSnapshot?: AnnotationSnapshotPayload | null;
+  cameraRestoreSnapshot?: AnnotationCameraSnapshot | null;
   modelUrl?: string;
   className?: string;
   cameraPreset?: CameraPresetId;
@@ -25,4 +41,6 @@ export type ViewerProps = {
   textureNormalIntensity?: number;
   textureRepeat?: number;
   useDamping?: boolean;
+  onAnnotationSave?: (payload: AnnotationSavePayload) => void;
+  onAnnotationSelectionStyleChange?: (payload: AnnotationStylePayload) => void;
 };

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
 import type {
+  AnnotationSaveEntry,
   ViewerBooleanControlKey,
   ViewerControlChangeHandler,
   ViewerControlConfig,
@@ -96,16 +97,35 @@ export type ConfigControlSection = {
 };
 
 export type ControlPanelTabsProps = {
+  annotationSaves: AnnotationSaveEntry[];
   onMaterialPresetChange: ViewerMaterialPresetChangeHandler;
+  onActiveTabChange: (tabId: ControlPanelTabId) => void;
+  onAnnotationSaveDelete: (saveId: string) => void;
+  onAnnotationSaveSelect: (save: AnnotationSaveEntry) => void;
   onMaterialTintChange: ViewerMaterialTintChangeHandler;
   onViewerConfigChange: ViewerControlChangeHandler;
   onViewerNumberConfigChange: ViewerNumberControlChangeHandler;
   onViewerOptionConfigChange: ViewerOptionControlChangeHandler;
   onViewerScreenshot: () => void;
+  activeTabId: ControlPanelTabId;
   viewerConfig: ViewerControlConfig;
 };
 
-export type ConfigPanelProps = ControlPanelTabsProps;
+export type ConfigPanelProps = Pick<
+  ControlPanelTabsProps,
+  | "onMaterialPresetChange"
+  | "onMaterialTintChange"
+  | "onViewerConfigChange"
+  | "onViewerNumberConfigChange"
+  | "onViewerOptionConfigChange"
+  | "onViewerScreenshot"
+  | "viewerConfig"
+>;
+
+export type AnnotationPanelProps = Pick<
+  ControlPanelTabsProps,
+  "annotationSaves" | "onAnnotationSaveDelete" | "onAnnotationSaveSelect"
+>;
 
 export type SwitchControlProps = {
   checked: boolean;

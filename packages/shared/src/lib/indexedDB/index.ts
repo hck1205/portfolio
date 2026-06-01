@@ -1,4 +1,4 @@
-export { IndexedDBClient } from "./IndexedDBClient";
+export { createIndexedDBClient, IndexedDBClient } from "./IndexedDBClient";
 export {
   IndexedDBTransactionError,
   IndexedDBUnavailableError

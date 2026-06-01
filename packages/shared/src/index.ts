@@ -5,6 +5,7 @@ export {
 } from "./utils/images";
 
 export {
+  createIndexedDBClient,
   IndexedDBClient,
   IndexedDBTransactionError,
   IndexedDBUnavailableError,

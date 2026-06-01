@@ -1,12 +1,19 @@
+import { useEffect, useRef } from "react";
+
 import { controlPanelTabs } from "./ControlPanelTabs.constants";
 import styles from "./ControlPanelTabs.module.css";
-import { ConfigPanel, PlaceholderPanel } from "./Panels";
+import { AnnotationPanel, ConfigPanel, PlaceholderPanel } from "./Panels";
 import type {
   ControlPanelTabId,
   ControlPanelTabsProps
 } from "./ControlPanelTabs.types";
 
 export function ControlPanelTabs({
+  activeTabId,
+  annotationSaves,
+  onActiveTabChange,
+  onAnnotationSaveDelete,
+  onAnnotationSaveSelect,
   onMaterialPresetChange,
   onMaterialTintChange,
   onViewerConfigChange,
@@ -15,6 +22,30 @@ export function ControlPanelTabs({
   onViewerScreenshot,
   viewerConfig
 }: ControlPanelTabsProps) {
+  const tabsRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const tabsElement = tabsRef.current;
+
+    if (!tabsElement) {
+      return;
+    }
+
+    const handleTabsChange = (event: Event) => {
+      const { activeKey } = (event as CustomEvent<{ activeKey: string }>).detail;
+
+      if (isControlPanelTabId(activeKey)) {
+        onActiveTabChange(activeKey);
+      }
+    };
+
+    tabsElement.addEventListener("ds-tabs-change", handleTabsChange);
+
+    return () => {
+      tabsElement.removeEventListener("ds-tabs-change", handleTabsChange);
+    };
+  }, [onActiveTabChange]);
+
   const renderPanel = (tabId: ControlPanelTabId) => {
     if (tabId === "config") {
       return (
@@ -30,15 +61,27 @@ export function ControlPanelTabs({
       );
     }
 
+    if (tabId === "annotation") {
+      return (
+        <AnnotationPanel
+          annotationSaves={annotationSaves}
+          onAnnotationSaveDelete={onAnnotationSaveDelete}
+          onAnnotationSaveSelect={onAnnotationSaveSelect}
+        />
+      );
+    }
+
     return <PlaceholderPanel />;
   };
 
   return (
     <ds-tabs
+      active-key={activeTabId}
       centered=""
       className={styles.tabs}
       default-active-key="config"
       full-width=""
+      ref={tabsRef}
       size="medium"
       type="line"
     >
@@ -56,4 +99,8 @@ export function ControlPanelTabs({
       ))}
     </ds-tabs>
   );
+}
+
+function isControlPanelTabId(value: string): value is ControlPanelTabId {
+  return controlPanelTabs.some((tab) => tab.id === value);
 }

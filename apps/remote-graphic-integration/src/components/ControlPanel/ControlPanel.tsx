@@ -3,7 +3,12 @@ import styles from "./ControlPanel.module.css";
 import type { ControlPanelProps } from "./ControlPanel.types";
 
 export function ControlPanel({
+  activeTabId,
+  annotationSaves,
   collapsed,
+  onActiveTabChange,
+  onAnnotationSaveDelete,
+  onAnnotationSaveSelect,
   onMaterialPresetChange,
   onMaterialTintChange,
   onViewerConfigChange,
@@ -42,6 +47,11 @@ export function ControlPanel({
         </header>
         <div className={styles.tabWrapper}>
           <ControlPanelTabs
+            activeTabId={activeTabId}
+            annotationSaves={annotationSaves}
+            onActiveTabChange={onActiveTabChange}
+            onAnnotationSaveDelete={onAnnotationSaveDelete}
+            onAnnotationSaveSelect={onAnnotationSaveSelect}
             onMaterialPresetChange={onMaterialPresetChange}
             onMaterialTintChange={onMaterialTintChange}
             onViewerConfigChange={onViewerConfigChange}

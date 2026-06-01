@@ -1,5 +1,14 @@
-import { forwardRef, Suspense, useImperativeHandle, useRef } from "react";
-import { Canvas, type RootState } from "@react-three/fiber";
+import {
+  forwardRef,
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState
+} from "react";
+import { Canvas } from "@react-three/fiber";
 import { Bounds, OrbitControls } from "@react-three/drei";
 import { MOUSE } from "three";
 
@@ -7,23 +16,44 @@ import {
   DEFAULT_SCENE_DISPLAY_CONFIG
 } from "./Display/Display.constants";
 import { CameraPresetController } from "./Display/controls/CameraPresetController";
+import { CameraSnapshotController } from "./Display/controls/CameraSnapshotController";
 import { GridFloor } from "./Display/overlays/GridFloor";
 import { EmptyModel } from "./EmptyModel";
 import { DEFAULT_SCENE_LIGHTING_CONFIG } from "./Lighting/Lighting.constants";
 import { SceneLighting } from "./Lighting/SceneLighting";
 import { Loader } from "./Loader";
 import { Model } from "./Model";
-import { isPngDataUrl, type ViewerScreenshotHandle } from "./Screenshot";
+import type { ViewerScreenshotHandle } from "./Screenshot";
 import styles from "./Viewer.module.css";
+import type { AnnotationSnapshotPayload } from "./Annotation";
+import {
+  captureCameraSnapshot,
+  captureViewerScreenshot,
+  type OrbitControlsSnapshot,
+  type RendererSnapshotState
+} from "./Viewer.snapshot";
 import type { ViewerProps } from "./Viewer.types";
 
-type RendererSnapshotState = Pick<RootState, "camera" | "gl" | "scene">;
+const LazyAnnotationCanvas = lazy(() =>
+  import("./Annotation").then((module) => ({
+    default: module.AnnotationCanvas
+  }))
+);
 
 export const Viewer = forwardRef<ViewerScreenshotHandle, ViewerProps>(
   function Viewer(
     {
+      annotationClearSignal = 0,
+      annotationMode = false,
+      annotationRestoreSignal = 0,
+      annotationRestoreSnapshot = null,
+      annotationSaveSignal = 0,
+      annotationStrokeColor = "#e11d48",
+      annotationStrokeWidth = 4,
+      annotationTool = "pen",
       autoRotate = false,
       canZoom = true,
+      cameraRestoreSnapshot = null,
       cameraPreset = DEFAULT_SCENE_DISPLAY_CONFIG.cameraPreset,
       className,
       directionalLightIntensity = DEFAULT_SCENE_LIGHTING_CONFIG.directionalLightIntensity,
@@ -34,6 +64,8 @@ export const Viewer = forwardRef<ViewerScreenshotHandle, ViewerProps>(
       materialRoughness = 0.55,
       materialTint = "#ffffff",
       modelUrl,
+      onAnnotationSave,
+      onAnnotationSelectionStyleChange,
       partVisibilityMode = DEFAULT_SCENE_DISPLAY_CONFIG.partVisibilityMode,
       showBoundingBox = DEFAULT_SCENE_DISPLAY_CONFIG.showBoundingBox,
       showEnvironment = true,
@@ -46,10 +78,47 @@ export const Viewer = forwardRef<ViewerScreenshotHandle, ViewerProps>(
     },
     ref
   ) {
+    const annotationCanvasElementRef = useRef<HTMLCanvasElement | null>(null);
+    const orbitControlsRef = useRef<OrbitControlsSnapshot | null>(null);
     const rendererStateRef = useRef<RendererSnapshotState | null>(null);
+    const [hasLoadedAnnotationCanvas, setHasLoadedAnnotationCanvas] =
+      useState(annotationMode);
     const rootClassName = className
       ? `${styles.viewer} ${className}`
       : styles.viewer;
+    const handleAnnotationCanvasElementChange = useCallback(
+      (canvasElement: HTMLCanvasElement | null) => {
+        annotationCanvasElementRef.current = canvasElement;
+      },
+      []
+    );
+    const handleAnnotationSave = useCallback(
+      (annotationSnapshot: AnnotationSnapshotPayload) => {
+        const rendererState = rendererStateRef.current;
+        const thumbnailDataUrl = rendererState
+          ? captureViewerScreenshot(
+              rendererState,
+              annotationCanvasElementRef.current
+            )
+          : null;
+        const camera = rendererState
+          ? captureCameraSnapshot(rendererState.camera, orbitControlsRef.current)
+          : null;
+
+        onAnnotationSave?.({
+          ...annotationSnapshot,
+          camera,
+          thumbnailDataUrl
+        });
+      },
+      [onAnnotationSave]
+    );
+
+    useEffect(() => {
+      if (annotationMode) {
+        setHasLoadedAnnotationCanvas(true);
+      }
+    }, [annotationMode]);
 
     useImperativeHandle(
       ref,
@@ -61,11 +130,10 @@ export const Viewer = forwardRef<ViewerScreenshotHandle, ViewerProps>(
             return null;
           }
 
-          rendererState.gl.render(rendererState.scene, rendererState.camera);
-
-          const dataUrl = rendererState.gl.domElement.toDataURL("image/png");
-
-          return isPngDataUrl(dataUrl) ? dataUrl : null;
+          return captureViewerScreenshot(
+            rendererState,
+            annotationCanvasElementRef.current
+          );
         }
       }),
       []
@@ -95,7 +163,7 @@ export const Viewer = forwardRef<ViewerScreenshotHandle, ViewerProps>(
           />
           <Suspense fallback={<Loader />}>
             {modelUrl ? (
-              <Bounds fit clip margin={1.2}>
+              <Bounds fit margin={1.2}>
                 <Model
                   materialMetalness={materialMetalness}
                   materialOpacity={materialOpacity}
@@ -117,18 +185,44 @@ export const Viewer = forwardRef<ViewerScreenshotHandle, ViewerProps>(
           </Suspense>
           <OrbitControls
             makeDefault
-            autoRotate={autoRotate}
+            autoRotate={annotationMode ? false : autoRotate}
             dampingFactor={0.08}
-            enableZoom={canZoom}
-            enableDamping={useDamping}
+            enablePan={!annotationMode}
+            enableRotate={!annotationMode}
+            enableZoom={!annotationMode && canZoom}
+            enableDamping={!annotationMode && useDamping}
             mouseButtons={{
               LEFT: MOUSE.PAN,
               MIDDLE: MOUSE.DOLLY,
               RIGHT: MOUSE.ROTATE
             }}
+            ref={(controls) => {
+              orbitControlsRef.current = controls;
+            }}
           />
           <CameraPresetController cameraPreset={cameraPreset} />
+          <CameraSnapshotController
+            cameraSnapshot={cameraRestoreSnapshot}
+            restoreSignal={annotationRestoreSignal}
+          />
         </Canvas>
+        {hasLoadedAnnotationCanvas ? (
+          <Suspense fallback={null}>
+            <LazyAnnotationCanvas
+              active={annotationMode}
+              clearSignal={annotationClearSignal}
+              onCanvasElementChange={handleAnnotationCanvasElementChange}
+              onSave={handleAnnotationSave}
+              onSelectionStyleChange={onAnnotationSelectionStyleChange}
+              restoreSignal={annotationRestoreSignal}
+              restoreSnapshot={annotationRestoreSnapshot}
+              saveSignal={annotationSaveSignal}
+              strokeColor={annotationStrokeColor}
+              strokeWidth={annotationStrokeWidth}
+              tool={annotationTool}
+            />
+          </Suspense>
+        ) : null}
       </section>
     );
   }

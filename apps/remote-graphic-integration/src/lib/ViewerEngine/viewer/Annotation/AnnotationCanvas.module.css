@@ -1,0 +1,21 @@
+.annotationLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+}
+
+.annotationLayerActive {
+  pointer-events: auto;
+}
+
+.annotationLayerResizing {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.annotationCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

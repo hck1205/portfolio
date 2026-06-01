@@ -238,3 +238,9 @@ export class IndexedDBClient<TSchema extends IndexedDBSchema> {
     }
   }
 }
+
+export function createIndexedDBClient<TSchema extends IndexedDBSchema>(
+  config: IndexedDBClientConfig<TSchema>
+) {
+  return new IndexedDBClient(config);
+}

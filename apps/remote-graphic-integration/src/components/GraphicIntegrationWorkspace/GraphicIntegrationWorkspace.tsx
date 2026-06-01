@@ -1,6 +1,9 @@
 import { lazy, Suspense, useRef, useState } from "react";
 
 import type { ViewerScreenshotHandle } from "../../lib/ViewerEngine/viewer/Screenshot";
+import type { ControlPanelTabId } from "../ControlPanel/ControlPanelTabs/ControlPanelTabs.types";
+import { AnnotationToolbar } from "./AnnotationToolbar";
+import { useAnnotationWorkspace } from "./AnnotationWorkspace";
 import {
   DEFAULT_VIEWER_CONTROL_CONFIG,
   MATERIAL_PRESETS
@@ -38,9 +41,33 @@ export function GraphicIntegrationWorkspace({
   const viewerRef = useRef<ViewerScreenshotHandle | null>(null);
   const [isControlPanelCollapsed, setIsControlPanelCollapsed] = useState(true);
   const [hasOpenedControlPanel, setHasOpenedControlPanel] = useState(false);
+  const [activeControlPanelTabId, setActiveControlPanelTabId] =
+    useState<ControlPanelTabId>("config");
   const [viewerConfig, setViewerConfig] = useState<ViewerControlConfig>(
     DEFAULT_VIEWER_CONTROL_CONFIG
   );
+  const isAnnotationMode =
+    !isControlPanelCollapsed && activeControlPanelTabId === "annotation";
+  const {
+    annotationConfig,
+    clearSignal: annotationClearSignal,
+    handleClear: handleAnnotationClear,
+    handleDelete: handleAnnotationDelete,
+    handleSave: handleAnnotationSave,
+    handleSaveRequest: handleAnnotationSaveRequest,
+    handleRestore: handleAnnotationRestore,
+    handleSelectionStyleChange: handleAnnotationSelectionStyleChange,
+    handleStrokeColorChange: handleAnnotationStrokeColorChange,
+    handleStrokeWidthChange: handleAnnotationStrokeWidthChange,
+    handleToolChange: handleAnnotationToolChange,
+    isCameraMode: isAnnotationCameraMode,
+    isDrawingMode: isAnnotationDrawingMode,
+    restoreSignal: annotationRestoreSignal,
+    restoreTarget: annotationRestoreTarget,
+    saveSignal: annotationSaveSignal,
+    saves: annotationSaves,
+    toggleCameraMode: toggleAnnotationCameraMode
+  } = useAnnotationWorkspace(isAnnotationMode, viewerConfig);
   const viewerClassName = `${styles.viewerSurface} ${
     isControlPanelCollapsed ? "" : styles.viewerSurfaceControlPanelOpen
   }`;
@@ -86,6 +113,12 @@ export function GraphicIntegrationWorkspace({
       materialPreset: value
     }));
   };
+  const handleAnnotationSaveSelect = (
+    save: (typeof annotationSaves)[number]
+  ) => {
+    setViewerConfig(save.viewerState);
+    handleAnnotationRestore(save);
+  };
   const handleViewerScreenshot = async () => {
     const dataUrl = viewerRef.current?.captureScreenshot() ?? null;
 
@@ -107,8 +140,19 @@ export function GraphicIntegrationWorkspace({
       <ds-layout-content className={styles.viewerRegion}>
         <Suspense fallback={<div className={styles.viewerLoadingSurface} />}>
           <LazyViewer
+            annotationClearSignal={annotationClearSignal}
+            annotationMode={isAnnotationDrawingMode}
+            annotationRestoreSignal={annotationRestoreSignal}
+            annotationRestoreSnapshot={
+              annotationRestoreTarget?.annotationSnapshot ?? null
+            }
+            annotationSaveSignal={annotationSaveSignal}
+            annotationStrokeColor={annotationConfig.strokeColor}
+            annotationStrokeWidth={annotationConfig.strokeWidth}
+            annotationTool={annotationConfig.tool}
             autoRotate={viewerConfig.autoRotate}
             canZoom={viewerConfig.canZoom}
+            cameraRestoreSnapshot={annotationRestoreTarget?.camera ?? null}
             cameraPreset={viewerConfig.cameraPreset}
             className={viewerClassName}
             directionalLightIntensity={viewerConfig.directionalLightIntensity}
@@ -119,6 +163,10 @@ export function GraphicIntegrationWorkspace({
             materialRoughness={viewerConfig.materialRoughness}
             materialTint={viewerConfig.materialTint}
             modelUrl={modelUrl}
+            onAnnotationSave={handleAnnotationSave}
+            onAnnotationSelectionStyleChange={
+              handleAnnotationSelectionStyleChange
+            }
             partVisibilityMode={viewerConfig.partVisibilityMode}
             ref={viewerRef}
             showBoundingBox={viewerConfig.showBoundingBox}
@@ -132,6 +180,38 @@ export function GraphicIntegrationWorkspace({
           />
         </Suspense>
       </ds-layout-content>
+      {isAnnotationMode ? (
+        <>
+          <button
+            aria-label={
+              isAnnotationCameraMode
+                ? "Return to annotation drawing"
+                : "Use camera controls"
+            }
+            aria-pressed={isAnnotationCameraMode}
+            className={styles.annotationCameraToggle}
+            onClick={toggleAnnotationCameraMode}
+            title={
+              isAnnotationCameraMode
+                ? "Return to annotation drawing"
+                : "Use camera controls"
+            }
+            type="button"
+          >
+            <ds-icon icon="rotate3-d" size="17" />
+          </button>
+          <AnnotationToolbar
+            activeStrokeColor={annotationConfig.strokeColor}
+            activeStrokeWidth={annotationConfig.strokeWidth}
+            activeTool={annotationConfig.tool}
+            onClear={handleAnnotationClear}
+            onSave={handleAnnotationSaveRequest}
+            onStrokeColorChange={handleAnnotationStrokeColorChange}
+            onStrokeWidthChange={handleAnnotationStrokeWidthChange}
+            onToolChange={handleAnnotationToolChange}
+          />
+        </>
+      ) : null}
       <ds-button
         aria-label={
           isControlPanelCollapsed
@@ -151,7 +231,12 @@ export function GraphicIntegrationWorkspace({
       {hasOpenedControlPanel ? (
         <Suspense fallback={null}>
           <LazyControlPanel
+            activeTabId={activeControlPanelTabId}
+            annotationSaves={annotationSaves}
             collapsed={isControlPanelCollapsed}
+            onActiveTabChange={setActiveControlPanelTabId}
+            onAnnotationSaveDelete={handleAnnotationDelete}
+            onAnnotationSaveSelect={handleAnnotationSaveSelect}
             onMaterialPresetChange={handleMaterialPresetChange}
             onMaterialTintChange={handleMaterialTintChange}
             onViewerConfigChange={handleViewerConfigChange}

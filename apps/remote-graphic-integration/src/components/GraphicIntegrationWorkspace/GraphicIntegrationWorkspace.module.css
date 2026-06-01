@@ -47,6 +47,195 @@
   right: 14px;
 }
 
+.annotationToolbar {
+  position: absolute;
+  z-index: 9;
+  top: 104px;
+  right: calc(var(--graphic-control-panel-width) + 14px);
+  display: grid;
+  gap: 6px;
+  border: 1px solid rgba(21, 23, 25, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  padding: 6px;
+  box-shadow: 0 16px 44px rgba(21, 23, 25, 0.14);
+  backdrop-filter: blur(10px);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.annotationCameraToggle {
+  position: absolute;
+  z-index: 9;
+  top: 62px;
+  right: calc(var(--graphic-control-panel-width) + 14px);
+  display: inline-grid;
+  width: 48px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid rgba(21, 23, 25, 0.12);
+  border-radius: 8px;
+  appearance: none;
+  background: rgba(255, 255, 255, 0.92);
+  color: #26313c;
+  cursor: pointer;
+  box-shadow: 0 16px 44px rgba(21, 23, 25, 0.14);
+  backdrop-filter: blur(10px);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.annotationCameraToggle:hover {
+  border-color: #c9d1dc;
+  background: #f4f7fb;
+}
+
+.annotationCameraToggle:focus-visible {
+  outline: 2px solid #3866e8;
+  outline-offset: 2px;
+}
+
+.annotationCameraToggle[aria-pressed="true"] {
+  border-color: #3866e8;
+  background: #edf3ff;
+  color: #214fd1;
+}
+
+.annotationToolButton {
+  display: inline-grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  appearance: none;
+  background: transparent;
+  color: #26313c;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.annotationToolButton:hover {
+  border-color: #c9d1dc;
+  background: #f4f7fb;
+}
+
+.annotationToolButton:focus-visible {
+  outline: 2px solid #3866e8;
+  outline-offset: 2px;
+}
+
+.annotationToolButton[aria-pressed="true"] {
+  border-color: #3866e8;
+  background: #edf3ff;
+  color: #214fd1;
+}
+
+.annotationToolbarDivider {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: #dfe4ea;
+}
+
+.annotationColorControl,
+.annotationStrokeControl {
+  display: grid;
+  justify-items: center;
+  color: #4b5560;
+}
+
+.annotationStrokeControl {
+  position: relative;
+}
+
+.annotationColorControl input {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 6px;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.annotationColorControl input::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.annotationColorControl input::-webkit-color-swatch {
+  border: 1px solid #c9d1dc;
+  border-radius: 6px;
+}
+
+.annotationStrokeValueButton {
+  display: inline-grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  appearance: none;
+  background: #eef2f7;
+  color: #26313c;
+  cursor: pointer;
+  font-size: 11px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.annotationStrokeValueButton:hover {
+  border-color: #c9d1dc;
+  background: #f4f7fb;
+}
+
+.annotationStrokeValueButton:focus-visible {
+  outline: 2px solid #3866e8;
+  outline-offset: 2px;
+}
+
+.annotationStrokeController {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  right: calc(100% + 10px);
+  display: grid;
+  grid-template-columns: minmax(0, 120px) 42px;
+  align-items: center;
+  gap: 10px;
+  width: 186px;
+  border: 1px solid rgba(21, 23, 25, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.96);
+  padding: 10px;
+  box-shadow: 0 14px 34px rgba(21, 23, 25, 0.16);
+  transform: translateY(-50%);
+}
+
+.annotationStrokeController input {
+  width: 100%;
+  accent-color: #3866e8;
+  cursor: pointer;
+}
+
+.annotationStrokePreview {
+  display: inline-grid;
+  height: 26px;
+  place-items: center;
+}
+
+.annotationStrokePreview span {
+  display: block;
+  border-radius: 999px;
+  background: #26313c;
+}
+
 @media (max-width: 720px) {
   .viewerRegion {
     --ds-layout-content-padding: 0;
@@ -55,5 +244,13 @@
 
   .viewerSurface {
     transform: translateX(0);
+  }
+
+  .annotationToolbar {
+    right: 14px;
+  }
+
+  .annotationCameraToggle {
+    right: 14px;
   }
 }
